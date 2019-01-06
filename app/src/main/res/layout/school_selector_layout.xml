@@ -5,25 +5,40 @@
     android:background="#ffffff"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
-            android:layout_margin="8dp"
-            android:text="@string/school_list"
-            android:textAlignment="center"
-            android:textSize="20dp"
+        <com.rey.material.widget.ProgressView
+            android:id="@+id/login_progress_view"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:pv_autostart="true"
+            app:pv_circular="true"
+            app:pv_progressStyle="@style/MyCircularProgress"
+            app:pv_progressMode="indeterminate"/>
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <View
-            android:background="#CCCCCC"
-            android:layout_marginBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-        <ListView
-            android:id="@+id/school_list"
-            android:layout_width="match_parent"
-            android:layout_height="350dp"></ListView>
-    </LinearLayout>
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_margin="8dp"
+                android:text="@string/school_list"
+                android:textAlignment="center"
+                android:textSize="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <View
+                android:background="#CCCCCC"
+                android:layout_marginBottom="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <ListView
+                android:id="@+id/school_list"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"></ListView>
+        </LinearLayout>
+    </RelativeLayout>
+
 </android.support.v4.widget.NestedScrollView>

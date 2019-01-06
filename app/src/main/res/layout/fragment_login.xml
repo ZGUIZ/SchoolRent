@@ -122,15 +122,4 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
-    <com.rey.material.widget.ProgressView
-        android:id="@+id/login_progress_view"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:pv_autostart="true"
-        app:pv_circular="true"
-        app:pv_progressStyle="@style/Material.Drawable.CircularProgress"
-        app:pv_progressMode="indeterminate"/>
 </RelativeLayout>

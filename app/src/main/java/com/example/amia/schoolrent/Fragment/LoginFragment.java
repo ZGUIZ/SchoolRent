@@ -51,6 +51,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     private EditText schoolText;
     private BottomSheetDialog dialog;  //学校选择弹出窗
     private ProgressView progressView; //进度条
+    private View selectView; //学校选择的View
     private LoginContract.Presenter presenter;
 
     //所选的学校
@@ -73,14 +74,20 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     @Override
     public void onStart() {
         super.onStart();
-
-        progressView = view.findViewById(R.id.login_progress_view);
         //设置选择学校EditText点击事件
         schoolText=view.findViewById(R.id.school_input);
         schoolText.setKeyListener(null);
         schoolText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(dialog != null) {
+                    dialog.cancel();
+                }
+                dialog = new BottomSheetDialog(getActivity());
+                selectView = getLayoutInflater().inflate(R.layout.school_selector_layout,null);
+                progressView = selectView.findViewById(R.id.login_progress_view);
+                dialog.setContentView(selectView);
+                dialog.show();
                 progressView.setVisibility(View.VISIBLE);
                 presenter.getProvince(handler);
             }
@@ -130,12 +137,6 @@ public class LoginFragment extends Fragment implements LoginContract.View {
             return;
         }
 
-        if(dialog != null) {
-            dialog.cancel();
-        }
-        dialog = new BottomSheetDialog(getActivity());
-        final View selectView = getLayoutInflater().inflate(R.layout.school_selector_layout,null);
-
         listView = selectView.findViewById(R.id.school_list);
 
         ArrayAdapter<String> adapter;
@@ -151,7 +152,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    LoginFragment.this.view.findViewById(R.id.login_progress_view).setVisibility(View.VISIBLE);
+                    progressView.setVisibility(View.VISIBLE);
                     presenter.getCity(provinceList.get(i),handler);
                 }
             });
@@ -167,8 +168,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
             }
         });
 
-        dialog.setContentView(selectView);
-        dialog.show();
+
     }
 
     public void setCityList(final List<Province> cityList) {

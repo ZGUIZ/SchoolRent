@@ -1,12 +1,8 @@
 package com.example.amia.schoolrent.Util;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 
-import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.NetCallBack;
 
 import org.json.JSONObject;
@@ -18,23 +14,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import rx.Observable;
-import rx.Scheduler;
-import rx.Subscriber;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Amia on 2018/3/8.
