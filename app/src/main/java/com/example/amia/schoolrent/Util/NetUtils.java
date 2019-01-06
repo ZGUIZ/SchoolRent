@@ -24,7 +24,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,6 +43,7 @@ import rx.schedulers.Schedulers;
 public class NetUtils {
 
     private static ExecutorService executorService = Executors.newFixedThreadPool(4);
+    private static List<HttpURLConnection> connections = new ArrayList<>();
     /**
      * 读取网页内容
      * @param uri
@@ -53,8 +56,10 @@ public class NetUtils {
         BufferedReader bufReader=null;
         HttpURLConnection conn=null;
         StringBuffer sb=new StringBuffer();
+        int size = connections.size();  //记录当前连接的数量
         try{
             conn=(HttpURLConnection) url.openConnection();
+            connections.add(conn);
             conn.setReadTimeout(10000);
             conn.setRequestMethod("GET");
             inReader=new InputStreamReader(conn.getInputStream());
@@ -70,6 +75,7 @@ public class NetUtils {
             throw e;
         }
         finally {
+            connections.remove(size);
             try {
                 if (bufReader != null) {
                     bufReader.close();
@@ -133,9 +139,11 @@ public class NetUtils {
     public static String post(String url, Map<String,Object> param,Map<String,String> header) throws IOException {
         StringBuffer sb =new StringBuffer();
         DataOutputStream outputStream = null;
+        int size=connections.size();
         try {
             URL urlPath = new URL(url);
             HttpURLConnection httpConnection = (HttpURLConnection) urlPath.openConnection();
+            connections.add(httpConnection);
             httpConnection.setDoInput(true);
             httpConnection.setDoOutput(true);
             httpConnection.setUseCaches(false);
@@ -166,6 +174,7 @@ public class NetUtils {
             e.printStackTrace();
             throw e;
         } finally {
+            connections.remove(size);
             if(outputStream != null){
                 outputStream.close();
             }
@@ -208,5 +217,15 @@ public class NetUtils {
         InputStream is=connection.getInputStream();
         bitmap= BitmapFactory.decodeStream(is);
         return bitmap;
+    }
+
+    /**
+     * 中断连接
+     */
+    public static void disConnection(){
+        if(connections.size()>0){
+            HttpURLConnection httpURLConnection = connections.get(connections.size()-1);
+            httpURLConnection.disconnect();
+        }
     }
 }
