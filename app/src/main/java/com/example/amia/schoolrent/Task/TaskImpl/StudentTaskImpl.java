@@ -1,11 +1,12 @@
 package com.example.amia.schoolrent.Task.TaskImpl;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Base64;
 
 import com.example.amia.schoolrent.Bean.KeyValue;
 import com.example.amia.schoolrent.Bean.Student;
-import com.example.amia.schoolrent.Presenter.LoginContract;
 import com.example.amia.schoolrent.Presenter.NetCallBack;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.StudentTask;
@@ -14,20 +15,23 @@ import com.example.amia.schoolrent.Util.JSONUtil;
 import com.example.amia.schoolrent.Util.NetUtils;
 import com.example.amia.schoolrent.Util.RSAUtil;
 
-import org.json.JSONException;
 import org.litepal.LitePal;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.ERROR;
+import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.ERRORWITHMESSAGE;
+import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.LOGINSUCCESS;
+import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.PASSWORDERROR;
+
 
 public class StudentTaskImpl implements StudentTask {
     @Override
-    public void login(Context context, Student student, final LoginContract.CallBack callBack) {
+    public void login(Context context, Student student, final Handler handler) {
         String password=student.getPassword();
         List<KeyValue> keyValues = LitePal.where("key = ?","publicKey").find(KeyValue.class);
         if(keyValues.size()>0){
@@ -50,26 +54,39 @@ public class StudentTaskImpl implements StudentTask {
             NetUtils.doPost(url, param, new HashMap<String, String>(), new NetCallBack() {
                 @Override
                 public void finish(String json) {
+                    Message msg = handler.obtainMessage();
                     if(json== null || "".equals(json.trim())){
-                        callBack.passwordError();
+                        //callBack.passwordError();
+                        msg.what = PASSWORDERROR;
+                        handler.sendMessage(msg);
+                        return;
                     }
                     Student s = null;
                     try {
                         s = (Student) JSONUtil.getObject(Student.class,json);
-                        callBack.toListPage(s);
+                        //callBack.toListPage(s);
+                        msg.what = LOGINSUCCESS;
+                        msg.obj = s;
                     } catch (Exception e) {
                         e.printStackTrace();
-                        error("json转换异常");
+                        msg.what = ERROR;
+                    } finally {
+                        handler.sendMessage(msg);
                     }
                 }
 
                 @Override
                 public void error(String... msg) {
-                    callBack.netLinkError();
+                    Message message = handler.obtainMessage();
+                    message.what = ERRORWITHMESSAGE;
+                    message.obj = msg;
+                    handler.sendMessage(message);
                 }
             });
         } else{
-            callBack.netLinkError();
+            Message msg = handler.obtainMessage();
+            msg.what = ERROR;
+            handler.sendMessage(msg);
         }
     }
 }

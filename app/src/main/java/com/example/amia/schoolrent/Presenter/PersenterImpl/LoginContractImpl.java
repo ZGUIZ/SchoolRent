@@ -17,11 +17,6 @@ public class LoginContractImpl implements LoginContract.Presenter {
     private SchoolTask task;
     private StudentTask studentTask;
 
-    public static final int ERROR = -1;
-    public static final int PROVINCE = 0;
-    public static final int CITY = 1;
-    public static final int SCHOOL = 2;
-
     public LoginContractImpl(LoginContract.View view, SchoolTask task,StudentTask studentTask) {
         this.view = view;
         this.task = task;
@@ -46,6 +41,6 @@ public class LoginContractImpl implements LoginContract.Presenter {
 
     @Override
     public void login(Context context,Student student,Handler handler) {
-        //studentTask.login(context,student,callBack);
+        studentTask.login(context,student,handler);
     }
 }
