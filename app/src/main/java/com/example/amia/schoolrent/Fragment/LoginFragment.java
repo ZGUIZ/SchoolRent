@@ -38,10 +38,10 @@ import com.rey.material.widget.ProgressView;
 
 import java.util.List;
 
-import static com.example.amia.schoolrent.Presenter.PersenterImpl.LoginContractImpl.CITY;
-import static com.example.amia.schoolrent.Presenter.PersenterImpl.LoginContractImpl.ERROR;
-import static com.example.amia.schoolrent.Presenter.PersenterImpl.LoginContractImpl.PROVINCE;
-import static com.example.amia.schoolrent.Presenter.PersenterImpl.LoginContractImpl.SCHOOL;
+import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.CITY;
+import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.ERROR;
+import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.PROVINCE;
+import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.SCHOOL;
 
 public class LoginFragment extends Fragment implements LoginContract.View {
 
@@ -246,7 +246,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
             Toast.makeText(getActivity(),ActivityUtil.getString(getActivity(),R.string.null_school),Toast.LENGTH_SHORT).show();
             return;
         }
-        view.findViewById(R.id.login_progress_view).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
         Student student = new Student();
         student.setSchoolId(school.getSchoolId());
         EditText account = view.findViewById(R.id.account);
