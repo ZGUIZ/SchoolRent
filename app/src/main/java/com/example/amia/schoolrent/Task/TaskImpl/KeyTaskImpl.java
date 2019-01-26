@@ -16,6 +16,7 @@ import com.example.amia.schoolrent.Task.KeyTask;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.Util.NetUtils;
 import com.example.amia.schoolrent.Util.RSAUtil;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,18 +50,6 @@ public class KeyTaskImpl implements KeyTask {
 
     @Override
     public void isChangeKey(final Context context, final Handler handler) throws Exception {
-        /*Future<String> future = service.submit(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                String result = null;
-                result = NetUtils.requestDataFromNet(ActivityUtil.getString(context, R.string.host) +
-                        ActivityUtil.getString(context, R.string.getKey));
-                return result;
-            }
-        });
-        //会导致线程阻塞
-        publicKeyStr=future.get();*/
-
         service.submit(new Runnable() {
             @Override
             public void run() {
@@ -110,7 +99,7 @@ public class KeyTaskImpl implements KeyTask {
         Message message = Message.obtain();
         message.what = -1;
         message.obj = null;
-        handler.handleMessage(message);
+        handler.sendMessage(message);
     }
 
     private Student getCurrentAccount(){

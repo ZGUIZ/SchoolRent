@@ -75,7 +75,7 @@ public class SplashFragment extends Fragment implements SplashContract.View,Spla
         int status = msg.what;
         switch (status){
             case -1:
-                Toast.makeText(activity,"aaaa",Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity,"服务器连接异常！",Toast.LENGTH_SHORT).show();
                 return;
             case 0:
                 //打开登陆页面

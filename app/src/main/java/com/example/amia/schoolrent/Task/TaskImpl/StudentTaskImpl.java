@@ -6,6 +6,7 @@ import android.os.Message;
 import android.util.Base64;
 
 import com.example.amia.schoolrent.Bean.KeyValue;
+import com.example.amia.schoolrent.Bean.Result;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.NetCallBack;
 import com.example.amia.schoolrent.R;
@@ -15,6 +16,7 @@ import com.example.amia.schoolrent.Util.JSONUtil;
 import com.example.amia.schoolrent.Util.NetUtils;
 import com.example.amia.schoolrent.Util.RSAUtil;
 
+import org.json.JSONObject;
 import org.litepal.LitePal;
 
 import java.io.UnsupportedEncodingException;
@@ -43,7 +45,7 @@ public class StudentTaskImpl implements StudentTask {
             byte[] encodePassword = null;
             try {
                 encodePassword = RSAUtil.RSAEncode(key,password.getBytes("utf-8"));
-                student.setPassword(new String(encodePassword,"utf-8"));
+                student.setPassword(Base64.encodeToString(encodePassword,Base64.DEFAULT));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -63,10 +65,15 @@ public class StudentTaskImpl implements StudentTask {
                     }
                     Student s = null;
                     try {
-                        s = (Student) JSONUtil.getObject(Student.class,json);
-                        //callBack.toListPage(s);
-                        msg.what = LOGINSUCCESS;
-                        msg.obj = s;
+                        Result result = Result.getJSONObject(json.trim(),Student.class);
+                        if(result.getResult()){
+                            s = (Student) result.getData();
+                            //callBack.toListPage(s);
+                            msg.what = LOGINSUCCESS;
+                            msg.obj = s;
+                        } else {
+                            msg.what = PASSWORDERROR;
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                         msg.what = ERROR;

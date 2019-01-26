@@ -40,6 +40,8 @@ import java.util.List;
 
 import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.CITY;
 import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.ERROR;
+import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.LOGINSUCCESS;
+import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.PASSWORDERROR;
 import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.PROVINCE;
 import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.SCHOOL;
 
@@ -273,6 +275,12 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                     break;
                 case SCHOOL:
                     setSchoolList((List<School>) msg.obj);
+                    break;
+                case PASSWORDERROR:
+                    passwordError();
+                    break;
+                case LOGINSUCCESS:
+
                     break;
             }
         }

@@ -139,7 +139,7 @@ public class NetUtils {
             httpConnection.setConnectTimeout(10000);
             httpConnection.setRequestMethod("POST");
             //设置请求属性
-            httpConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            httpConnection.setRequestProperty("Content-Type", "application/json;charse=UTF-8");
             httpConnection.setRequestProperty("Charset", "UTF-8");
             //设置头部参数
             for (String key : header.keySet()) {
@@ -175,16 +175,13 @@ public class NetUtils {
     public static String urlencode(Map<String,Object>data) {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry i : data.entrySet()) {
-            try {
-                Object value = i.getValue();
-                if(!(value instanceof String)){
-                    JSONObject jsonObject = JSONUtil.getJSONObject(value);
-                    value = jsonObject.toString();
-                }
-                sb.append(i.getKey()).append("=").append(URLEncoder.encode(value+"","UTF-8")).append("&");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            Object value = i.getValue();
+            if(!(value instanceof String)){
+                JSONObject jsonObject = JSONUtil.getJSONObject(value);
+                value = jsonObject.toString();
             }
+            //sb.append(i.getKey()).append("=").append(URLEncoder.encode(value+"","UTF-8")).append("&");
+            sb.append(value);
         }
         return sb.toString();
     }
