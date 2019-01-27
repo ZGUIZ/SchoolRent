@@ -61,6 +61,12 @@ public class SplashFragment extends Fragment implements SplashContract.View,Spla
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter = null;
+    }
+
     //加载动画
     private void loadAnimation(){
         LogoView logoView = view.findViewById(R.id.logo);

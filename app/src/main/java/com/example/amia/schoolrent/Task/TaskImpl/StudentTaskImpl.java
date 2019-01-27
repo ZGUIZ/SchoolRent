@@ -16,6 +16,8 @@ import com.example.amia.schoolrent.Util.NetUtils;
 import com.example.amia.schoolrent.Util.RSAUtil;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.litepal.LitePal;
 
 import java.io.UnsupportedEncodingException;
@@ -24,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.ERROR_WITH_MESSAGE;
+import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.SEND_SUCCESS;
 import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.ERROR;
 import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.ERRORWITHMESSAGE;
 import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.LOGINSUCCESS;
@@ -31,6 +35,7 @@ import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.PASSWORDE
 
 
 public class StudentTaskImpl implements StudentTask {
+
     @Override
     public void login(Context context, Student student, final Handler handler) {
         String password=student.getPassword();
@@ -91,5 +96,47 @@ public class StudentTaskImpl implements StudentTask {
             msg.what = ERROR;
             handler.sendMessage(msg);
         }
+    }
+
+    @Override
+    public void sendValidateMail(Context context, String address, final Handler handler) {
+        //拼接URL
+        StringBuffer sb = new StringBuffer(ActivityUtil.getString(context,R.string.host));
+        sb.append(ActivityUtil.getString(context,R.string.send_mail_validate)).append(address);
+
+        NetUtils.get(sb.toString(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    JSONObject jsonObject = new JSONObject(json);
+                    boolean result = jsonObject.getBoolean("result");
+                    if(result){
+                        msg.what = SEND_SUCCESS;
+                        msg.obj = jsonObject.getString("msg");
+                    } else {
+                        msg.what = ERROR_WITH_MESSAGE;
+                        msg.obj = jsonObject.getString("msg");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERROR_WITH_MESSAGE;
+                message.obj = msg;
+                handler.sendMessage(message);
+            }
+        });
+    }
+
+    @Override
+    public void validateMail(Context context,KeyValue keyValue, Handler handler) {
+
     }
 }

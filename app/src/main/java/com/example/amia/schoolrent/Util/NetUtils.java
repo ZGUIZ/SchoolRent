@@ -8,16 +8,13 @@ import com.example.amia.schoolrent.Presenter.NetCallBack;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +30,26 @@ public class NetUtils {
 
     private static ExecutorService executorService = Executors.newFixedThreadPool(4);
     private static List<HttpURLConnection> connections = new ArrayList<>();
+
+    /**
+     * get方法发送请求
+     * @param url
+     * @param callBack
+     */
+    public static void get(final String url, final NetCallBack callBack){
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String json=requestDataFromNet(url);
+                    callBack.finish(json);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callBack.error(e.getMessage());
+                }
+            }
+        });
+    }
     /**
      * 读取网页内容
      * @param uri

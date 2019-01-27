@@ -3,7 +3,9 @@ package com.example.amia.schoolrent.Bean;
 
 import org.litepal.crud.LitePalSupport;
 
-public class KeyValue extends LitePalSupport {
+import java.io.Serializable;
+
+public class KeyValue extends LitePalSupport implements Serializable {
     private String key;
     private String value;
 

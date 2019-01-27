@@ -20,12 +20,4 @@ public interface LoginContract {
     interface View extends BaseView<Presenter>{
         void linkError();
     }
-
-    interface CallBack extends BaseCallBack{
-        void toListPage(Student student);
-        void passwordError();
-        void setProvinceList(List<Province> provinceList);
-        void setCityList(List<Province> cityList);
-        void setSchoolList(List<School> school);
-    }
 }

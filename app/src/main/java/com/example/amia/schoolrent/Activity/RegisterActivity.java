@@ -5,12 +5,16 @@ import android.os.Bundle;
 
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Fragment.MailFragment;
+import com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl;
+import com.example.amia.schoolrent.Presenter.StudentContract;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Task.StudentTask;
+import com.example.amia.schoolrent.Task.TaskImpl.StudentTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    protected Student student;
+    protected Student student =new Student();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +31,12 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         //设置Presenter
-      /* SchoolTask schoolTask = new SchoolTaskImpl();
         StudentTask studentTask = new StudentTaskImpl();
-        LoginContract.Presenter presenter = new LoginContractImpl(fragment,schoolTask,studentTask);
-        fragment.setPresenter(presenter);*/
+        StudentContract.Presenter presenter = new StudentContractImpl(fragment,studentTask);
+        fragment.setPresenter(presenter);
+    }
 
+    public void setEMail(String eMail){
+        student.setEmail(eMail);
     }
 }
