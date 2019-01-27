@@ -112,15 +112,9 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         loginButton.setOnClickListener(clickListener);
     }
 
-    public void toListPage(Student student) {
-        Intent intent = new Intent(getActivity(),MainActivity.class);
-        intent.putExtra("user",student);
-        startActivity(intent);
-        getActivity().finish();
-    }
-
     public void passwordError() {
         Toast.makeText(getActivity(),ActivityUtil.getString(getActivity(),R.string.password_error),Toast.LENGTH_SHORT).show();
+        view.findViewById(R.id.progress_view).setVisibility(View.GONE);
     }
 
     @Override
