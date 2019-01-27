@@ -1,6 +1,5 @@
 package com.example.amia.schoolrent.Activity;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
