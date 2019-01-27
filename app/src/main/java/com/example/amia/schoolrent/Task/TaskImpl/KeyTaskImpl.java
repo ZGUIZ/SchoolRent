@@ -1,30 +1,23 @@
 package com.example.amia.schoolrent.Task.TaskImpl;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Base64;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.amia.schoolrent.Bean.KeyValue;
 import com.example.amia.schoolrent.Bean.Student;
-import com.example.amia.schoolrent.Presenter.SplashContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.KeyTask;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.Util.NetUtils;
 import com.example.amia.schoolrent.Util.RSAUtil;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.LitePal;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.security.PublicKey;
 import java.util.List;
 

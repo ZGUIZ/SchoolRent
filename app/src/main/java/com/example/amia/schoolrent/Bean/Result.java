@@ -60,10 +60,12 @@ public class Result {
         JSONObject object = new JSONObject(json);
         Result result = new Result();
         result.setResult(object.getBoolean("result"));
-        result.setMsg(object.getString("msg"));
+
         if(result.getResult()) {
-            Object data = JSONUtil.getObject(className, object.getString("data"));
+            Object data = JSONUtil.getObject(className, object.getJSONObject("data"));
             result.setData(data);
+        } else {
+            result.setMsg(object.getString("msg"));
         }
         return result;
     }

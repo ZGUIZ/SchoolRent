@@ -12,11 +12,9 @@ import com.example.amia.schoolrent.Presenter.NetCallBack;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.StudentTask;
 import com.example.amia.schoolrent.Util.ActivityUtil;
-import com.example.amia.schoolrent.Util.JSONUtil;
 import com.example.amia.schoolrent.Util.NetUtils;
 import com.example.amia.schoolrent.Util.RSAUtil;
 
-import org.json.JSONObject;
 import org.litepal.LitePal;
 
 import java.io.UnsupportedEncodingException;
@@ -63,14 +61,11 @@ public class StudentTaskImpl implements StudentTask {
                         handler.sendMessage(msg);
                         return;
                     }
-                    Student s = null;
                     try {
                         Result result = Result.getJSONObject(json.trim(),Student.class);
                         if(result.getResult()){
-                            s = (Student) result.getData();
-                            //callBack.toListPage(s);
                             msg.what = LOGINSUCCESS;
-                            msg.obj = s;
+                            msg.obj = result.getData();
                         } else {
                             msg.what = PASSWORDERROR;
                         }

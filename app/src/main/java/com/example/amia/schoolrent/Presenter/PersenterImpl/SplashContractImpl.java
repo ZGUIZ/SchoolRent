@@ -19,11 +19,6 @@ public class SplashContractImpl implements com.example.amia.schoolrent.Presenter
         handler.setCallBack(callBack);
         Handler h = handler;
         keyTask.isChangeKey(view.getContext(),h);
-       /* if(result){
-            callBack.setStatus(0);
-        } else {
-            callBack.setStatus(0);
-        }*/
     }
 
     private MyHandler handler = new MyHandler();
@@ -38,5 +33,5 @@ public class SplashContractImpl implements com.example.amia.schoolrent.Presenter
         public void setCallBack(SplashContract.CallBack callBack) {
             this.callBack = callBack;
         }
-    };
+    }
 }

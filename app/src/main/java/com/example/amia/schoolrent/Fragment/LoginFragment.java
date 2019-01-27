@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -169,8 +170,6 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                 return false;
             }
         });
-
-
     }
 
     public void setCityList(final List<Province> cityList) {
@@ -217,6 +216,19 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                    dialog.cancel();
                 }
             });
+        }
+    }
+
+    protected void loginSuccess(Object object){
+        try {
+            Student student = (Student) object;
+            Activity activity = getActivity();
+            Intent intent = new Intent(activity,MainActivity.class);
+            intent.putExtra("student",student);
+            startActivity(intent);
+            activity.finish();
+        } catch (ClassCastException e){
+            e.printStackTrace();
         }
     }
 
@@ -280,7 +292,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                     passwordError();
                     break;
                 case LOGINSUCCESS:
-
+                    loginSuccess(msg.obj);
                     break;
             }
         }

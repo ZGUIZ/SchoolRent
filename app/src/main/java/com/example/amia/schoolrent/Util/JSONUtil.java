@@ -6,6 +6,11 @@ import org.json.JSONObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.PortUnreachableException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class JSONUtil {
     /**
@@ -50,17 +55,40 @@ public class JSONUtil {
         if(className == null || json == null ||"".equals("")){
             return null;
         }
+        JSONObject jsonObject = new JSONObject(json);
+       return getObject(className,jsonObject);
+    }
 
+    public static Object getObject(Class className,JSONObject jsonObject) throws IllegalAccessException, InstantiationException, JSONException {
         Object object = className.newInstance();
         Field[] fileds = className.getDeclaredFields();
-        JSONObject jsonObject = new JSONObject(json);
+
         for(int i=0;i<fileds.length;i++){
             Field field = fileds[i];
             String propertyName = field.getName();
             //转换为首字母大写
             field.setAccessible(true);
-            field.set(object,jsonObject.get(propertyName));
+            if("serialVersionUID".equals(field.getName())){
+                continue;
+            }
+            field.set(object,getFieldVal(field.getType(),jsonObject,propertyName));
         }
         return object;
+    }
+
+    private static Object getFieldVal(Class cls,JSONObject jsonObject,String propertyName){
+        if(cls == null){
+            return null;
+        }
+        try{
+            if(cls.equals(Date.class)){
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                return sdf.parse(jsonObject.getString(propertyName));
+            }
+            return jsonObject.get(propertyName);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+       return null;
     }
 }
