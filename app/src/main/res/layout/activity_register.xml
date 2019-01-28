@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".Activity.RegisterActivity">
 
-    <FrameLayout
+    <com.example.amia.schoolrent.View.WindowInsetsFrameLayout
         android:id="@+id/register_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        android:layout_height="match_parent"></com.example.amia.schoolrent.View.WindowInsetsFrameLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -48,7 +48,6 @@ import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.SCHOOL;
 
 public class LoginFragment extends Fragment implements LoginContract.View {
 
-    private static LoginFragment loginFragment;
     private static View view;
     private ListView listView;
     private EditText schoolText;
@@ -61,9 +60,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     private School school;
 
     public static LoginFragment newInstance(){
-        if(loginFragment == null){
-            loginFragment = new LoginFragment();
-        }
+        LoginFragment loginFragment = new LoginFragment();
         return loginFragment;
     }
 

@@ -29,15 +29,12 @@ import java.io.Serializable;
 
 public class SplashFragment extends Fragment implements SplashContract.View,SplashContract.CallBack {
 
-    private static SplashFragment splashFragment;
     private View view;
 
     private SplashContract.Presenter presenter;
 
     public static SplashFragment newInstance(){
-        if(splashFragment == null){
-            splashFragment=new SplashFragment();
-        }
+        SplashFragment splashFragment=new SplashFragment();
         return splashFragment;
     }
 

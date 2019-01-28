@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.amia.schoolrent.Activity.ActivityInterface.RegisterInterface;
 import com.example.amia.schoolrent.Bean.KeyValue;
 import com.example.amia.schoolrent.Presenter.StudentContract;
 import com.example.amia.schoolrent.R;
@@ -30,16 +31,14 @@ public class MailFragment extends Fragment implements StudentContract.View {
 
     private View view;
 
-    private static MailFragment mailFragment;
-
     protected Button sendBtn;
 
     protected StudentContract.Presenter presenter;
 
+    protected String email;
+
     public static MailFragment newInstance(){
-        if(mailFragment == null){
-            mailFragment=new MailFragment();
-        }
+        MailFragment mailFragment=new MailFragment();
         return mailFragment;
     }
 
@@ -67,8 +66,17 @@ public class MailFragment extends Fragment implements StudentContract.View {
         view.findViewById(R.id.back_layout).setOnClickListener(onClickListener);
         sendBtn.setOnClickListener(onClickListener);
         view.findViewById(R.id.next_layout).setOnClickListener(onClickListener);
+
+        String mail = ((RegisterInterface)getActivity()).getEMail();
+        if(mail!=null && !"".equals(mail)){
+            EditText editText = view.findViewById(R.id.mailAddress);
+            editText.setText(mail);
+        }
     }
 
+    /**
+     * 发送邮件
+     */
     protected void sendMail(){
         EditText editText = view.findViewById(R.id.mailAddress);
         String address = editText.getText().toString().trim();
@@ -79,8 +87,10 @@ public class MailFragment extends Fragment implements StudentContract.View {
         }
         if(!MailUtil.isMail(address)){
             Snackbar.make(view, R.string.mail_format_error, Snackbar.LENGTH_SHORT).show();
+            return;
         }
         presenter.sendRegisterMail(address,handler);
+        email = address;
     }
 
     /**
@@ -129,7 +139,13 @@ public class MailFragment extends Fragment implements StudentContract.View {
             Snackbar.make(view,R.string.valid_code,Snackbar.LENGTH_SHORT).show();
             return;
         }
+        //邮箱非法
+        if(!MailUtil.isMail(address)){
+            Snackbar.make(view, R.string.mail_format_error, Snackbar.LENGTH_SHORT).show();
+            return;
+        }
 
+        view.findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
         KeyValue keyValue = new KeyValue(address,code);
         presenter.validateMail(keyValue,handler);
     }
@@ -165,14 +181,22 @@ public class MailFragment extends Fragment implements StudentContract.View {
     @Override
     public void linkError() {
         Toast.makeText(getContext(),R.string.link_error,Toast.LENGTH_SHORT).show();
+        view.findViewById(R.id.progress_view).setVisibility(View.GONE);
     }
 
+    /**
+     * 验证成功
+     */
     protected void validateSuccess(){
-        Toast.makeText(getContext(),"验证成功！",Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(),"验证成功！",Toast.LENGTH_LONG).show();
+        RegisterInterface registerInterface = (RegisterInterface)getActivity();
+        registerInterface.setEMail(email);
+        view.findViewById(R.id.progress_view).setVisibility(View.GONE);
     }
 
     protected void validateError(){
         Snackbar.make(view,R.string.mail_validate_error,Snackbar.LENGTH_SHORT).show();
+        view.findViewById(R.id.progress_view).setVisibility(View.GONE);
     }
 
     @Override
@@ -199,7 +223,11 @@ public class MailFragment extends Fragment implements StudentContract.View {
                     sendSuccess();
                     break;
                 case ERROR_WITH_MESSAGE:
-                    Snack(((String[])msg.obj)[0]);
+                    try {
+                        Snack(((String[]) msg.obj)[0]);
+                    }catch (ClassCastException e){
+                        e.printStackTrace();
+                    }
                     break;
                 case BTN_TIME_FLAG:
                     setBtnTime((Integer) msg.obj);

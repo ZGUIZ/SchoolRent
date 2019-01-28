@@ -1,53 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/splash_background"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ProgressBar
-        android:progress="25"
-        android:layout_width="match_parent"
-        android:layout_height="3dp" />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <include layout="@layout/back_tool_bar"/>
-        <include layout="@layout/next_tool_bar"/>
-    </RelativeLayout>
-
-    <TextView
-        android:text="@string/mail_input_title"
-        android:layout_width="match_parent"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:textSize="30dp"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:id="@+id/mailAddress"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:inputType="textEmailAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
     <LinearLayout
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/back_tool_bar"/>
+            <include layout="@layout/next_tool_bar"/>
+        </RelativeLayout>
+
+        <TextView
+            android:text="@string/mail_input_title"
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="30dp"
+            android:layout_height="wrap_content" />
         <EditText
-            android:id="@+id/validate_code_et"
-            android:hint="@string/valid_code"
-            android:layout_weight="3"
+            android:id="@+id/mailAddress"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:inputType="textEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <Button
-            android:id="@+id/send_mail_btn"
-            android:paddingLeft="3dp"
-            android:text="@string/send_valid_code"
-            android:background="@drawable/send_mail_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp" />
+        <LinearLayout
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/validate_code_et"
+                android:hint="@string/valid_code"
+                android:layout_weight="3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/send_mail_btn"
+                android:paddingLeft="3dp"
+                android:text="@string/send_valid_code"
+                android:background="@drawable/send_mail_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+    <com.rey.material.widget.ProgressView
+        android:id="@+id/progress_view"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:pv_autostart="true"
+        app:pv_circular="true"
+        app:pv_progressStyle="@style/MyCircularProgress"
+        app:pv_progressMode="indeterminate"/>
+</RelativeLayout>

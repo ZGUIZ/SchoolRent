@@ -2,6 +2,7 @@ package com.example.amia.schoolrent.Util;
 
 
 import android.content.Context;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -11,6 +12,10 @@ public class ActivityUtil {
         FragmentTransaction transaction=fragmentManager.beginTransaction();
         transaction.add(frameId,fragment);
         transaction.commit();
+    }
+
+    public static void replaceFragment(FragmentManager fragmentManager, Fragment fragment, int frameId){
+        fragmentManager.beginTransaction().replace(frameId,fragment).commit();
     }
 
     public static String getString(Context context,int id){
