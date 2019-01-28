@@ -1,5 +1,7 @@
 package com.example.amia.schoolrent.Bean;
 
+import android.support.annotation.Nullable;
+
 import com.example.amia.schoolrent.Util.JSONUtil;
 
 import org.json.JSONException;
@@ -53,7 +55,7 @@ public class Result {
         this.paramType = paramType;
     }
 
-    public static Result getJSONObject(String json,Class className) throws JSONException, InstantiationException, IllegalAccessException {
+    public static Result getJSONObject(String json,@Nullable Class className) throws JSONException, InstantiationException, IllegalAccessException {
         if(json== null || "".equals(json)){
             return null;
         }
@@ -61,7 +63,7 @@ public class Result {
         Result result = new Result();
         result.setResult(object.getBoolean("result"));
 
-        if(result.getResult()) {
+        if(result.getResult() && className != null) {
             Object data = JSONUtil.getObject(className, object.getJSONObject("data"));
             result.setData(data);
         } else {

@@ -15,13 +15,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.amia.schoolrent.Bean.KeyValue;
 import com.example.amia.schoolrent.Presenter.StudentContract;
 import com.example.amia.schoolrent.R;
-import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.Util.MailUtil;
 
 import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.ERROR_WITH_MESSAGE;
 import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.SEND_SUCCESS;
+import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.VALIDATE_ERROR;
+import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.VALIDATE_SUCCESS;
 
 public class MailFragment extends Fragment implements StudentContract.View {
     protected static final int BTN_TIME_FLAG = 1000;
@@ -64,6 +66,7 @@ public class MailFragment extends Fragment implements StudentContract.View {
         sendBtn = view.findViewById(R.id.send_mail_btn);
         view.findViewById(R.id.back_layout).setOnClickListener(onClickListener);
         sendBtn.setOnClickListener(onClickListener);
+        view.findViewById(R.id.next_layout).setOnClickListener(onClickListener);
     }
 
     protected void sendMail(){
@@ -107,6 +110,38 @@ public class MailFragment extends Fragment implements StudentContract.View {
         }).start();
     }
 
+    /**
+     * 服务器请求验证
+     */
+    protected void sendValidate(){
+        EditText mailET = view.findViewById(R.id.mailAddress);
+        String address = mailET.getText().toString().trim();
+        //空邮箱
+        if(address == null || "".equals(address)){
+            Snackbar.make(view, R.string.mail_null, Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
+        //空验证码
+        EditText editText = view.findViewById(R.id.validate_code_et);
+        String code = editText.getText().toString().trim();
+        if(code == null || "".equals(code)){
+            Snackbar.make(view,R.string.valid_code,Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
+        KeyValue keyValue = new KeyValue(address,code);
+        presenter.validateMail(keyValue,handler);
+    }
+
+    protected void Snack(String msg){
+        if("".equals(msg)){
+            Snackbar.make(view,R.string.link_error,Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        Snackbar.make(view,msg,Toast.LENGTH_SHORT).show();
+    }
+
     protected View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -117,13 +152,27 @@ public class MailFragment extends Fragment implements StudentContract.View {
                 case R.id.send_mail_btn:
                     sendMail();
                     break;
+                case R.id.next_layout:
+                    sendValidate();
+                    break;
             }
         }
     };
 
+    /**
+     * 网络连接异常
+     */
     @Override
     public void linkError() {
         Toast.makeText(getContext(),R.string.link_error,Toast.LENGTH_SHORT).show();
+    }
+
+    protected void validateSuccess(){
+        Toast.makeText(getContext(),"验证成功！",Toast.LENGTH_LONG).show();
+    }
+
+    protected void validateError(){
+        Snackbar.make(view,R.string.mail_validate_error,Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -150,10 +199,16 @@ public class MailFragment extends Fragment implements StudentContract.View {
                     sendSuccess();
                     break;
                 case ERROR_WITH_MESSAGE:
-
+                    Snack(((String[])msg.obj)[0]);
                     break;
                 case BTN_TIME_FLAG:
                     setBtnTime((Integer) msg.obj);
+                    break;
+                case VALIDATE_SUCCESS:
+                    validateSuccess();
+                    break;
+                case VALIDATE_ERROR:
+                    validateError();
                     break;
             }
 

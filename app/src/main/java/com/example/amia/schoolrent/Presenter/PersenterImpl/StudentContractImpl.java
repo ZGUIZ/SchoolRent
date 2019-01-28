@@ -10,6 +10,8 @@ public class StudentContractImpl implements StudentContract.Presenter {
     public static final int ERROR_WITH_MESSAGE=-2;
     public static final int ERROR = -1;
     public static final int SEND_SUCCESS = 0;
+    public static final int VALIDATE_SUCCESS = 1;
+    public static final int VALIDATE_ERROR = 2;
 
     protected StudentContract.View view;
     protected StudentTask task;

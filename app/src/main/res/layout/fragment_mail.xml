@@ -37,6 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
+            android:id="@+id/validate_code_et"
             android:hint="@string/valid_code"
             android:layout_weight="3"
             android:layout_width="match_parent"

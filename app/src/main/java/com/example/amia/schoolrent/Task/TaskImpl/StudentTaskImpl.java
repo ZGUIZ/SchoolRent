@@ -12,6 +12,7 @@ import com.example.amia.schoolrent.Presenter.NetCallBack;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.StudentTask;
 import com.example.amia.schoolrent.Util.ActivityUtil;
+import com.example.amia.schoolrent.Util.JSONUtil;
 import com.example.amia.schoolrent.Util.NetUtils;
 import com.example.amia.schoolrent.Util.RSAUtil;
 
@@ -28,6 +29,8 @@ import java.util.Map;
 
 import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.ERROR_WITH_MESSAGE;
 import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.SEND_SUCCESS;
+import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.VALIDATE_ERROR;
+import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.VALIDATE_SUCCESS;
 import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.ERROR;
 import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.ERRORWITHMESSAGE;
 import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.LOGINSUCCESS;
@@ -136,7 +139,34 @@ public class StudentTaskImpl implements StudentTask {
     }
 
     @Override
-    public void validateMail(Context context,KeyValue keyValue, Handler handler) {
+    public void validateMail(Context context, KeyValue keyValue, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.mail_validate);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("keyValue",keyValue);
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()){
+                        msg.what = VALIDATE_SUCCESS;
+                    } else{
+                        msg.what = VALIDATE_ERROR;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
 
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERROR_WITH_MESSAGE;
+                message.obj = msg;
+            }
+        });
     }
 }
