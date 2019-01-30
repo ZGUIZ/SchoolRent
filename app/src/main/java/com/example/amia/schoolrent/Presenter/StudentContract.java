@@ -3,6 +3,7 @@ package com.example.amia.schoolrent.Presenter;
 import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.KeyValue;
+import com.example.amia.schoolrent.Bean.Student;
 
 public interface StudentContract {
     interface Presenter{
@@ -19,6 +20,13 @@ public interface StudentContract {
          * @param handler
          */
         void validateMail(KeyValue keyValue,Handler handler);
+
+        /**
+         * 学生注册
+         * @param student
+         * @param handler
+         */
+        void register(Student student,Handler handler);
     }
 
     interface View extends BaseView<Presenter>{

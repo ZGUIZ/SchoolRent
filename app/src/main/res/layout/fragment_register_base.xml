@@ -27,18 +27,162 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:textSize="30dp"
+                android:layout_marginBottom="30dp"
                 android:layout_height="wrap_content" />
-
+            <RelativeLayout
+                android:id="@+id/school_ll"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="25dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/login_text_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/school_iv"
+                    android:layout_marginLeft="5dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/school"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+                <EditText
+                    android:id="@+id/school_input"
+                    android:hint="@string/select_school"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@id/school_iv"
+                    android:layout_width="match_parent"
+                    android:background="@null"
+                    android:layout_height="40dp" />
+            </RelativeLayout>
+            <!--<RelativeLayout
+                android:id="@+id/user_ll"
+                android:layout_marginBottom="25dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/login_text_background"
+                android:layout_below="@id/school_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/user_iv"
+                    android:layout_marginLeft="5dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/student_num"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+                <EditText
+                    android:id="@+id/account"
+                    android:layout_toRightOf="@id/user_iv"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@null"
+                    android:inputType="number"
+                    android:hint="@string/user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+            </RelativeLayout>-->
+            <RelativeLayout
+                android:id="@+id/user_name_ll"
+                android:layout_marginBottom="25dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/login_text_background"
+                android:layout_below="@id/school_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/user_name_iv"
+                    android:layout_marginLeft="5dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/user"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+                <EditText
+                    android:id="@+id/user_name"
+                    android:layout_toRightOf="@id/user_name_iv"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@null"
+                    android:hint="@string/user_show_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginBottom="25dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:id="@+id/password_ll"
+                android:background="@drawable/login_text_background"
+                android:layout_below="@id/user_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/pass_iv"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/password"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_toRightOf="@id/pass_iv"
+                    android:inputType="textPassword"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_centerVertical="true"
+                    android:background="@null"
+                    android:hint="@string/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginBottom="25dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:id="@+id/password_confirm_ll"
+                android:background="@drawable/login_text_background"
+                android:layout_below="@id/user_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/pass_confirm_iv"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/password"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+                <EditText
+                    android:id="@+id/password_confirm"
+                    android:layout_toRightOf="@id/pass_confirm_iv"
+                    android:inputType="textPassword"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_centerVertical="true"
+                    android:background="@null"
+                    android:hint="@string/password_confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
-    <com.rey.material.widget.ProgressView
-        android:id="@+id/progress_view"
-        android:layout_centerInParent="true"
+    <RelativeLayout
+        android:id="@+id/progress_rl"
         android:visibility="gone"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:pv_autostart="true"
-        app:pv_circular="true"
-        app:pv_progressStyle="@style/MyCircularProgress"
-        app:pv_progressMode="indeterminate"/>
+        android:background="#66000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.rey.material.widget.ProgressView
+            android:id="@+id/progress_view"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:pv_autostart="true"
+            app:pv_circular="true"
+            app:pv_progressStyle="@style/MyCircularProgress"
+            app:pv_progressMode="indeterminate"/>
+    </RelativeLayout>
 </RelativeLayout>

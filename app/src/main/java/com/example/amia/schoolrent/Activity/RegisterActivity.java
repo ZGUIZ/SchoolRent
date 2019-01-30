@@ -34,8 +34,8 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
 
         schoolTask = new SchoolTaskImpl();
         studentTask = new StudentTaskImpl();
-        //loadMailFragment();
-        loadBaseFragment();
+        loadMailFragment();
+        //loadBaseFragment();
     }
 
     public void loadMailFragment(){

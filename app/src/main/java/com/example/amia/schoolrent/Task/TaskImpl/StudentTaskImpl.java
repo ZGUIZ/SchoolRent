@@ -22,12 +22,15 @@ import org.json.JSONObject;
 import org.litepal.LitePal;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.ERROR_WITH_MESSAGE;
+import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.REGISTER_ERROR;
+import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.REGISTER_SUCCESS;
 import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.SEND_SUCCESS;
 import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.VALIDATE_ERROR;
 import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.VALIDATE_SUCCESS;
@@ -47,7 +50,7 @@ public class StudentTaskImpl implements StudentTask {
             KeyValue keyValue = keyValues.get(0);
             byte[] bytes = Base64.decode(keyValue.getValue(), Base64.DEFAULT);
             //还原公钥
-            RSAUtil.restorePublicKey(bytes);
+            //RSAUtil.restorePublicKey(bytes);
             PublicKey key = RSAUtil.restorePublicKey(bytes);
             byte[] encodePassword = null;
             try {
@@ -173,6 +176,27 @@ public class StudentTaskImpl implements StudentTask {
     @Override
     public void register(Context context, Student student, final Handler handler) {
         String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.student_register);
+        List<KeyValue> keyValues = LitePal.where("key = ?","publicKey").find(KeyValue.class);
+        KeyValue keyValue = keyValues.get(0);
+        byte[] bytes = Base64.decode(keyValue.getValue(), Base64.DEFAULT);
+        //还原公钥
+        //RSAUtil.restorePublicKey(bytes);
+        PublicKey key = RSAUtil.restorePublicKey(bytes);
+        byte[] encodePassword = null;
+        try {
+            //加密密码
+            encodePassword = RSAUtil.RSAEncode(key,student.getPassword().getBytes("utf-8"));
+            student.setPassword(Base64.encodeToString(encodePassword,Base64.DEFAULT));
+            //加密确认密码
+            encodePassword = RSAUtil.RSAEncode(key,student.getConfirmPassword().getBytes("utf-8"));
+            student.setConfirmPassword(Base64.encodeToString(encodePassword,Base64.DEFAULT));
+
+            //用户名编码
+            student.setUserName(URLEncoder.encode(student.getUserName(),"utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         Map<String,Object> keyValueMap = new HashMap<>();
         keyValueMap.put("student",student);
         NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
@@ -181,9 +205,16 @@ public class StudentTaskImpl implements StudentTask {
                 Message msg = handler.obtainMessage();
                 try {
                     Result result = Result.getJSONObject(json,Student.class);
-
+                    if(result.getResult()) {
+                        msg.what = REGISTER_SUCCESS;
+                        msg.obj = result.getData();
+                    } else {
+                        msg.what = REGISTER_ERROR;
+                        msg.obj = result.getMsg();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    msg.what = ERROR;
                 } finally {
                     handler.sendMessage(msg);
                 }

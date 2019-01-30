@@ -1,6 +1,7 @@
 package com.example.amia.schoolrent.Fragment;
 
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -17,25 +18,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.RegisterInterface;
+import com.example.amia.schoolrent.Activity.MainActivity;
 import com.example.amia.schoolrent.Bean.Province;
 import com.example.amia.schoolrent.Bean.School;
+import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.LoginContract;
 import com.example.amia.schoolrent.Presenter.StudentContract;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.rey.material.app.BottomSheetDialog;
 import com.rey.material.widget.ProgressView;
 
 import java.util.List;
 
+import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.REGISTER_ERROR;
+import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.REGISTER_SUCCESS;
 import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.CITY;
 import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.ERROR;
 import static com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl.PROVINCE;
@@ -193,6 +196,9 @@ public class RegisterBaseFragment extends Fragment implements StudentContract.Vi
     }
 
     void finishRegister(){
+        showProgressBar();
+
+        //获取填写的信息
         RegisterInterface registerInterface = (RegisterInterface) getActivity();
         EditText editText = view.findViewById(R.id.user_name);
         String userName = editText.getText().toString().trim();
@@ -216,7 +222,53 @@ public class RegisterBaseFragment extends Fragment implements StudentContract.Vi
         registerInterface.setUserName(userName);
         registerInterface.setPassword(password);
         registerInterface.setConfirmPassword(password);
+        presenter.register(registerInterface.getStudent(),handler);
+    }
 
+    protected void registerError(Object msg){
+        hideProgressBar();
+        try {
+            String message = (String)msg;
+            Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
+        } catch (Exception e){
+            e.printStackTrace();
+            Snackbar.make(view, R.string.link_error, Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 注册成功，跳转到列表页面
+     * @param student
+     */
+    protected void registerSuccess(Student student){
+        hideProgressBar();
+
+        if(student == null){
+            registerError(ActivityUtil.getString(getActivity(),R.string.password_error));
+            return;
+        }
+
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        intent.putExtra("student",student);
+        getActivity().startActivity(intent);
+
+        getActivity().finish();
+    }
+
+    /**
+     * 显示进度条
+     */
+    protected void showProgressBar(){
+        view.findViewById(R.id.progress_rl).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 隐藏进度条
+     */
+    protected void hideProgressBar(){
+        view.findViewById(R.id.progress_view).setVisibility(View.GONE);
+        view.findViewById(R.id.progress_rl).setVisibility(View.GONE);
     }
 
     @Override
@@ -271,6 +323,12 @@ public class RegisterBaseFragment extends Fragment implements StudentContract.Vi
                     break;
                 case SCHOOL:
                     setSchoolList((List<School>) msg.obj);
+                    break;
+                case REGISTER_SUCCESS:
+                    registerSuccess((Student) msg.obj);
+                    break;
+                case REGISTER_ERROR:
+                    registerError(msg.obj);
                     break;
             }
         }
