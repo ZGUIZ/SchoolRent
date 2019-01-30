@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.RegisterInterface;
 import com.example.amia.schoolrent.Bean.KeyValue;
+import com.example.amia.schoolrent.Presenter.LoginContract;
 import com.example.amia.schoolrent.Presenter.StudentContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.MailUtil;
@@ -182,6 +183,10 @@ public class MailFragment extends Fragment implements StudentContract.View {
     public void linkError() {
         Toast.makeText(getContext(),R.string.link_error,Toast.LENGTH_SHORT).show();
         view.findViewById(R.id.progress_view).setVisibility(View.GONE);
+    }
+
+    @Deprecated
+    public void setPresenter(StudentContract.Presenter presenter, LoginContract.Presenter loginPresenter) {
     }
 
     /**

@@ -44,10 +44,14 @@ public class Student extends LitePalSupport implements Serializable{
      * 登录密码
      */
 	private String password;
+
+	private String confirmPassword;
     /**
      * 支付密码
      */
 	private String payPassword;
+
+	private String confirmPayPassword;
     /**
      * 认证等级
      */
@@ -225,6 +229,22 @@ public class Student extends LitePalSupport implements Serializable{
 
 	public void setBeanStatus(String beanStatus) {
 		this.beanStatus = beanStatus;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
+	}
+
+	public String getConfirmPayPassword() {
+		return confirmPayPassword;
+	}
+
+	public void setConfirmPayPassword(String confirmPayPassword) {
+		this.confirmPayPassword = confirmPayPassword;
 	}
 
 	/**

@@ -5,13 +5,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.RegisterInterface;
+import com.example.amia.schoolrent.Bean.School;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Fragment.MailFragment;
 import com.example.amia.schoolrent.Fragment.RegisterBaseFragment;
+import com.example.amia.schoolrent.Presenter.LoginContract;
+import com.example.amia.schoolrent.Presenter.PersenterImpl.LoginContractImpl;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl;
 import com.example.amia.schoolrent.Presenter.StudentContract;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Task.SchoolTask;
 import com.example.amia.schoolrent.Task.StudentTask;
+import com.example.amia.schoolrent.Task.TaskImpl.SchoolTaskImpl;
 import com.example.amia.schoolrent.Task.TaskImpl.StudentTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 
@@ -20,15 +25,17 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
     protected Student student =new Student();
 
     protected StudentTask studentTask;
+    protected SchoolTask schoolTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        schoolTask = new SchoolTaskImpl();
         studentTask = new StudentTaskImpl();
-        loadMailFragment();
-        //loadBaseFragment();
+        //loadMailFragment();
+        loadBaseFragment();
     }
 
     public void loadMailFragment(){
@@ -50,7 +57,8 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
         RegisterBaseFragment fragment = RegisterBaseFragment.newInstance();
         ActivityUtil.replaceFragment(getSupportFragmentManager(),fragment,R.id.register_fragment);
         StudentContract.Presenter presenter = new StudentContractImpl(fragment,studentTask);
-        fragment.setPresenter(presenter);
+        LoginContract.Presenter loginPresenter = new LoginContractImpl(fragment,schoolTask,studentTask);
+        fragment.setPresenter(presenter,loginPresenter);
     }
 
     @Override
@@ -61,7 +69,35 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
     }
 
     @Override
+    public void setSchool(School school){
+        student.setSchoolId(school.getSchoolId());
+    }
+
+    @Override
+    public void setUserName(String userName) {
+        student.setUserName(userName);
+    }
+
+    @Override
+    public void setPassword(String password) {
+        student.setPassword(password);
+    }
+
+    @Override
+    public Student getStudent() {
+        return student;
+    }
+
+    @Override
     public String getEMail() {
         return student.getEmail();
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        student.setConfirmPassword(confirmPassword);;
+    }
+
+    public void setConfirmPayPassword(String confirmPayPassword) {
+        student.setConfirmPassword(confirmPayPassword);
     }
 }

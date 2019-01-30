@@ -7,17 +7,25 @@ import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.Province;
 import com.example.amia.schoolrent.Bean.Student;
+import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.LoginContract;
+import com.example.amia.schoolrent.Presenter.StudentContract;
 import com.example.amia.schoolrent.Task.SchoolTask;
 import com.example.amia.schoolrent.Task.StudentTask;
 
 
 public class LoginContractImpl implements LoginContract.Presenter {
-    private LoginContract.View view;
+    private BaseView view;
     private SchoolTask task;
     private StudentTask studentTask;
 
     public LoginContractImpl(LoginContract.View view, SchoolTask task,StudentTask studentTask) {
+        this.view = view;
+        this.task = task;
+        this.studentTask = studentTask;
+    }
+
+    public LoginContractImpl(StudentContract.View view, SchoolTask task, StudentTask studentTask) {
         this.view = view;
         this.task = task;
         this.studentTask = studentTask;

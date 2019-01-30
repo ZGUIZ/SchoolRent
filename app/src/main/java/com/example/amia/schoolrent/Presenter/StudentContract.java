@@ -23,5 +23,6 @@ public interface StudentContract {
 
     interface View extends BaseView<Presenter>{
         void linkError();
+        void setPresenter(StudentContract.Presenter presenter,LoginContract.Presenter loginPresenter);
     }
 }

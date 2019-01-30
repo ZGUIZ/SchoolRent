@@ -169,4 +169,32 @@ public class StudentTaskImpl implements StudentTask {
             }
         });
     }
+
+    @Override
+    public void register(Context context, Student student, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.student_register);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("student",student);
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,Student.class);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERROR_WITH_MESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
 }

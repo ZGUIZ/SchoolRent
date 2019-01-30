@@ -30,4 +30,12 @@ public interface StudentTask {
      * @param handler
      */
     void validateMail(Context context,KeyValue keyValue,Handler handler);
+
+    /**
+     * 账号注册
+     * @param context
+     * @param student
+     * @param handler
+     */
+    void register(Context context,Student student,Handler handler);
 }
