@@ -15,13 +15,14 @@
         <activity android:name=".Activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Activity.LoginActivity" />
-        <activity android:name=".Activity.MainActivity" />
-        <activity android:name=".Activity.RegisterActivity"></activity>
+        <activity android:name=".Activity.MainActivity"
+            android:launchMode="singleInstance" />
+        <activity android:name=".Activity.RegisterActivity"
+            android:launchMode="singleInstance"></activity>
     </application>
 
 </manifest>
