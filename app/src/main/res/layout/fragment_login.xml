@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>
-    <RelativeLayout
+    <!--<RelativeLayout
         android:id="@+id/school_ll"
         android:layout_centerInParent="true"
         android:layout_marginBottom="25dp"
@@ -52,14 +52,14 @@
             android:layout_width="match_parent"
             android:background="@null"
             android:layout_height="40dp" />
-    </RelativeLayout>
+    </RelativeLayout>-->
     <RelativeLayout
         android:id="@+id/user_ll"
+        android:layout_centerInParent="true"
         android:layout_marginBottom="25dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/login_text_background"
-        android:layout_below="@id/school_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -76,7 +76,6 @@
             android:layout_marginLeft="6dp"
             android:layout_marginRight="5dp"
             android:background="@null"
-            android:inputType="number"
             android:hint="@string/user_name"
             android:layout_width="match_parent"
             android:layout_height="40dp" />

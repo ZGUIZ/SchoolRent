@@ -56,6 +56,8 @@ public class StudentTaskImpl implements StudentTask {
             try {
                 encodePassword = RSAUtil.RSAEncode(key,password.getBytes("utf-8"));
                 student.setPassword(Base64.encodeToString(encodePassword,Base64.DEFAULT));
+
+                student.setUserName(URLEncoder.encode(student.getUserName(),"utf-8"));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

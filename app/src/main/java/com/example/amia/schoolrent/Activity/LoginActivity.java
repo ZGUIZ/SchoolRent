@@ -1,8 +1,6 @@
 package com.example.amia.schoolrent.Activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.example.amia.schoolrent.Fragment.LoginFragment;
 import com.example.amia.schoolrent.Presenter.LoginContract;

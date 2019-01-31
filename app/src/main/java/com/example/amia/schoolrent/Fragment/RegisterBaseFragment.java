@@ -249,10 +249,11 @@ public class RegisterBaseFragment extends Fragment implements StudentContract.Vi
         }
 
         Intent intent = new Intent(getActivity(), MainActivity.class);
+        /*//清空栈
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);*/
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.putExtra("student",student);
-        getActivity().startActivity(intent);
-
-        getActivity().finish();
+        startActivity(intent);
     }
 
     /**
