@@ -1,13 +1,17 @@
 package com.example.amia.schoolrent.Activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.NetUtils;
 
 public abstract class BaseAcitivity extends AppCompatActivity {
     private long lastBackPressTime;
+
+    protected Student student;
 
     protected static boolean isLoading;
     @Override
@@ -28,5 +32,21 @@ public abstract class BaseAcitivity extends AppCompatActivity {
 
     protected void disConnection(){
         NetUtils.disConnection();
+    }
+
+    public Student getStudent(){
+        return student;
+    }
+
+    /**
+     * 退出登录
+     */
+    public void exitLogin(){
+        //删除连接
+
+        //返回注册页面
+        Intent intent = new Intent(this,LoginActivity.class);
+        startActivity(intent);
+        this.finish();
     }
 }

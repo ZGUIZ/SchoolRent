@@ -5,10 +5,15 @@
     android:layout_height="match_parent">
     <include layout="@layout/tool_bar_layout"
         android:id="@+id/bottom_tool_bar"/>
-    <FrameLayout
+    <com.example.amia.schoolrent.View.WindowInsetsFrameLayout
         android:layout_above="@id/bottom_tool_bar"
         android:id="@+id/main_frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </FrameLayout>
+    </com.example.amia.schoolrent.View.WindowInsetsFrameLayout>
+    <View
+        android:layout_above="@id/bottom_tool_bar"
+        android:background="@color/span"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
 </RelativeLayout>

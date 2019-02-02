@@ -20,7 +20,8 @@
         </activity>
         <activity android:name=".Activity.LoginActivity" />
         <activity android:name=".Activity.MainActivity"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance" >
+        </activity>
         <activity android:name=".Activity.RegisterActivity"
             android:launchMode="singleInstance"></activity>
     </application>

@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.example.amia.schoolrent.Bean.Student;
@@ -8,8 +9,6 @@ import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 
 public class MainActivity extends BaseAcitivity {
-
-    protected Student student;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +19,9 @@ public class MainActivity extends BaseAcitivity {
     }
 
     protected void init(){
+        //设置状态栏颜色
+        ActivityUtil.setWindowStatusBarColor(this, Color.rgb(204,204,204));
+
         student = (Student) getIntent().getSerializableExtra("student");
 
         MainFragement fragment = (MainFragement) getSupportFragmentManager().findFragmentById(R.id.main_frame);
@@ -27,10 +29,5 @@ public class MainActivity extends BaseAcitivity {
             fragment = MainFragement.newInstance();
             ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),fragment,R.id.main_frame);
         }
-
-    }
-
-    public Student getStudent(){
-        return student;
     }
 }

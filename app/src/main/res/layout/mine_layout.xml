@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:paddingLeft="10dp"
+            android:orientation="vertical"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/user_name_tv"
+                android:text="用户名"
+                android:textSize="25dp"
+                android:textColor="@android:color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/real_name_tv"
+                android:text="真实姓名"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/credit_tv"
+                android:text="信誉"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/default_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp" />
+            <ImageView
+                android:src="@drawable/go"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="12dp"
+                android:layout_height="60dp" />
+        </LinearLayout>
+    </RelativeLayout>
+    <View
+        android:background="#f3f4f8"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
+    <RelativeLayout
+        android:id="@+id/mine_push"
+        android:padding="10dp"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/mine_push_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+        <TextView
+            android:text="@string/mine_push"
+            android:layout_toRightOf="@id/mine_push_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <View
+        android:background="#f3f4f8"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <RelativeLayout
+        android:id="@+id/mine_need"
+        android:padding="10dp"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/mine_need_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+        <TextView
+            android:text="@string/mine_need"
+            android:layout_toRightOf="@id/mine_need_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <View
+        android:background="#f3f4f8"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <RelativeLayout
+        android:id="@+id/mine_rent"
+        android:padding="10dp"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/mine_rent_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+        <TextView
+            android:text="@string/mine_rent"
+            android:layout_toRightOf="@id/mine_rent_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</LinearLayout>

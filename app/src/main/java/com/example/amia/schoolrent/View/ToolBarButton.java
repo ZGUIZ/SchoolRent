@@ -3,7 +3,6 @@ package com.example.amia.schoolrent.View;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -61,6 +60,10 @@ public class ToolBarButton extends LinearLayout {
         setClicked(isClicked);
     }
 
+    /**
+     * 设置是否处于选中状态
+     * @param isClicked
+     */
     public void setClicked(boolean isClicked){
         this.isClicked = isClicked;
         if(isClicked){
@@ -72,16 +75,27 @@ public class ToolBarButton extends LinearLayout {
         }
     }
 
+    @Deprecated
     @Override
     public void setOnClickListener(@Nullable OnClickListener l) {
         super.setOnClickListener(l);
     }
 
+    /**
+     * 设置监听器
+     * @param l
+     * @param clearButtonStatus
+     */
     public void setOnClickListener(OnClickListener l, ClearButtonStatus clearButtonStatus){
         super.setOnClickListener(l);
         this.clearButtonStatus = clearButtonStatus;
     }
 
+    /**
+     * 处理点击事件
+     * @param event
+     * @return
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()){
