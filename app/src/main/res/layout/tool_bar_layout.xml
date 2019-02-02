@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_alignParentBottom="true"
+    android:paddingBottom="5dp"
+    android:background="@android:color/white"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.example.amia.schoolrent.View.ToolBarButton
+        android:id="@+id/index_btn"
+        android:layout_weight="1"
+        android:background="?android:selectableItemBackgroundBorderless"
+        app:before_clicked="@drawable/index"
+        app:after_clicked="@drawable/index_clicked"
+        app:title_text="@string/index"
+        app:isClicked="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <com.example.amia.schoolrent.View.ToolBarButton
+        android:id="@+id/newest"
+        android:layout_weight="1"
+        android:background="?android:selectableItemBackgroundBorderless"
+        app:before_clicked="@drawable/list"
+        app:after_clicked="@drawable/list_clicked"
+        app:title_text="@string/newest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <com.example.amia.schoolrent.View.ToolBarButton
+        android:id="@+id/push"
+        android:layout_weight="1"
+        android:background="?android:selectableItemBackgroundBorderless"
+        app:before_clicked="@drawable/add"
+        app:after_clicked="@drawable/index_clicked"
+        app:title_text="@string/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <com.example.amia.schoolrent.View.ToolBarButton
+        android:id="@+id/message"
+        android:layout_weight="1"
+        android:background="?android:selectableItemBackgroundBorderless"
+        app:before_clicked="@drawable/message"
+        app:after_clicked="@drawable/message_clicked"
+        app:title_text="@string/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <com.example.amia.schoolrent.View.ToolBarButton
+        android:id="@+id/mine"
+        android:layout_weight="1"
+        android:background="?android:selectableItemBackgroundBorderless"
+        app:before_clicked="@drawable/user_icon"
+        app:after_clicked="@drawable/user_icon_clicked"
+        app:title_text="@string/mine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

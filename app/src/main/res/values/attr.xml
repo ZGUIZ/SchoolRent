@@ -3,4 +3,10 @@
     <declare-styleable name="LogoView">
         <attr name="bgColor" format="color"/>
     </declare-styleable>
+    <declare-styleable name="ToolBarButton">
+        <attr name="before_clicked" format="reference" />
+        <attr name="after_clicked" format="reference" />
+        <attr name="isClicked" format="boolean" />
+        <attr name="title_text" format="string" />
+    </declare-styleable>
 </resources>
