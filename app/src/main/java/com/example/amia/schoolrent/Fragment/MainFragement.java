@@ -26,6 +26,10 @@ public class MainFragement extends Fragment {
 
     private FrameLayout frameLayout;
     private Fragment mineFragment;
+    private Fragment indexFragment;
+
+    //被选中的Fragment
+    private Fragment selected;
 
     public static MainFragement newInstance(){
         MainFragement mainFragement=new MainFragement();
@@ -46,6 +50,7 @@ public class MainFragement extends Fragment {
 
     protected void init(){
         frameLayout = view.findViewById(R.id.main_frame_layout);
+        loadSelect();
 
         ToolBarButton indexButton = view.findViewById(R.id.index_btn);
         toolBarButtons.add(indexButton);
@@ -77,6 +82,28 @@ public class MainFragement extends Fragment {
         //presenter = null;
     }
 
+    protected void loadSelect(){
+        if(selected == null){
+            loadIndex();
+            return;
+        }
+        ActivityUtil.replaceFragment(getActivity().getSupportFragmentManager(),selected,R.id.main_frame_layout);
+    }
+
+    /**
+     * 加载首页
+     */
+    protected void loadIndex(){
+        if(indexFragment == null){
+            indexFragment = IndexFragment.newInstance();
+        }
+        selected = indexFragment;
+        ActivityUtil.replaceFragment(getActivity().getSupportFragmentManager(),indexFragment,R.id.main_frame_layout);
+    }
+
+    /**
+     * 加载“我的”
+     */
     protected void loadMine(){
         BaseAcitivity activity = (BaseAcitivity) getActivity();
         //如果没有学生资料，则直接断开连接
@@ -89,6 +116,7 @@ public class MainFragement extends Fragment {
         if(mineFragment == null){
             mineFragment = MineFragment.newInstance();
         }
+        selected = mineFragment;
         ActivityUtil.replaceFragment(activity.getSupportFragmentManager(),mineFragment,R.id.main_frame_layout);
     }
 
@@ -98,6 +126,9 @@ public class MainFragement extends Fragment {
             switch (view.getId()){
                 case R.id.mine:
                     loadMine();
+                    break;
+                case R.id.index_btn:
+                    loadIndex();
                     break;
             }
         }

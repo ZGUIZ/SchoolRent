@@ -1,7 +1,9 @@
 package com.example.amia.schoolrent.Activity;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Fragment.MainFragement;
@@ -19,9 +21,6 @@ public class MainActivity extends BaseAcitivity {
     }
 
     protected void init(){
-        //设置状态栏颜色
-        ActivityUtil.setWindowStatusBarColor(this, Color.rgb(204,204,204));
-
         student = (Student) getIntent().getSerializableExtra("student");
 
         MainFragement fragment = (MainFragement) getSupportFragmentManager().findFragmentById(R.id.main_frame);

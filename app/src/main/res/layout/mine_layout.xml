@@ -56,6 +56,28 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"/>
     <RelativeLayout
+        android:id="@+id/mine_check"
+        android:padding="10dp"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/check"
+            android:id="@+id/mine_check_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+        <TextView
+            android:text="@string/mine_check"
+            android:layout_marginLeft="6dp"
+            android:layout_toRightOf="@id/mine_check_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <View
+        android:background="#f3f4f8"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <RelativeLayout
         android:id="@+id/mine_push"
         android:padding="10dp"
         android:background="?android:selectableItemBackgroundBorderless"
@@ -63,11 +85,13 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/mine_push_iv"
+            android:src="@drawable/push"
             android:layout_width="20dp"
             android:layout_height="20dp" />
         <TextView
             android:text="@string/mine_push"
             android:layout_toRightOf="@id/mine_push_iv"
+            android:layout_marginLeft="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>
@@ -83,11 +107,13 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/mine_need_iv"
+            android:src="@drawable/need"
             android:layout_width="20dp"
             android:layout_height="20dp" />
         <TextView
             android:text="@string/mine_need"
             android:layout_toRightOf="@id/mine_need_iv"
+            android:layout_marginLeft="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>
@@ -103,10 +129,12 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/mine_rent_iv"
+            android:src="@drawable/rent"
             android:layout_width="20dp"
             android:layout_height="20dp" />
         <TextView
             android:text="@string/mine_rent"
+            android:layout_marginLeft="6dp"
             android:layout_toRightOf="@id/mine_rent_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
