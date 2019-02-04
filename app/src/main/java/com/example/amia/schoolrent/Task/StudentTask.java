@@ -8,7 +8,7 @@ import com.example.amia.schoolrent.Bean.KeyValue;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.LoginContract;
 
-public interface StudentTask {
+public interface StudentTask extends BaseTask{
     /**
      * 登录
      * @param context

@@ -4,8 +4,12 @@ import android.support.annotation.Nullable;
 
 import com.example.amia.schoolrent.Util.JSONUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Result {
     /**
@@ -71,5 +75,26 @@ public class Result {
         }
         return result;
     }
+    public static Result getObjectWithList(String json,Class className) throws JSONException, InstantiationException, IllegalAccessException {
+        if(json== null || "".equals(json)){
+            return null;
+        }
+        JSONObject object = new JSONObject(json);
+        Result result = new Result();
+        result.setResult(object.getBoolean("result"));
+        List<Object> objects = new ArrayList<>();
 
+        if(result.getResult() && className != null) {
+            JSONArray jsonArray = object.getJSONArray("data");
+            for(int i = 0;i<jsonArray.length();i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Object data = JSONUtil.getObject(className,jsonObject);
+                objects.add(data);
+            }
+            result.setData(objects);
+        } else {
+            result.setMsg(object.getString("msg"));
+        }
+        return result;
+    }
 }

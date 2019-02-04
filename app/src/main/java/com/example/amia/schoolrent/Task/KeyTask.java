@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.security.PublicKey;
 
-public interface KeyTask {
+public interface KeyTask extends BaseTask{
     PublicKey getKey(Context context) throws IOException, JSONException;
     void isChangeKey(Context context, Handler handler) throws Exception;
 }

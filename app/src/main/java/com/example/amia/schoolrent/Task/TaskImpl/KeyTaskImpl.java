@@ -26,9 +26,6 @@ import java.util.concurrent.Executors;
 
 public class KeyTaskImpl implements KeyTask {
 
-    //线程池
-    private static ExecutorService service = Executors.newSingleThreadExecutor();
-
     @Override
     public PublicKey getKey(Context context) throws IOException, JSONException {
         String result=NetUtils.requestDataFromNet(ActivityUtil.getString(context,R.string.host)+

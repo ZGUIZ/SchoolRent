@@ -1,6 +1,8 @@
 package com.example.amia.schoolrent.Fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,16 +10,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.amia.schoolrent.Activity.BaseAcitivity;
 import com.example.amia.schoolrent.Bean.Student;
+import com.example.amia.schoolrent.Presenter.MainContract;
+import com.example.amia.schoolrent.Presenter.PersenterImpl.MainContractImpl;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Task.IdleTask;
+import com.example.amia.schoolrent.Task.TaskImpl.IdleTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.View.ClearButtonStatus;
 import com.example.amia.schoolrent.View.ToolBarButton;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
+import static com.example.amia.schoolrent.Task.IdleTask.ERRORWITHMESSAGE;
+import static com.example.amia.schoolrent.Task.IdleTask.INDEX_CLASSIFY;
 
 public class MainFragement extends Fragment {
 
@@ -98,7 +109,13 @@ public class MainFragement extends Fragment {
             indexFragment = IndexFragment.newInstance();
         }
         selected = indexFragment;
+
         ActivityUtil.replaceFragment(getActivity().getSupportFragmentManager(),indexFragment,R.id.main_frame_layout);
+
+        IdleTask task = new IdleTaskImpl();
+        IndexFragment fragment = ((IndexFragment)indexFragment);
+        MainContract.Presenter presenter = new MainContractImpl(fragment,task);
+        fragment.setPresenter(presenter);
     }
 
     /**

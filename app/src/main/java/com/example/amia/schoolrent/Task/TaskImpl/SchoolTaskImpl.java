@@ -21,16 +21,6 @@ import java.util.concurrent.Executors;
 
 public class SchoolTaskImpl implements SchoolTask {
 
-    private static ExecutorService service = Executors.newSingleThreadExecutor();
-
-    public static final int ERRORWITHMESSAGE=-2;
-    public static final int ERROR = -1;
-    public static final int PROVINCE = 0;
-    public static final int CITY = 1;
-    public static final int SCHOOL = 2;
-    public static final int PASSWORDERROR = 3;
-    public static final int LOGINSUCCESS = 4;
-
     @Override
     public void getProvince(final Context context, final Handler handler) {
         service.submit(new Runnable() {
