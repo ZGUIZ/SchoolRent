@@ -68,7 +68,7 @@ public class ToolBarButton extends LinearLayout {
         this.isClicked = isClicked;
         if(isClicked){
             icon.setImageResource(afterCLickImage);
-            textView.setTextColor(Color.rgb(18,150,219));
+            textView.setTextColor(Color.rgb(8,138,152));
         } else {
             icon.setImageResource(beforeClickImage);
             textView.setTextColor(Color.rgb(0,0,0));
