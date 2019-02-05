@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Fragment;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,14 +16,17 @@ import android.widget.Toast;
 
 
 import com.example.amia.schoolrent.Bean.Classify;
+import com.example.amia.schoolrent.Bean.MapKeyValue;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.IndexClassifyAdapter;
 import com.example.amia.schoolrent.Presenter.MainContract;
 import com.example.amia.schoolrent.R;
 import com.ufo.dwrefresh.view.DWRefreshLayout;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static com.example.amia.schoolrent.Task.IdleTask.CLASSIFY_ICON;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.ERRORWITHMESSAGE;
 import static com.example.amia.schoolrent.Task.IdleTask.INDEX_CLASSIFY;
@@ -36,6 +40,7 @@ public class IndexFragment extends Fragment implements MainContract.View{
     private MainContract.Presenter presenter;
 
     private List<Classify> classifyList;
+    private Map<String, Bitmap> iconMap;
 
     public static IndexFragment newInstance(){
         IndexFragment indexFragment = new IndexFragment();
@@ -56,11 +61,13 @@ public class IndexFragment extends Fragment implements MainContract.View{
     }
 
     protected void init(){
+        iconMap = new HashMap<>();
         classifyList = presenter.getCacheClassify();
 
         classifyView = view.findViewById(R.id.index_classify_rv);
         classifyView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
         adapter = new IndexClassifyAdapter(classifyList,getActivity());
+        adapter.setIconMap(iconMap);
         classifyView.setAdapter(adapter);
 
         refreshLayout = view.findViewById(R.id.index_refresh_layout);
@@ -113,6 +120,16 @@ public class IndexFragment extends Fragment implements MainContract.View{
         }
     }
 
+    private void loadIcon(Object object){
+        try{
+            MapKeyValue<Bitmap> keyValue = (MapKeyValue<Bitmap>) object;
+            iconMap.put(keyValue.getId(),keyValue.getData());
+            adapter.notifyDataSetChanged();
+        } catch (ClassCastException e){
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -143,7 +160,9 @@ public class IndexFragment extends Fragment implements MainContract.View{
                 case ERRORWITHMESSAGE:
                     errorWithMessage(msg.obj);
                     break;
-
+                case CLASSIFY_ICON:
+                    loadIcon(msg.obj);
+                    break;
             }
         }
     };

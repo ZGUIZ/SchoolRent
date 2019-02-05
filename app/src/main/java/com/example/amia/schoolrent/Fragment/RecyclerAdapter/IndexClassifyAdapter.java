@@ -1,6 +1,7 @@
 package com.example.amia.schoolrent.Fragment.RecyclerAdapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,9 +14,11 @@ import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.R;
 
 import java.util.List;
+import java.util.Map;
 
 public class IndexClassifyAdapter extends RecyclerView.Adapter<IndexClassifyAdapter.Holder> {
     private List<Classify> list;
+    private Map<String,Bitmap> iconMap;
     private Context context;
 
     public IndexClassifyAdapter(List<Classify> list, Context context) {
@@ -36,8 +39,8 @@ public class IndexClassifyAdapter extends RecyclerView.Adapter<IndexClassifyAdap
         holder.textView.setText(classify.getClassifyName());
         if(classify.getImageUrl() == null || "".equals(classify.getImageUrl().trim())){
             holder.imageView.setImageResource(R.drawable.default_icon);
-        } else {
-
+        } else if(iconMap.get(classify.getClassifyId())!=null){
+            holder.imageView.setImageBitmap(iconMap.get(classify.getClassifyId()));
         }
     }
 
@@ -54,5 +57,9 @@ public class IndexClassifyAdapter extends RecyclerView.Adapter<IndexClassifyAdap
             imageView = itemView.findViewById(R.id.image_view);
             textView = itemView.findViewById(R.id.text_view);
         }
+    }
+
+    public void setIconMap(Map<String, Bitmap> iconMap) {
+        this.iconMap = iconMap;
     }
 }

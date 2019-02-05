@@ -204,6 +204,26 @@ public class NetUtils {
     }
 
     /**
+     * 获取网络图片
+     * @param url
+     * @param callback
+     */
+    public static void getImage(final String url, final NetImageCallback callback){
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Bitmap bitmap = getURLImage(url);
+                    callback.finish(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    callback.error();
+                }
+            }
+        });
+    }
+
+    /**
      * 从网络上加载图片
      * @param url
      * @return

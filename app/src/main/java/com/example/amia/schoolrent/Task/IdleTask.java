@@ -13,6 +13,7 @@ public interface IdleTask extends BaseTask{
     int ERROR = -1;
     int INDEX_CLASSIFY = 1;
     int ALL_CLASSIFY = 2;
+    int CLASSIFY_ICON = 3;
 
     void getIndexClassify(Context context,Handler handler);
     List<Classify> getIndexClassifyFromCache();

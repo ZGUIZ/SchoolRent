@@ -2,6 +2,7 @@ package com.example.amia.schoolrent.Bean;
 
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -67,6 +68,8 @@ public class IdleInfo implements Serializable{
 	 * 标题
 	 */
 	private String title;
+
+	private List<IdelPic> picList;
 
 	public String getSchoolId() {
 		return schoolId;
@@ -172,4 +175,11 @@ public class IdleInfo implements Serializable{
 		this.title = title;
 	}
 
+	public List<IdelPic> getPicList() {
+		return picList;
+	}
+
+	public void setPicList(List<IdelPic> picList) {
+		this.picList = picList;
+	}
 }

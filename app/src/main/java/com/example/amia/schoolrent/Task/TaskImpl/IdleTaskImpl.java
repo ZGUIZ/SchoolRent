@@ -1,16 +1,20 @@
 package com.example.amia.schoolrent.Task.TaskImpl;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
 import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
+import com.example.amia.schoolrent.Bean.MapKeyValue;
 import com.example.amia.schoolrent.Bean.Result;
 import com.example.amia.schoolrent.Presenter.NetCallBack;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.IdleTask;
 import com.example.amia.schoolrent.Util.ActivityUtil;
+import com.example.amia.schoolrent.Util.NetImageCallback;
 import com.example.amia.schoolrent.Util.NetUtils;
 
 import org.litepal.LitePal;
@@ -34,6 +38,9 @@ public class IdleTaskImpl implements IdleTask {
                         LitePal.deleteAll(Classify.class);
                         for(int i=0;i<results.size();i++){
                             Classify classify = results.get(i);
+                            //加载图片信息
+                            loadIcon(classify.getClassifyId(),classify.getImageUrl(),handler);
+                            //保存到数据库
                             classify.save();
                         }
                     } else {
@@ -54,6 +61,31 @@ public class IdleTaskImpl implements IdleTask {
                 message.obj = msg;
             }
         });
+    }
+
+    public void loadIcon(final String id,String url, final Handler handler){
+        //下载图片
+        if(url != null  && !"".equals(url)) {
+            NetUtils.getImage(url, new NetImageCallback() {
+                @Override
+                public void finish(Bitmap bitmap) {
+                    Message message = handler.obtainMessage();
+                    message.what = CLASSIFY_ICON;
+
+                    //封装对象
+                    MapKeyValue<Bitmap> keyValue = new MapKeyValue<>();
+                    keyValue.setId(id);
+                    keyValue.setData(bitmap);
+
+                    message.obj = keyValue;
+                    handler.sendMessage(message);
+                }
+
+                @Override
+                public void error() {
+                }
+            });
+        }
     }
 
     @Override
