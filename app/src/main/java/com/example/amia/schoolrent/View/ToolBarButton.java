@@ -104,9 +104,11 @@ public class ToolBarButton extends LinearLayout {
             case MotionEvent.ACTION_DOWN:
                 break;
             case MotionEvent.ACTION_UP:
-                clearButtonStatus.clearButtonStatus();
-                setClicked(true);
-                invalidate();//更新视图
+                if(clearButtonStatus!=null) {
+                    clearButtonStatus.clearButtonStatus();
+                    setClicked(true);
+                    invalidate();//更新视图
+                }
                 break;
         }
 
