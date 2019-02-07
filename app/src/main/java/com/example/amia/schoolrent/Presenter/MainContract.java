@@ -1,8 +1,10 @@
 package com.example.amia.schoolrent.Presenter;
 
+import android.content.Context;
 import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.Classify;
+import com.example.amia.schoolrent.Bean.Student;
 
 import java.util.List;
 
@@ -13,7 +15,14 @@ public interface MainContract {
          * @param handler
          */
         void getIndexClassify(Handler handler);
+
+        /**
+         * 读取缓存的分类
+         * @return
+         */
         List<Classify> getCacheClassify();
+
+        String uploadImage(Context context, Student student, String srcPath,Handler handler);
     }
 
     interface View extends BaseView<Presenter>{

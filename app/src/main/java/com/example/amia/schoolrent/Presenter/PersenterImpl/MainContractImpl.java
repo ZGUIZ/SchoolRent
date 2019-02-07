@@ -1,8 +1,10 @@
 package com.example.amia.schoolrent.Presenter.PersenterImpl;
 
+import android.content.Context;
 import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.Classify;
+import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.MainContract;
 import com.example.amia.schoolrent.Task.IdleTask;
@@ -26,5 +28,10 @@ public class MainContractImpl implements MainContract.Presenter {
     @Override
     public List<Classify> getCacheClassify() {
         return task.getIndexClassifyFromCache();
+    }
+
+    @Override
+    public String uploadImage(Context context, Student student, String srcPath, Handler handler) {
+        return task.uploadImage(context,student,srcPath,handler);
     }
 }

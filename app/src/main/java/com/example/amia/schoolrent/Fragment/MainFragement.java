@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +14,8 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.amia.schoolrent.Activity.BaseAcitivity;
+import com.example.amia.schoolrent.Activity.MainActivity;
+import com.example.amia.schoolrent.Activity.PushActivity;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.MainContract;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.MainContractImpl;
@@ -73,7 +76,7 @@ public class MainFragement extends Fragment {
 
         ToolBarButton pushButton = view.findViewById(R.id.push);
         toolBarButtons.add(pushButton);
-        pushButton.setOnClickListener(clickListener,clearButtonStatus);
+        pushButton.setOnClickListener(clickListener);
 
         ToolBarButton messageButton = view.findViewById(R.id.message);
         toolBarButtons.add(messageButton);
@@ -137,6 +140,13 @@ public class MainFragement extends Fragment {
         ActivityUtil.replaceFragment(activity.getSupportFragmentManager(),mineFragment,R.id.main_frame_layout);
     }
 
+    private void loadPushActivity(){
+        MainActivity mainActivity = (MainActivity) getActivity();
+        Intent intent = new Intent(mainActivity, PushActivity.class);
+        intent.putExtra("student",mainActivity.getStudent());
+        startActivity(intent);
+    }
+
     View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -146,6 +156,9 @@ public class MainFragement extends Fragment {
                     break;
                 case R.id.index_btn:
                     loadIndex();
+                    break;
+                case R.id.push:
+                    loadPushActivity();
                     break;
             }
         }

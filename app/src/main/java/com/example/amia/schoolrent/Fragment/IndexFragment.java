@@ -30,6 +30,9 @@ import static com.example.amia.schoolrent.Task.IdleTask.CLASSIFY_ICON;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.ERRORWITHMESSAGE;
 import static com.example.amia.schoolrent.Task.IdleTask.INDEX_CLASSIFY;
+import static com.example.amia.schoolrent.Util.COSUtil.PUT_PROGRESS;
+import static com.example.amia.schoolrent.Util.COSUtil.RESULT_ERROR;
+import static com.example.amia.schoolrent.Util.COSUtil.RESULT_SUCCESS;
 
 public class IndexFragment extends Fragment implements MainContract.View{
     private static View view;
@@ -162,6 +165,15 @@ public class IndexFragment extends Fragment implements MainContract.View{
                     break;
                 case CLASSIFY_ICON:
                     loadIcon(msg.obj);
+                    break;
+                case PUT_PROGRESS: //上传图片进度回显
+
+                    break;
+                case RESULT_SUCCESS:  //上传图片成功
+
+                    break;
+                case RESULT_ERROR:  //上传图片失败
+                    Toast.makeText(getActivity(),(String)msg.obj,Toast.LENGTH_SHORT).show();
                     break;
             }
         }

@@ -99,34 +99,6 @@ public class NetUtils {
         }
     }
 
-    /*public static <T> void doPost(final String url, final Map<String,Object> param, final Map<String,String> header){
-        final Student student = null;
-        Observable.create(new Observable.OnSubscribe<Object>() {
-            @Override
-            public void call(Subscriber<? super Object> subscriber) {
-                try {
-                    String json=post(url,param,header);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).subscribeOn(Schedulers.newThread()).observeOn(new Subscriber<String>(){
-
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-            }
-
-            @Override
-            public void onNext(String json) {
-                student = JSONUtil.getObject(Student.class,json)
-            }
-        });
-    }*/
-
     public static void doPost(final String url, final Map<String,Object> param, final Map<String,String> header, final NetCallBack callBack){
         executorService.submit(new Runnable() {
             @Override

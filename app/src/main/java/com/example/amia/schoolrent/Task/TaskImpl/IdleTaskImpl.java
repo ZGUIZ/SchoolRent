@@ -10,21 +10,27 @@ import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.MapKeyValue;
 import com.example.amia.schoolrent.Bean.Result;
+import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.NetCallBack;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.IdleTask;
 import com.example.amia.schoolrent.Util.ActivityUtil;
+import com.example.amia.schoolrent.Util.COSUtil;
 import com.example.amia.schoolrent.Util.NetImageCallback;
 import com.example.amia.schoolrent.Util.NetUtils;
 
 import org.litepal.LitePal;
 
+import java.util.Date;
 import java.util.List;
 
 public class IdleTaskImpl implements IdleTask {
 
+    private Date updateTime;
+
     @Override
     public void getIndexClassify(final Context context,final Handler handler) {
+        updateTime = new Date();
         NetUtils.get(ActivityUtil.getString(context, R.string.host) + ActivityUtil.getString(context, R.string.classify_index), new NetCallBack() {
             @Override
             public void finish(String json) {
@@ -98,6 +104,21 @@ public class IdleTaskImpl implements IdleTask {
     @Override
     public void getAllClassify(Context context,Handler handler) {
 
+    }
+
+    @Override
+    public String uploadImage(Context context,Student student, String srcPath, Handler handler) {
+        Date now = new Date();
+        COSUtil cosUtil = new COSUtil(context);
+        String id = "/"+student.getUserId() +"/"+now.getTime();
+        String cosUrl = ActivityUtil.getString(context,R.string.idle_pic_package) + id;
+        cosUtil.uploadFile(cosUrl,srcPath,handler, id);
+        return id;
+    }
+
+    @Override
+    public void stopUpload(String id) {
+        COSUtil.stop(id);
     }
 
     @Override
