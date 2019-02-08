@@ -9,6 +9,7 @@ import com.example.amia.schoolrent.Bean.Student;
 public interface PushIdleContract {
     interface Presenter{
         void uploadFile(Context context, Student student, String url, Handler handler);
+        void getAllClassify(Context context,Handler handler);
     }
 
     interface View extends BaseView<Presenter>{

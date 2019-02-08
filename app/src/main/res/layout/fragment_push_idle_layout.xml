@@ -77,13 +77,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="6dp"/>
             <RelativeLayout
+                android:id="@+id/classify_rl"
                 android:background="?android:selectableItemBackground"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="35dp">
                 <TextView
                     android:id="@+id/classify_title"
                     android:text="@string/classify"
                     android:padding="6dp"
+                    android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <ImageView
@@ -95,9 +97,11 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp" />
                 <TextView
+                    android:id="@+id/classify_name_tv"
                     android:layout_toRightOf="@id/classify_title"
                     android:layout_toLeftOf="@id/go_iv"
                     android:background="@null"
+                    android:layout_centerVertical="true"
                     android:padding="6dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

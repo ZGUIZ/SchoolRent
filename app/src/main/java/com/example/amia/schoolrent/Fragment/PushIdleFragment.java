@@ -7,14 +7,23 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.PushIdleInterface;
+import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdelPic;
+import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.LocalPic;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.PushImageAdapter;
@@ -22,6 +31,12 @@ import com.example.amia.schoolrent.Presenter.PushIdleContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.Util.COSUtil;
+import com.rey.material.app.BottomSheetDialog;
+import com.rey.material.widget.ProgressView;
+
+import java.util.List;
+
+import static com.example.amia.schoolrent.Task.IdleTask.CLASSIFY_ALL;
 
 public class PushIdleFragment extends Fragment implements PushIdleContract.View {
 
@@ -30,7 +45,15 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
 
     private PushIdleContract.Presenter presenter;
 
-    int imageCount = 0;
+    private BottomSheetDialog dialog;
+    private View selectView;
+    private ProgressView progressView;
+
+    private int imageCount = 0;
+    protected IdleInfo idleInfo;
+    protected Student student;
+
+    protected static final int SET_CLASSIFY_TITLE = 1001;
 
     public static PushIdleFragment newInstance(){
         PushIdleFragment pushIdleFragment = new PushIdleFragment();
@@ -51,6 +74,11 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
     }
 
     protected void init(){
+        student = ((PushIdleInterface)getActivity()).getStudent();
+        idleInfo = new IdleInfo();
+        idleInfo.setUserId(student.getUserId());
+        idleInfo.setSchoolId(student.getSchoolId());
+
         view.findViewById(R.id.back_button).setOnClickListener(onClickListener);
 
         //初始化添加图片的RecyclerView
@@ -65,6 +93,8 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
             }
         });
         recyclerView.setAdapter(adapter);
+
+        view.findViewById(R.id.classify_rl).setOnClickListener(onClickListener);
     }
 
     /**
@@ -94,13 +124,79 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
                 case R.id.back_button:
                     leavePage();
                     break;
+                case R.id.classify_rl:
+                    showClassifySelector();
+                    break;
             }
         }
     };
 
+    private void showClassifySelector(){
+        if(dialog != null) {
+            dialog.cancel();
+        }
+        dialog = new BottomSheetDialog(getActivity());
+        selectView = getLayoutInflater().inflate(R.layout.school_selector_layout,null);
+        ((TextView)selectView.findViewById(R.id.title_tv)).setText(R.string.select_classify);
+        progressView = selectView.findViewById(R.id.login_progress_view);
+        dialog.setContentView(selectView);
+        dialog.show();
+        progressView.setVisibility(View.VISIBLE);
+        presenter.getAllClassify(getActivity(),handler);
+    }
+
+    private void setClassify(final List<Classify> classifyList) {
+        progressView.setVisibility(View.GONE);
+        if(classifyList== null || classifyList.size() == 0){
+            linkError();
+            return;
+        }
+
+        ListView listView = selectView.findViewById(R.id.school_list);
+
+        ArrayAdapter<String> adapter;
+        if(listView != null){
+            //将其转换为数组
+            String[] array = new String[classifyList.size()];
+            for(int i = 0;i<classifyList.size();i++){
+                array[i] = classifyList.get(i).getClassifyName();
+            }
+            adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,array);
+            listView.setAdapter(adapter);
+
+            final View pageView = view;
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    //设置分类信息
+                    Classify classify = classifyList.get(i);
+                    idleInfo.setClassifyId(classify.getClassifyId());
+                    Message msg = handler.obtainMessage();
+                    msg.what = SET_CLASSIFY_TITLE;
+                    msg.obj = classify;
+                    handler.sendMessage(msg);
+                    dialog.cancel();
+                }
+            });
+        }
+
+        //解决NestedScrollView和ListView滑动事件冲突
+        listView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                NestedScrollView scrollView = selectView.findViewById(R.id.school_nv);
+                scrollView.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
+    }
+
+    public void linkError() {
+        Toast.makeText(getContext(),R.string.link_error,Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void addPic(String path) {
-        Student student = ((PushIdleInterface)getActivity()).getStudent();
         LocalPic localPic = new LocalPic();
         localPic.setAdd(false);
         localPic.setLocalUri(path);
@@ -117,9 +213,26 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
         adapter.addPic(localPic);
     }
 
+    private void setClassifyTextView(Classify classify){
+        try {
+            TextView textView = view.findViewById(R.id.classify_name_tv);
+            textView.setText(classify.getClassifyName());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
+            switch (msg.what){
+                case CLASSIFY_ALL:
+                    setClassify((List<Classify>) msg.obj);
+                    break;
+                case SET_CLASSIFY_TITLE:
+                    setClassifyTextView((Classify) msg.obj);
+                    break;
+            }
             super.handleMessage(msg);
         }
     };

@@ -21,4 +21,9 @@ public class PushIdleContractImpl implements PushIdleContract.Presenter {
     public void uploadFile(Context context, Student student, String url, Handler handler) {
         task.uploadImage(context,student,url,handler);
     }
+
+    @Override
+    public void getAllClassify(Context context, Handler handler) {
+        task.getAllClassify(context,handler);
+    }
 }

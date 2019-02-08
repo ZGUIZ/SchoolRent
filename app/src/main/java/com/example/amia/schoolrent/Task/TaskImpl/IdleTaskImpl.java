@@ -102,8 +102,35 @@ public class IdleTaskImpl implements IdleTask {
 
 
     @Override
-    public void getAllClassify(Context context,Handler handler) {
+    public void getAllClassify(Context context,final Handler handler) {
+        NetUtils.get(ActivityUtil.getString(context, R.string.host) + ActivityUtil.getString(context, R.string.classify_all), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result r = Result.getObjectWithList(json,Classify.class);
+                    if(r.getResult()){
+                        List<Classify> results = (List<Classify>) r.getData();
+                        msg.what = CLASSIFY_ALL;
+                        msg.obj = results;
+                    } else {
+                        msg.what = ERROR;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                }finally {
+                    handler.sendMessage(msg);
+                }
+            }
 
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
     }
 
     @Override

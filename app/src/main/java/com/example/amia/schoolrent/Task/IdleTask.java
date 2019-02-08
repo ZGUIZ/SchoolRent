@@ -15,6 +15,7 @@ public interface IdleTask extends BaseTask{
     int INDEX_CLASSIFY = 1;
     int ALL_CLASSIFY = 2;
     int CLASSIFY_ICON = 3;
+    int CLASSIFY_ALL = 4;
 
     /**
      * 获取首页分类
