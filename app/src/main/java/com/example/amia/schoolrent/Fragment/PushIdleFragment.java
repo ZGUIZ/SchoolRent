@@ -1,7 +1,6 @@
 package com.example.amia.schoolrent.Fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -59,7 +58,7 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
         Activity activity = getActivity();
         adapter = new PushImageAdapter(activity);
-        ((PushImageAdapter) adapter).setOnItemCLickListener(new PushImageAdapter.OnItemClickListener() {
+        adapter.setOnItemCLickListener(new PushImageAdapter.OnItemClickListener() {
             @Override
             public void addPic() {
                 selectPic();

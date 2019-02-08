@@ -82,7 +82,7 @@ public class PushImageAdapter extends RecyclerView.Adapter<PushImageAdapter.Hold
     }
 
     public void addPic(LocalPic localPic) {
-        picList.add(localPic);
+        picList.add(picList.size()-1,localPic);
         this.notifyDataSetChanged();
     }
 
