@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Util;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class JSONUtil {
     /**
@@ -35,7 +37,11 @@ public class JSONUtil {
                     Method method = t.getClass().getMethod("get"+upperName);
                     Object o = method.invoke(t);
                     if(o!=null){
-                        jsonObject.put(propertyName,o);
+                        if(o instanceof List){
+                            jsonObject.put(propertyName,getJsonArray(o));
+                        } else {
+                            jsonObject.put(propertyName, o);
+                        }
                     }
                 } catch (NoSuchMethodException e) {
                     e.printStackTrace();
@@ -49,6 +55,18 @@ public class JSONUtil {
             }
         }
         return jsonObject;
+    }
+
+    public static JSONArray getJsonArray(Object o){
+        JSONArray jsonArray = new JSONArray();
+        if(o instanceof List){
+            List<Object> objects = (List<Object>) o;
+            for(Object object : objects){
+                JSONObject result = getJSONObject(object);
+                jsonArray.put(result);
+            }
+        }
+        return jsonArray;
     }
 
     public static Object getObject(Class className,String json) throws IllegalAccessException, InstantiationException, JSONException {

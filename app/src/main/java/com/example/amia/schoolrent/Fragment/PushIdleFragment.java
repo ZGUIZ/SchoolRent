@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,9 @@ import com.rey.material.widget.ProgressView;
 import java.util.List;
 
 import static com.example.amia.schoolrent.Task.IdleTask.CLASSIFY_ALL;
+import static com.example.amia.schoolrent.Task.IdleTask.ERRORWITHMESSAGE;
+import static com.example.amia.schoolrent.Task.IdleTask.PUSH_ERROR;
+import static com.example.amia.schoolrent.Task.IdleTask.PUSH_SUCCESS;
 
 public class PushIdleFragment extends Fragment implements PushIdleContract.View {
 
@@ -95,6 +99,8 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
         recyclerView.setAdapter(adapter);
 
         view.findViewById(R.id.classify_rl).setOnClickListener(onClickListener);
+
+        view.findViewById(R.id.push_button).setOnClickListener(onClickListener);
     }
 
     /**
@@ -103,6 +109,42 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
     protected void selectPic(){
         PushIdleInterface pushIdleInterface = (PushIdleInterface) getActivity();
         pushIdleInterface.choosePic();
+    }
+
+    protected void pushIdle(){
+        if(idleInfo.getClassifyId() == null || "".equals(idleInfo.getClassifyId())){
+            Toast.makeText(getActivity(),R.string.classify_null,Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String title = ((EditText)view.findViewById(R.id.idle_title_et)).getText().toString();
+        if(title == null || "".equals(title)){
+            Toast.makeText(getActivity(),R.string.title_null,Toast.LENGTH_SHORT).show();
+            return;
+        }
+        idleInfo.setTitle(title);
+
+        String info = ((EditText)view.findViewById(R.id.idle_info_et)).getText().toString();
+        if(title == null || "".equals(title)){
+            Toast.makeText(getActivity(),R.string.info_null,Toast.LENGTH_SHORT).show();
+            return;
+        }
+        idleInfo.setIdelInfo(info);
+
+        float baseCash = Float.valueOf(((EditText)view.findViewById(R.id.deposit_ev)).getText().toString());
+        idleInfo.setDeposit(baseCash);
+        float retal = Float.valueOf(((EditText)view.findViewById(R.id.retal_et)).getText().toString());
+        idleInfo.setRetal(retal);
+
+        List<IdelPic> pics = adapter.getPicList();
+        if (pics.size()<=0){
+            Toast.makeText(getActivity(),R.string.pic_null,Toast.LENGTH_SHORT).show();
+            return;
+        }
+        idleInfo.setPicList(pics);
+
+        idleInfo.setAddress(((EditText)view.findViewById(R.id.address_et)).getText().toString());
+
+        presenter.pushIdle(getActivity(),idleInfo,handler);
     }
 
     @Override
@@ -126,6 +168,9 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
                     break;
                 case R.id.classify_rl:
                     showClassifySelector();
+                    break;
+                case R.id.push_button:
+                    pushIdle();
                     break;
             }
         }
@@ -231,6 +276,15 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
                     break;
                 case SET_CLASSIFY_TITLE:
                     setClassifyTextView((Classify) msg.obj);
+                    break;
+                case PUSH_SUCCESS:
+                    Toast.makeText(getActivity(),"发布成功！",Toast.LENGTH_SHORT).show();
+                    break;
+                case PUSH_ERROR:
+                    Toast.makeText(getActivity(),"发布失败！",Toast.LENGTH_SHORT).show();
+                    break;
+                case ERRORWITHMESSAGE:
+                    Toast.makeText(getActivity(),"发布失败！withmessage",Toast.LENGTH_SHORT).show();
                     break;
             }
             super.handleMessage(msg);

@@ -21,8 +21,12 @@ import com.example.amia.schoolrent.Util.NetUtils;
 
 import org.litepal.LitePal;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class IdleTaskImpl implements IdleTask {
 
@@ -151,5 +155,52 @@ public class IdleTaskImpl implements IdleTask {
     @Override
     public void getListInfo(List<IdleInfo> list, int index,Handler handler) {
 
+    }
+
+    @Override
+    public void pushIdle(Context context, IdleInfo idleInfo, final Handler handler) {
+
+        try {
+            idleInfo.setTitle(URLEncoder.encode(idleInfo.getTitle(),"utf-8"));
+            idleInfo.setIdelInfo(URLEncoder.encode(idleInfo.getIdelInfo(),"utf-8"));
+            if(idleInfo.getAddress()!=null){
+                idleInfo.setAddress(URLEncoder.encode(idleInfo.getAddress(),"utf-8"));
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.add_idle);
+
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("idleInfo",idleInfo);
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,IdleInfo.class);
+                    if(result.getResult()) {
+                        msg.what = PUSH_SUCCESS;
+                        msg.obj = result.getData();
+                    } else {
+                        msg.what = PUSH_ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
     }
 }

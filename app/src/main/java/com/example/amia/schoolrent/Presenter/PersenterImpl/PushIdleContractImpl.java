@@ -3,6 +3,7 @@ package com.example.amia.schoolrent.Presenter.PersenterImpl;
 import android.content.Context;
 import android.os.Handler;
 
+import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.PushIdleContract;
@@ -25,5 +26,10 @@ public class PushIdleContractImpl implements PushIdleContract.Presenter {
     @Override
     public void getAllClassify(Context context, Handler handler) {
         task.getAllClassify(context,handler);
+    }
+
+    @Override
+    public void pushIdle(Context context, IdleInfo idleInfo, Handler handler) {
+        task.pushIdle(context,idleInfo,handler);
     }
 }

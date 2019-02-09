@@ -17,6 +17,10 @@ public interface IdleTask extends BaseTask{
     int CLASSIFY_ICON = 3;
     int CLASSIFY_ALL = 4;
 
+
+    int PUSH_SUCCESS = 500;
+    int PUSH_ERROR = 501;
+
     /**
      * 获取首页分类
      * @param context
@@ -54,4 +58,12 @@ public interface IdleTask extends BaseTask{
      * @return
      */
     void getListInfo(List<IdleInfo> list,int index,Handler handler);
+
+    /**
+     * 发布闲置
+     * @param context
+     * @param idleInfo
+     * @param handler
+     */
+    void pushIdle(Context context,IdleInfo idleInfo,Handler handler);
 }

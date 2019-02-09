@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.amia.schoolrent.Bean.IdelPic;
 import com.example.amia.schoolrent.Bean.LocalPic;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.BitMapUtil;
@@ -114,4 +115,15 @@ public class PushImageAdapter extends RecyclerView.Adapter<PushImageAdapter.Hold
             }
         }
     };
+
+    public List<IdelPic> getPicList(){
+        List<IdelPic> pics = new ArrayList<>();
+        for(LocalPic localPic : picList){
+            IdelPic idelPic = localPic.getPic();
+            if(idelPic!=null) {
+                pics.add(idelPic);
+            }
+        }
+        return pics;
+    }
 }
