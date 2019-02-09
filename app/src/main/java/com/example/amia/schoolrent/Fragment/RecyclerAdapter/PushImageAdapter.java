@@ -2,8 +2,8 @@ package com.example.amia.schoolrent.Fragment.RecyclerAdapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.example.amia.schoolrent.Bean.IdelPic;
 import com.example.amia.schoolrent.Bean.LocalPic;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Util.BitMapUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,10 @@ public class PushImageAdapter extends RecyclerView.Adapter<PushImageAdapter.Hold
         } else {
             holder.addRl.setVisibility(View.GONE);
             holder.idleRl.setVisibility(View.VISIBLE);
-            holder.idleImage.setImageBitmap(BitmapFactory.decodeFile(pic.getLocalUri()));
+
+            //压缩图片
+            Bitmap bitmap = BitMapUtil.getBigBitmap(pic.getLocalUri(),(AppCompatActivity) context,4);
+            holder.idleImage.setImageBitmap(bitmap);
 
             holder.delBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
