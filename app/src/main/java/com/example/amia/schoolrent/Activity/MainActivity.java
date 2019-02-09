@@ -9,6 +9,11 @@ import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Fragment.MainFragement;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
+import com.example.amia.schoolrent.Util.NetUtils;
+import com.example.amia.schoolrent.Util.SharedPreferencesUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends BaseAcitivity {
 
@@ -16,11 +21,16 @@ public class MainActivity extends BaseAcitivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         init();
     }
 
     protected void init(){
+        //写入sessionId
+        SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(this);
+        Map<String,String> map = new HashMap<>();
+        map.put("sessionId", NetUtils.getSessionId());
+        sharedPreferencesUtil.write("SessionId",map);
+
         student = (Student) getIntent().getSerializableExtra("student");
 
         MainFragement fragment = (MainFragement) getSupportFragmentManager().findFragmentById(R.id.main_frame);

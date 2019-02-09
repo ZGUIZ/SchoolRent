@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -31,6 +32,7 @@ public class NetUtils {
     private static ExecutorService executorService = Executors.newFixedThreadPool(4);
     private static List<HttpURLConnection> connections = new ArrayList<>();
 
+    private static String sessionId;
     /**
      * get方法发送请求
      * @param url
@@ -65,7 +67,18 @@ public class NetUtils {
         int size = connections.size();  //记录当前连接的数量
         try{
             conn=(HttpURLConnection) url.openConnection();
+
+            if(sessionId != null){
+                conn.setRequestProperty("cookie",sessionId);
+            }
+
             connections.add(conn);
+           /* //设置session
+            String cookieval  = conn.getHeaderField("set-cookie");
+            if(cookieval!=null){
+                sessionId = cookieval.substring(0,cookieval.indexOf(";"));
+            }*/
+
             conn.setReadTimeout(10000);
             conn.setRequestMethod("GET");
             inReader=new InputStreamReader(conn.getInputStream());
@@ -122,13 +135,18 @@ public class NetUtils {
             URL urlPath = new URL(url);
             HttpURLConnection httpConnection = (HttpURLConnection) urlPath.openConnection();
             connections.add(httpConnection);
+
+            if(sessionId != null){
+                httpConnection.setRequestProperty("cookie",sessionId);
+            }
+
             httpConnection.setDoInput(true);
             httpConnection.setDoOutput(true);
             httpConnection.setUseCaches(false);
             httpConnection.setConnectTimeout(10000);
             httpConnection.setRequestMethod("POST");
             //设置请求属性
-            httpConnection.setRequestProperty("Content-Type", "application/json;charse=UTF-8");
+            httpConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             httpConnection.setRequestProperty("Charset", "UTF-8");
             //设置头部参数
             for (String key : header.keySet()) {
@@ -141,6 +159,12 @@ public class NetUtils {
             outputStream.flush();
             int resultCode = httpConnection.getResponseCode();
             if (HttpURLConnection.HTTP_OK == resultCode) {
+                //获取session
+                String cookieval  = httpConnection.getHeaderField("Set-Cookie");
+                if(cookieval!=null){
+                    sessionId = cookieval.substring(0,cookieval.indexOf(";"));
+                }
+
                 String readLine = null;
                 BufferedReader responseReader = new BufferedReader(new InputStreamReader(httpConnection.getInputStream(), "UTF-8"));
                 while ((readLine = responseReader.readLine()) != null) {
@@ -222,5 +246,13 @@ public class NetUtils {
             HttpURLConnection httpURLConnection = connections.get(connections.size()-1);
             httpURLConnection.disconnect();
         }
+    }
+
+    public static String getSessionId() {
+        return sessionId;
+    }
+
+    public static void setSessionId(String sessionId) {
+        NetUtils.sessionId = sessionId;
     }
 }

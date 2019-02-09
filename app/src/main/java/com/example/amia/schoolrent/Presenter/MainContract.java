@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.Classify;
+import com.example.amia.schoolrent.Bean.IdleInfo;
+import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.Student;
 
 import java.util.List;
@@ -21,6 +23,8 @@ public interface MainContract {
          * @return
          */
         List<Classify> getCacheClassify();
+
+        void getIdleByPages(IdleInfoExtend idleInfo, Handler handler);
 
         String uploadImage(Context context, Student student, String srcPath,Handler handler);
     }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.Classify;
+import com.example.amia.schoolrent.Bean.IdleInfo;
+import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.MainContract;
@@ -28,6 +30,11 @@ public class MainContractImpl implements MainContract.Presenter {
     @Override
     public List<Classify> getCacheClassify() {
         return task.getIndexClassifyFromCache();
+    }
+
+    @Override
+    public void getIdleByPages(IdleInfoExtend idleInfo, Handler handler) {
+        task.getListInfo(view.getContext(),idleInfo,handler);
     }
 
     @Override

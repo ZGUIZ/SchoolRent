@@ -8,6 +8,7 @@ public interface SplashContract {
     }
 
     interface View extends BaseView<Presenter>{
+        void setPresenter(SplashContract.Presenter presenter,StudentContract.Presenter studentPresenter);
     }
 
     interface CallBack{

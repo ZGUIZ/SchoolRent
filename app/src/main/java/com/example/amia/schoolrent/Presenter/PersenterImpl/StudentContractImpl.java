@@ -4,6 +4,7 @@ import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.KeyValue;
 import com.example.amia.schoolrent.Bean.Student;
+import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.StudentContract;
 import com.example.amia.schoolrent.Task.StudentTask;
 
@@ -16,10 +17,10 @@ public class StudentContractImpl implements StudentContract.Presenter {
     public static final int REGISTER_SUCCESS = 3;
     public static final int REGISTER_ERROR = 4;
 
-    protected StudentContract.View view;
+    protected BaseView view;
     protected StudentTask task;
 
-    public StudentContractImpl(StudentContract.View view, StudentTask task) {
+    public StudentContractImpl(BaseView view, StudentTask task) {
         this.view = view;
         this.task = task;
     }
@@ -37,5 +38,10 @@ public class StudentContractImpl implements StudentContract.Presenter {
     @Override
     public void register(Student student, Handler handler) {
         task.register(view.getContext(),student,handler);
+    }
+
+    @Override
+    public void getCurrentUser(Handler handler) {
+        task.getCurrentUser(view.getContext(),handler);
     }
 }

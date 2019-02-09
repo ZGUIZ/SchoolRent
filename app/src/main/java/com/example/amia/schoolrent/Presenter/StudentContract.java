@@ -27,6 +27,8 @@ public interface StudentContract {
          * @param handler
          */
         void register(Student student,Handler handler);
+
+        void getCurrentUser(Handler handler);
     }
 
     interface View extends BaseView<Presenter>{

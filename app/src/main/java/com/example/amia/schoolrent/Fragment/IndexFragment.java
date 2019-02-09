@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 
 import com.example.amia.schoolrent.Bean.Classify;
+import com.example.amia.schoolrent.Bean.IdleInfo;
+import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.MapKeyValue;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.IndexClassifyAdapter;
 import com.example.amia.schoolrent.Presenter.MainContract;
@@ -29,6 +31,8 @@ import java.util.Map;
 import static com.example.amia.schoolrent.Task.IdleTask.CLASSIFY_ICON;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.ERRORWITHMESSAGE;
+import static com.example.amia.schoolrent.Task.IdleTask.IDLE_ERROR;
+import static com.example.amia.schoolrent.Task.IdleTask.IDLE_SUCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.INDEX_CLASSIFY;
 import static com.example.amia.schoolrent.Util.COSUtil.PUT_PROGRESS;
 import static com.example.amia.schoolrent.Util.COSUtil.RESULT_ERROR;
@@ -44,6 +48,7 @@ public class IndexFragment extends Fragment implements MainContract.View{
 
     private List<Classify> classifyList;
     private Map<String, Bitmap> iconMap;
+    private IdleInfoExtend idleInfo;
 
     public static IndexFragment newInstance(){
         IndexFragment indexFragment = new IndexFragment();
@@ -64,6 +69,8 @@ public class IndexFragment extends Fragment implements MainContract.View{
     }
 
     protected void init(){
+        idleInfo = new IdleInfoExtend();
+
         iconMap = new HashMap<>();
         classifyList = presenter.getCacheClassify();
 
@@ -85,7 +92,6 @@ public class IndexFragment extends Fragment implements MainContract.View{
                 loadMore();
             }
         });
-        refreshLayout.lockLoadMore(true);
 
         //打开时刷新页面
         refreshLayout.setRefresh(true);
@@ -98,7 +104,7 @@ public class IndexFragment extends Fragment implements MainContract.View{
     }
 
     private void loadMore(){
-
+        presenter.getIdleByPages(idleInfo,handler);
     }
 
     private void finishFresh(){
@@ -174,6 +180,12 @@ public class IndexFragment extends Fragment implements MainContract.View{
                     break;
                 case RESULT_ERROR:  //上传图片失败
                     Toast.makeText(getActivity(),(String)msg.obj,Toast.LENGTH_SHORT).show();
+                    break;
+                case IDLE_SUCESS:
+
+                    break;
+                case IDLE_ERROR:
+
                     break;
             }
         }
