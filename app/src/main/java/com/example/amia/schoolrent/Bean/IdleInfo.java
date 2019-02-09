@@ -69,6 +69,8 @@ public class IdleInfo implements Serializable{
 	 */
 	private String title;
 
+	private String address;
+
 	private List<IdelPic> picList;
 
 	public String getSchoolId() {
@@ -181,5 +183,13 @@ public class IdleInfo implements Serializable{
 
 	public void setPicList(List<IdelPic> picList) {
 		this.picList = picList;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 }
