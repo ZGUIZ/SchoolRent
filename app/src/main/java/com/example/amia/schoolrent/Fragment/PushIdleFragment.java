@@ -17,7 +17,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,12 +54,17 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
     private BottomSheetDialog dialog;
     private View selectView;
     private ProgressView progressView;
+    private TextView lastTime;
+    private RelativeLayout errorLayout;
 
     private int imageCount = 0;
     protected IdleInfo idleInfo;
     protected Student student;
 
     protected static final int SET_CLASSIFY_TITLE = 1001;
+    protected static final int CLOSE_ACTIVITY = 400;
+    protected static final int UPDATE_TIME = 401;
+    protected static final int CLOSE_DIALOG = 402;
 
     public static PushIdleFragment newInstance(){
         PushIdleFragment pushIdleFragment = new PushIdleFragment();
@@ -101,6 +108,8 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
         view.findViewById(R.id.classify_rl).setOnClickListener(onClickListener);
 
         view.findViewById(R.id.push_button).setOnClickListener(onClickListener);
+
+        lastTime = view.findViewById(R.id.last_time);
     }
 
     /**
@@ -113,19 +122,19 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
 
     protected void pushIdle(){
         if(idleInfo.getClassifyId() == null || "".equals(idleInfo.getClassifyId())){
-            Toast.makeText(getActivity(),R.string.classify_null,Toast.LENGTH_SHORT).show();
+            pushError(ActivityUtil.getString(getActivity(),R.string.classify_null));
             return;
         }
         String title = ((EditText)view.findViewById(R.id.idle_title_et)).getText().toString();
         if(title == null || "".equals(title)){
-            Toast.makeText(getActivity(),R.string.title_null,Toast.LENGTH_SHORT).show();
+            pushError(ActivityUtil.getString(getActivity(),R.string.title_null));
             return;
         }
         idleInfo.setTitle(title);
 
         String info = ((EditText)view.findViewById(R.id.idle_info_et)).getText().toString();
         if(title == null || "".equals(title)){
-            Toast.makeText(getActivity(),R.string.info_null,Toast.LENGTH_SHORT).show();
+            pushError(ActivityUtil.getString(getActivity(),R.string.info_null));
             return;
         }
         idleInfo.setIdelInfo(info);
@@ -137,7 +146,7 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
 
         List<IdelPic> pics = adapter.getPicList();
         if (pics.size()<=0){
-            Toast.makeText(getActivity(),R.string.pic_null,Toast.LENGTH_SHORT).show();
+            pushError(ActivityUtil.getString(getActivity(),R.string.pic_null));
             return;
         }
         idleInfo.setPicList(pics);
@@ -209,7 +218,6 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
             adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,array);
             listView.setAdapter(adapter);
 
-            final View pageView = view;
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -267,6 +275,56 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
         }
     }
 
+    protected void pushSuccess(){
+        view.findViewById(R.id.success_ll).setVisibility(View.VISIBLE);
+        new Thread(new Runnable() {
+            int time = 3;
+            @Override
+            public void run() {
+                while(time > 0 ){
+                    Message msg = handler.obtainMessage();
+                    msg.what = UPDATE_TIME;
+                    msg.obj = time;
+                    handler.sendMessage(msg);
+                    try {
+                        time--;
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Message msg = handler.obtainMessage();
+                msg.what = CLOSE_ACTIVITY;
+                handler.sendMessage(msg);
+            }
+        }).start();
+    }
+
+    protected void pushError(String... msg){
+        TextView editText = view.findViewById(R.id.error_message_tv);
+        if(msg == null || msg.length <= 0){
+            editText.setText(R.string.push_error);
+        } else {
+            editText.setText(msg[0]);
+        }
+
+        errorLayout = view.findViewById(R.id.error_ll);
+        errorLayout.setVisibility(View.VISIBLE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Message msg = handler.obtainMessage();
+                msg.what = CLOSE_DIALOG;
+                handler.sendMessage(msg);
+            }
+        }).start();
+    }
+
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -278,13 +336,22 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
                     setClassifyTextView((Classify) msg.obj);
                     break;
                 case PUSH_SUCCESS:
-                    Toast.makeText(getActivity(),"发布成功！",Toast.LENGTH_SHORT).show();
+                    pushSuccess();
                     break;
                 case PUSH_ERROR:
-                    Toast.makeText(getActivity(),"发布失败！",Toast.LENGTH_SHORT).show();
+                    pushError();
                     break;
                 case ERRORWITHMESSAGE:
-                    Toast.makeText(getActivity(),"发布失败！withmessage",Toast.LENGTH_SHORT).show();
+                    pushError((String[]) msg.obj);
+                    break;
+                case CLOSE_ACTIVITY:
+                    getActivity().finish();
+                    break;
+                case UPDATE_TIME:
+                    lastTime.setText("("+msg.obj+" s)");
+                    break;
+                case CLOSE_DIALOG:
+                    errorLayout.setVisibility(View.GONE);
                     break;
             }
             super.handleMessage(msg);

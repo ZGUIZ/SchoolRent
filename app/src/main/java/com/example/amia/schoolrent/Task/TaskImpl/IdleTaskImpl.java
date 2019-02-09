@@ -179,7 +179,7 @@ public class IdleTaskImpl implements IdleTask {
             public void finish(String json) {
                 Message msg = handler.obtainMessage();
                 try {
-                    Result result = Result.getJSONObject(json,IdleInfo.class);
+                    Result result = Result.getJSONObject(json,null);
                     if(result.getResult()) {
                         msg.what = PUSH_SUCCESS;
                         msg.obj = result.getData();
