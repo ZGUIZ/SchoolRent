@@ -2,6 +2,7 @@
     <string name="app_name">校园租</string>
 
     <!--地址-->
+
     <string name="host">http://192.168.31.199:8080/SpringWind</string>
     <string name="getKey">/account/getPublicKey</string> <!--获取公钥-->
     <string name="getProvince">/school/getProvince</string><!--获取省份-->
@@ -11,6 +12,10 @@
     <string name="send_mail_validate">/student/sendMailMessage?address=</string>  <!--发送验证邮件-->
     <string name="mail_validate">/student/validateMail</string>  <!--验证邮件信息-->
     <string name="student_register">/student/register</string>  <!--学生账号注册-->
+    <string name="classify_index">/classify/queryFromIndex</string> <!--查询首页的分类信息-->
+    <string name="classify_all">/classify/queryList</string>  <!--查询所有分类信息-->
+    <string name="idle_pic_package">/idle_pic</string>  <!--闲置图片的路径-->
+    <string name="add_idle">/idleInfo/add</string>  <!--发布闲置-->
 
     <!--系统提示-->
     <string name="double_exit">请再按一次返回按钮退出程序</string>
@@ -27,6 +32,10 @@
     <string name="password_null">密码不能为空！</string>
     <string name="password_not_match">两次输入的密码不一致！</string>
     <string name="maid_registered">注册失败，邮箱已经被注册！</string>
+    <string name="classify_null">请选择商品分类！</string>
+    <string name="title_null">请填写标题！</string>
+    <string name="info_null">请填写描述信息！</string>
+    <string name="pic_null">请添加图片信息！</string>
 
     <!--按钮-->
     <string name="login">登录</string>
@@ -47,4 +56,18 @@
     <string name="add">发布</string>
     <string name="message">消息</string>
     <string name="mine">我的</string>
+    <string name="mine_need">我的需求</string>
+    <string name="mine_push">我发布的</string>
+    <string name="mine_rent">我租到的</string>
+    <string name="credit">信誉分：</string>
+    <string name="mine_check">我的账单</string>
+    <string name="push_idle">发布闲置</string>
+    <string name="push_title">标题 品牌型号都是买家喜欢搜索的</string>
+    <string name="push_hint">商品描述</string>
+    <string name="cost">押金（元）</string>
+    <string name="cost_day">每天（元）</string>
+    <string name="address">交易地点</string>
+    <string name="classify">分类</string>
+    <string name="add_pic">添加图片</string>
+    <string name="select_classify">选择分类</string>
 </resources>
