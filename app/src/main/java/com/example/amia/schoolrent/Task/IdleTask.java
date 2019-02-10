@@ -5,6 +5,7 @@ import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
+import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.Student;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public interface IdleTask extends BaseTask{
 
     int PUSH_SUCCESS = 500;
     int PUSH_ERROR = 501;
+    int IDLE_SUCESS = 502;
+    int IDLE_ERROR = 503;
 
     /**
      * 获取首页分类
@@ -53,11 +56,9 @@ public interface IdleTask extends BaseTask{
     void stopUpload(String id);
     /**
      * 获取商品列表
-     * @param list
-     * @param index
      * @return
      */
-    void getListInfo(List<IdleInfo> list,int index,Handler handler);
+    void getListInfo(Context context, IdleInfoExtend idleInfo, Handler handler);
 
     /**
      * 发布闲置

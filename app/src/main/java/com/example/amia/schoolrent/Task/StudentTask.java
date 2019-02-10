@@ -9,6 +9,9 @@ import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.LoginContract;
 
 public interface StudentTask extends BaseTask{
+    int CURRENT_USER_ERROR = 200;
+    int CURRENT_USER_SUCCESS = 201;
+
     /**
      * 登录
      * @param context
@@ -38,4 +41,6 @@ public interface StudentTask extends BaseTask{
      * @param handler
      */
     void register(Context context,Student student,Handler handler);
+
+    void getCurrentUser(Context context,Handler handler);
 }

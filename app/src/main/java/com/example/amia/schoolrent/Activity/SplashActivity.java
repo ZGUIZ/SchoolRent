@@ -18,7 +18,10 @@ import com.example.amia.schoolrent.Task.StudentTask;
 import com.example.amia.schoolrent.Task.TaskImpl.KeyTaskImpl;
 import com.example.amia.schoolrent.Task.TaskImpl.StudentTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
+import com.example.amia.schoolrent.Util.NetUtils;
 import com.example.amia.schoolrent.Util.SharedPreferencesUtil;
+
+import java.util.HashMap;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -50,7 +53,9 @@ public class SplashActivity extends AppCompatActivity {
 
         //读取sessionId
         SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(this);
-        sharedPreferencesUtil.read("SessionId",new String[]{"sessionId"});
+        HashMap<String,String> result = sharedPreferencesUtil.read("SessionId",new String[]{"sessionId"});
+        String sessionId = result.get("sessionId");
+        NetUtils.setSessionId(sessionId);
     }
 
     private void loadFragment(){

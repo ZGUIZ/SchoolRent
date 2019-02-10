@@ -33,6 +33,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.amia.schoolrent.Task.SchoolTask.PASSWORDERROR;
 import static com.example.amia.schoolrent.Task.StudentTask.CURRENT_USER_ERROR;
 import static com.example.amia.schoolrent.Task.StudentTask.CURRENT_USER_SUCCESS;
 
@@ -121,7 +122,11 @@ public class SplashFragment extends Fragment implements SplashContract.View,Spla
             e.printStackTrace();
             loadPublicKey();
         }
+    }
 
+    protected void loadLoginActivity(){
+        Intent intent = new Intent(getActivity(),LoginActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -149,6 +154,9 @@ public class SplashFragment extends Fragment implements SplashContract.View,Spla
                     break;
                 case CURRENT_USER_ERROR:
                     loadPublicKey();
+                    break;
+                case PASSWORDERROR:
+                    loadLoginActivity();
                     break;
             }
             super.handleMessage(msg);

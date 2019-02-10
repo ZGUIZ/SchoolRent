@@ -8,6 +8,7 @@ import android.os.Message;
 
 import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
+import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.MapKeyValue;
 import com.example.amia.schoolrent.Bean.Result;
 import com.example.amia.schoolrent.Bean.Student;
@@ -153,8 +154,48 @@ public class IdleTaskImpl implements IdleTask {
     }
 
     @Override
-    public void getListInfo(List<IdleInfo> list, int index,Handler handler) {
+    public void getListInfo(Context context, IdleInfoExtend idleInfo,final Handler handler) {
+        String search = idleInfo.getSearch();
+        try {
+            if (search != null) {
+                idleInfo.setSearch(URLEncoder.encode(search, "utf-8"));
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.get_idle_page);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("idleInfo",idleInfo);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getObjectWithList(json,IdleInfo.class);
+                    if(result.getResult()) {
+                        msg.what = IDLE_SUCESS;
+                        msg.obj = result.getData();
+                    } else {
+                        msg.what = IDLE_ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = IDLE_ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
     }
 
     @Override

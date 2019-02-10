@@ -15,6 +15,7 @@ import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.Util.JSONUtil;
 import com.example.amia.schoolrent.Util.NetUtils;
 import com.example.amia.schoolrent.Util.RSAUtil;
+import com.example.amia.schoolrent.Util.SharedPreferencesUtil;
 
 
 import org.json.JSONException;
@@ -56,54 +57,64 @@ public class StudentTaskImpl implements StudentTask {
             try {
                 encodePassword = RSAUtil.RSAEncode(key,password.getBytes("utf-8"));
                 student.setPassword(Base64.encodeToString(encodePassword,Base64.DEFAULT));
-
                 student.setUserName(URLEncoder.encode(student.getUserName(),"utf-8"));
+
+                //保存账号密码
+                SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(context);
+                Map<String,String> map = new HashMap<>();
+                map.put("userName", student.getUserName());
+                map.put("password",student.getPassword());
+                sharedPreferencesUtil.write("loginInfo",map);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            Map<String,Object> param = new HashMap<>();
-            param.put("student",student);
-            String url=ActivityUtil.getString(context, R.string.host)+ActivityUtil.getString(context,R.string.login_web);
-            //登录请求
-            NetUtils.doPost(url, param, new HashMap<String, String>(), new NetCallBack() {
-                @Override
-                public void finish(String json) {
-                    Message msg = handler.obtainMessage();
-                    if(json== null || "".equals(json.trim())){
-                        //callBack.passwordError();
-                        msg.what = PASSWORDERROR;
-                        handler.sendMessage(msg);
-                        return;
-                    }
-                    try {
-                        Result result = Result.getJSONObject(json.trim(),Student.class);
-                        if(result.getResult()){
-                            msg.what = LOGINSUCCESS;
-                            msg.obj = result.getData();
-                        } else {
-                            msg.what = PASSWORDERROR;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        msg.what = ERROR;
-                    } finally {
-                        handler.sendMessage(msg);
-                    }
-                }
-
-                @Override
-                public void error(String... msg) {
-                    Message message = handler.obtainMessage();
-                    message.what = ERRORWITHMESSAGE;
-                    message.obj = msg;
-                    handler.sendMessage(message);
-                }
-            });
+            loginAfterEncode(context,student,handler);
         } else{
             Message msg = handler.obtainMessage();
             msg.what = ERROR;
             handler.sendMessage(msg);
         }
+    }
+
+    protected void loginAfterEncode(Context context,Student student,final Handler handler){
+        Map<String,Object> param = new HashMap<>();
+        param.put("student",student);
+        String url=ActivityUtil.getString(context, R.string.host)+ActivityUtil.getString(context,R.string.login_web);
+        //登录请求
+        NetUtils.doPost(url, param, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                if(json== null || "".equals(json.trim())){
+                    //callBack.passwordError();
+                    msg.what = PASSWORDERROR;
+                    handler.sendMessage(msg);
+                    return;
+                }
+                try {
+                    Result result = Result.getJSONObject(json.trim(),Student.class);
+                    if(result.getResult()){
+                        msg.what = LOGINSUCCESS;
+                        msg.obj = result.getData();
+                    } else {
+                        msg.what = PASSWORDERROR;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+                handler.sendMessage(message);
+            }
+        });
     }
 
     @Override
@@ -230,4 +241,38 @@ public class StudentTaskImpl implements StudentTask {
             }
         });
     }
+
+    @Override
+    public void getCurrentUser(Context context, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.get_current_user);
+        NetUtils.get(url, new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result r = Result.getJSONObject(json, Student.class);
+                    if (r.getResult()) {
+                        Student student = (Student) r.getData();
+                        msg.what = CURRENT_USER_SUCCESS;
+                        msg.obj = student;
+                    } else {
+                        msg.what = CURRENT_USER_ERROR;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = CURRENT_USER_ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = CURRENT_USER_ERROR;
+                handler.sendMessage(message);
+            }
+        });
+    }
+
 }
