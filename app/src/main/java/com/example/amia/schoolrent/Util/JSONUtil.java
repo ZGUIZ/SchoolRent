@@ -1,5 +1,9 @@
 package com.example.amia.schoolrent.Util;
 
+import com.example.amia.schoolrent.Bean.IdelPic;
+import com.example.amia.schoolrent.Bean.IdleInfo;
+import com.example.amia.schoolrent.Bean.Student;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,9 +11,12 @@ import org.json.JSONObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.PortUnreachableException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +46,10 @@ public class JSONUtil {
                     if(o!=null){
                         if(o instanceof List){
                             jsonObject.put(propertyName,getJsonArray(o));
+                        }if(o instanceof Date){
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            String str = sdf.format(o);
+                            jsonObject.put(propertyName,str);
                         } else {
                             jsonObject.put(propertyName, o);
                         }
@@ -86,7 +97,30 @@ public class JSONUtil {
             String propertyName = field.getName();
             //转换为首字母大写
             field.setAccessible(true);
-            if("serialVersionUID".equals(field.getName())){
+            if("serialVersionUID".equals(field.getName())||"$change".equals(propertyName)){
+                continue;
+            }else if(field.getType().equals(List.class)){
+                Type genericType = field.getGenericType();
+                if (genericType == null){
+                    continue;
+                }
+                if(genericType instanceof ParameterizedType){
+                    ParameterizedType pt = (ParameterizedType) genericType;
+                    Class<?> genericClass = (Class<?>) pt.getActualTypeArguments()[0];
+                    JSONArray jsonArray = jsonObject.getJSONArray(propertyName);
+                    if(genericClass.equals(IdelPic.class)){
+                        List<IdelPic> list = new ArrayList<>();
+                        for(int j = 0;j < jsonArray.length();j++){
+                            IdelPic o = (IdelPic) getObject(IdelPic.class,jsonArray.getJSONObject(j));
+                            list.add(o);
+                        }
+                        field.set(object,list);
+                    }
+                }
+                continue;
+            } else if(field.getType().equals(Student.class)){
+                Object o = getObject(Student.class,jsonObject.getJSONObject(propertyName));
+                field.set(object,o);
                 continue;
             }
             field.set(object,getFieldVal(field.getType(),jsonObject,propertyName));
@@ -102,6 +136,10 @@ public class JSONUtil {
             if(cls.equals(Date.class)){
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 return sdf.parse(jsonObject.getString(propertyName));
+            } else if(cls.equals(IdleInfo.class)){
+                return getObject(IdleInfo.class,jsonObject);
+            } else if(cls.equals(Float.class)){
+                return Float.parseFloat(jsonObject.getString(propertyName));
             }
             return jsonObject.get(propertyName);
         } catch (Exception e){

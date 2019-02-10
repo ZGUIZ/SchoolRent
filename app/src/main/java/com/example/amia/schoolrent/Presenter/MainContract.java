@@ -16,7 +16,7 @@ public interface MainContract {
          * 获取首页的分类信息
          * @param handler
          */
-        void getIndexClassify(Handler handler);
+        void getIndexClassify(IdleInfoExtend idleInfoExtend,Handler handler);
 
         /**
          * 读取缓存的分类
@@ -27,6 +27,8 @@ public interface MainContract {
         void getIdleByPages(IdleInfoExtend idleInfo, Handler handler);
 
         String uploadImage(Context context, Student student, String srcPath,Handler handler);
+
+        void loadIamge(String id,String url,Handler handler);
     }
 
     interface View extends BaseView<Presenter>{

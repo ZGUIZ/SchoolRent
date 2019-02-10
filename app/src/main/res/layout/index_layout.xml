@@ -48,6 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <android.support.v7.widget.RecyclerView
@@ -56,6 +57,14 @@
                 android:padding="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/idle_info_rv"
+                android:background="@drawable/search_border"
+                android:layout_marginTop="6dp"
+                android:padding="6dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </com.ufo.dwrefresh.view.DWRefreshLayout>

@@ -1,5 +1,11 @@
 package com.example.amia.schoolrent.Bean;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.io.Serializable;
 import java.util.List;
@@ -72,6 +78,8 @@ public class IdleInfo implements Serializable{
 	private String address;
 
 	private List<IdelPic> picList;
+
+	private Student student;
 
 	public String getSchoolId() {
 		return schoolId;
@@ -191,5 +199,33 @@ public class IdleInfo implements Serializable{
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	public static IdleInfo getObjectFromJsonObject(JSONObject object) throws JSONException, ParseException {
+		IdleInfo idleInfo=new IdleInfo();
+		idleInfo.setInfoId(object.getString("infoId"));
+		idleInfo.setClassifyId(object.getString("classifyId"));
+		idleInfo.setDestoryInfo(object.getString("destoryInfo"));
+		idleInfo.setDeposit((float) object.getDouble("deposit"));
+		idleInfo.setRetal((float) object.getDouble("retal"));
+		idleInfo.setIdelInfo(object.getString("idelInfo"));
+		idleInfo.setRetalType(object.getInt("retalType"));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String str = object.getString("createDate");
+		idleInfo.setCreateDate(sdf.parse(str));
+		//idleInfo.setEndDate(object.getDate("endDate"));
+		idleInfo.setSchoolId(object.getString("schoolId"));
+		idleInfo.setStatus(object.getInt("status"));
+		idleInfo.setUserId(object.getString("userId"));
+		idleInfo.setTitle(object.getString("title"));
+		return idleInfo;
 	}
 }

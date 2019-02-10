@@ -23,8 +23,8 @@ public class MainContractImpl implements MainContract.Presenter {
     }
 
     @Override
-    public void getIndexClassify(Handler handler) {
-        task.getIndexClassify(view.getContext(),handler);
+    public void getIndexClassify(IdleInfoExtend extend,Handler handler) {
+        task.getIndexClassify(view.getContext(),extend,handler);
     }
 
     @Override
@@ -40,5 +40,10 @@ public class MainContractImpl implements MainContract.Presenter {
     @Override
     public String uploadImage(Context context, Student student, String srcPath, Handler handler) {
         return task.uploadImage(context,student,srcPath,handler);
+    }
+
+    @Override
+    public void loadIamge(String id,String url, Handler handler) {
+        task.loadImage(id,url,handler);
     }
 }

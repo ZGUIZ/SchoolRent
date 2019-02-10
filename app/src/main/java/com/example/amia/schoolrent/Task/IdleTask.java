@@ -23,13 +23,14 @@ public interface IdleTask extends BaseTask{
     int PUSH_ERROR = 501;
     int IDLE_SUCESS = 502;
     int IDLE_ERROR = 503;
+    int PIC_LOAD_SUCCESS = 504;
 
     /**
      * 获取首页分类
      * @param context
      * @param handler
      */
-    void getIndexClassify(Context context,Handler handler);
+    void getIndexClassify(Context context,IdleInfoExtend idleInfoExtend,Handler handler);
 
     /**
      * 从缓存中获取分类
@@ -67,4 +68,6 @@ public interface IdleTask extends BaseTask{
      * @param handler
      */
     void pushIdle(Context context,IdleInfo idleInfo,Handler handler);
+
+    void loadImage(String id,String url,Handler handler);
 }

@@ -1,13 +1,16 @@
 package com.example.amia.schoolrent.Bean;
 
+import java.util.Date;
+
 public class IdleInfoExtend extends IdleInfo{
     private int page;
     private int pageSize;
     private String search;
+    private Date createDate;
 
     public IdleInfoExtend() {
         super();
-        pageSize = 15;
+        pageSize = 16;
         page = 1;
     }
 
@@ -37,5 +40,15 @@ public class IdleInfoExtend extends IdleInfo{
 
     public void setSearch(String search) {
         this.search = search;
+    }
+
+    @Override
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    @Override
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

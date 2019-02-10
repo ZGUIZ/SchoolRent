@@ -10,6 +10,7 @@ import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.MapKeyValue;
+import com.example.amia.schoolrent.Bean.NetBitmap;
 import com.example.amia.schoolrent.Bean.Result;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.NetCallBack;
@@ -34,7 +35,7 @@ public class IdleTaskImpl implements IdleTask {
     private Date updateTime;
 
     @Override
-    public void getIndexClassify(final Context context,final Handler handler) {
+    public void getIndexClassify(final Context context,IdleInfoExtend idleInfoExtend,final Handler handler) {
         updateTime = new Date();
         NetUtils.get(ActivityUtil.getString(context, R.string.host) + ActivityUtil.getString(context, R.string.classify_index), new NetCallBack() {
             @Override
@@ -72,6 +73,8 @@ public class IdleTaskImpl implements IdleTask {
                 message.obj = msg;
             }
         });
+
+        getListInfo(context,idleInfoExtend,handler);
     }
 
     public void loadIcon(final String id,String url, final Handler handler){
@@ -164,6 +167,8 @@ public class IdleTaskImpl implements IdleTask {
             e.printStackTrace();
         }
 
+        idleInfo.setCreateDate(updateTime);
+
         String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.get_idle_page);
         Map<String,Object> keyValueMap = new HashMap<>();
         keyValueMap.put("idleInfo",idleInfo);
@@ -241,6 +246,26 @@ public class IdleTaskImpl implements IdleTask {
                 Message message = handler.obtainMessage();
                 message.what = ERRORWITHMESSAGE;
                 message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void loadImage(final String id, String url, final Handler handler) {
+        NetUtils.getImage(url, new NetImageCallback() {
+            @Override
+            public void finish(Bitmap bitmap) {
+                Message message = handler.obtainMessage();
+                message.what = PIC_LOAD_SUCCESS;
+                NetBitmap netBitmap = new NetBitmap();
+                netBitmap.setId(id);
+                netBitmap.setBitmap(bitmap);
+                message.obj = netBitmap;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void error() {
             }
         });
     }

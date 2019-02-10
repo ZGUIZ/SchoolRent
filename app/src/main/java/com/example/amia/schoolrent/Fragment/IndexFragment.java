@@ -19,9 +19,12 @@ import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.MapKeyValue;
+import com.example.amia.schoolrent.Bean.NetBitmap;
+import com.example.amia.schoolrent.Fragment.RecyclerAdapter.IdleAdapter;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.IndexClassifyAdapter;
 import com.example.amia.schoolrent.Presenter.MainContract;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Util.NetUtils;
 import com.ufo.dwrefresh.view.DWRefreshLayout;
 
 import java.util.HashMap;
@@ -34,6 +37,7 @@ import static com.example.amia.schoolrent.Task.IdleTask.ERRORWITHMESSAGE;
 import static com.example.amia.schoolrent.Task.IdleTask.IDLE_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.IDLE_SUCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.INDEX_CLASSIFY;
+import static com.example.amia.schoolrent.Task.IdleTask.PIC_LOAD_SUCCESS;
 import static com.example.amia.schoolrent.Util.COSUtil.PUT_PROGRESS;
 import static com.example.amia.schoolrent.Util.COSUtil.RESULT_ERROR;
 import static com.example.amia.schoolrent.Util.COSUtil.RESULT_SUCCESS;
@@ -43,6 +47,7 @@ public class IndexFragment extends Fragment implements MainContract.View{
     private DWRefreshLayout refreshLayout;
     private RecyclerView classifyView;
     private IndexClassifyAdapter adapter;
+    private IdleAdapter idleAdapter;
 
     private MainContract.Presenter presenter;
 
@@ -93,18 +98,32 @@ public class IndexFragment extends Fragment implements MainContract.View{
             }
         });
 
+        //设置闲置ListView
+        RecyclerView idleInfoView = view.findViewById(R.id.idle_info_rv);
+        idleInfoView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+        idleAdapter = new IdleAdapter(new IdleAdapter.LoadIconInterface() {
+            @Override
+            public void loadBitmap(String url, String id, Map<String, String> bitmapHashMap) {
+                presenter.loadIamge(id,url,handler);
+            }
+        },getActivity());
+
+        idleInfoView.setAdapter(idleAdapter);
+
         //打开时刷新页面
         refreshLayout.setRefresh(true);
-        refresh();
+        //refresh();
     }
 
     private void refresh(){
+        idleInfo.setPage(1);
         //刷新分类信息
-        presenter.getIndexClassify(handler);
+        presenter.getIndexClassify(idleInfo,handler);
     }
 
     private void loadMore(){
-        presenter.getIdleByPages(idleInfo,handler);
+        idleInfo.setPage(idleInfo.getPage() + 1);
+        //presenter.getIdleByPages(idleInfo,handler);
     }
 
     private void finishFresh(){
@@ -139,10 +158,31 @@ public class IndexFragment extends Fragment implements MainContract.View{
         }
     }
 
+    //获取到闲置信息
+    protected void setIdleInfoList(Object o){
+        try {
+            List<IdleInfo> idleInfos = (List<IdleInfo>) o;
+            idleAdapter.setIdleInfos(idleInfos);
+            //idleAdapter.notifyDataSetChanged();
+        } catch (ClassCastException e){
+            e.printStackTrace();
+            linkError();
+        }
+    }
+
+    protected void setBitmap(Object o){
+        try{
+            NetBitmap bitmap = (NetBitmap) o;
+            idleAdapter.addImage(bitmap.getId(),bitmap.getBitmap());
+        }catch (ClassCastException e){
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //presenter = null;
+        presenter = null;
     }
 
     private void errorWithMessage(Object o){
@@ -182,10 +222,13 @@ public class IndexFragment extends Fragment implements MainContract.View{
                     Toast.makeText(getActivity(),(String)msg.obj,Toast.LENGTH_SHORT).show();
                     break;
                 case IDLE_SUCESS:
-
+                    setIdleInfoList(msg.obj);
                     break;
                 case IDLE_ERROR:
-
+                    linkError();
+                    break;
+                case PIC_LOAD_SUCCESS:
+                    setBitmap(msg.obj);
                     break;
             }
         }
