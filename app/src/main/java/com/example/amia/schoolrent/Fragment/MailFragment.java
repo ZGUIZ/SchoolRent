@@ -20,6 +20,7 @@ import com.example.amia.schoolrent.Bean.KeyValue;
 import com.example.amia.schoolrent.Presenter.LoginContract;
 import com.example.amia.schoolrent.Presenter.StudentContract;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Util.KeyboardUtil;
 import com.example.amia.schoolrent.Util.MailUtil;
 
 import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.ERROR_WITH_MESSAGE;
@@ -80,6 +81,8 @@ public class MailFragment extends Fragment implements StudentContract.View {
      */
     protected void sendMail(){
         EditText editText = view.findViewById(R.id.mailAddress);
+        KeyboardUtil keyboardUtil = KeyboardUtil.getInstance();
+        keyboardUtil.hideKeyBoard(getActivity(),editText);
         String address = editText.getText().toString().trim();
         //空邮箱不发送邮件
         if(address == null || "".equals(address)){
