@@ -157,7 +157,7 @@ public class IdleTaskImpl implements IdleTask {
     }
 
     @Override
-    public void getListInfo(Context context, IdleInfoExtend idleInfo,final Handler handler) {
+    public void getListInfo(Context context, final IdleInfoExtend idleInfo, final Handler handler) {
         String search = idleInfo.getSearch();
         try {
             if (search != null) {
@@ -180,7 +180,11 @@ public class IdleTaskImpl implements IdleTask {
                 try {
                     Result result = Result.getObjectWithList(json,IdleInfo.class);
                     if(result.getResult()) {
-                        msg.what = IDLE_SUCESS;
+                        if(idleInfo.getPage() == 1) {
+                            msg.what = IDLE_SUCESS;
+                        } else {
+                            msg.what = LOAD_MORE_SUCCESS;
+                        }
                         msg.obj = result.getData();
                     } else {
                         msg.what = IDLE_ERROR;

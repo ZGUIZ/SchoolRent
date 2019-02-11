@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.R;
 
@@ -18,7 +19,7 @@ import java.util.Map;
 
 public class IndexClassifyAdapter extends RecyclerView.Adapter<IndexClassifyAdapter.Holder> {
     private List<Classify> list;
-    private Map<String,Bitmap> iconMap;
+    //private Map<String,Bitmap> iconMap;
     private Context context;
 
     public IndexClassifyAdapter(List<Classify> list, Context context) {
@@ -39,8 +40,8 @@ public class IndexClassifyAdapter extends RecyclerView.Adapter<IndexClassifyAdap
         holder.textView.setText(classify.getClassifyName());
         if(classify.getImageUrl() == null || "".equals(classify.getImageUrl().trim())){
             holder.imageView.setImageResource(R.drawable.default_icon);
-        } else if(iconMap.get(classify.getClassifyId())!=null){
-            holder.imageView.setImageBitmap(iconMap.get(classify.getClassifyId()));
+        } else {
+            Glide.with(context).load(classify.getImageUrl()).into(holder.imageView);
         }
     }
 
@@ -59,7 +60,7 @@ public class IndexClassifyAdapter extends RecyclerView.Adapter<IndexClassifyAdap
         }
     }
 
-    public void setIconMap(Map<String, Bitmap> iconMap) {
-        this.iconMap = iconMap;
-    }
+   /* public void setIconMap(Map<String, Bitmap> iconMap) {
+        //this.iconMap = iconMap;
+    }*/
 }

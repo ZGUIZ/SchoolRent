@@ -10,7 +10,7 @@ public class IdleInfoExtend extends IdleInfo{
 
     public IdleInfoExtend() {
         super();
-        pageSize = 16;
+        pageSize = 6;
         page = 1;
     }
 

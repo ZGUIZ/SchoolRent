@@ -52,7 +52,7 @@ public class IndexFragment extends Fragment implements MainContract.View{
     private MainContract.Presenter presenter;
 
     private List<Classify> classifyList;
-    private Map<String, Bitmap> iconMap;
+    //private Map<String, Bitmap> iconMap;
     private IdleInfoExtend idleInfo;
 
     public static IndexFragment newInstance(){
@@ -64,25 +64,25 @@ public class IndexFragment extends Fragment implements MainContract.View{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.index_layout,container,false);
+        init();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        init();
     }
 
     protected void init(){
         idleInfo = new IdleInfoExtend();
 
-        iconMap = new HashMap<>();
+        //iconMap = new HashMap<>();
         classifyList = presenter.getCacheClassify();
 
         classifyView = view.findViewById(R.id.index_classify_rv);
         classifyView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
         adapter = new IndexClassifyAdapter(classifyList,getActivity());
-        adapter.setIconMap(iconMap);
+        /*adapter.setIconMap(iconMap);*/
         classifyView.setAdapter(adapter);
 
         refreshLayout = view.findViewById(R.id.index_refresh_layout);
@@ -115,15 +115,20 @@ public class IndexFragment extends Fragment implements MainContract.View{
     }
 
     private void finishFresh(){
-        idleInfo.setPage(idleInfo.getPage() + 1);
         refreshLayout.setPullLoadMoreCompleted();
-        idleAdapter.notifyDataSetChanged();
     }
 
     private void finishLoadMore(Object object){
         refreshLayout.setPullLoadMoreCompleted();
         try{
             List<IdleInfo> idleInfos = (List<IdleInfo>) object;
+
+            if(idleInfos==null || idleInfos.size()<=0){
+                Toast.makeText(getActivity(),R.string.no_more,Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            idleInfo.setPage(idleInfo.getPage() + 1);
             idleAdapter.addIdleInfos(idleInfos);
         } catch (ClassCastException e){
             e.printStackTrace();
@@ -148,7 +153,7 @@ public class IndexFragment extends Fragment implements MainContract.View{
         }
     }
 
-    private void loadIcon(Object object){
+    /*private void loadIcon(Object object){
         try{
             MapKeyValue<Bitmap> keyValue = (MapKeyValue<Bitmap>) object;
             iconMap.put(keyValue.getId(),keyValue.getData());
@@ -156,10 +161,12 @@ public class IndexFragment extends Fragment implements MainContract.View{
         } catch (ClassCastException e){
             e.printStackTrace();
         }
-    }
+    }*/
 
     //获取到闲置信息
     protected void setIdleInfoList(Object o){
+        idleInfo.setPage(2);
+        idleAdapter.notifyDataSetChanged();
         try {
             List<IdleInfo> idleInfos = (List<IdleInfo>) o;
             idleAdapter.setIdleInfos(idleInfos);
@@ -200,9 +207,9 @@ public class IndexFragment extends Fragment implements MainContract.View{
                 case ERRORWITHMESSAGE:
                     errorWithMessage(msg.obj);
                     break;
-                case CLASSIFY_ICON:
+                /*case CLASSIFY_ICON:
                     loadIcon(msg.obj);
-                    break;
+                    break;*/
                 case PUT_PROGRESS: //上传图片进度回显
                     break;
                 case RESULT_SUCCESS:  //上传图片成功
