@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ripple xmlns:anroid="http://schemas.android.com/apk/res/android"
+    anroid:color="#aacccccc"
+    anroid:shape="rectangle">
+    <item>
+        <shape anroid:shape="rectangle" anroid:innerRadius="3dp">
+            <solid anroid:color="@android:color/white"/>
+            <corners anroid:radius="4dp"/>
+        </shape>
+    </item>
+
+</ripple>
