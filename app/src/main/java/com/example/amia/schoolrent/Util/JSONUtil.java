@@ -46,7 +46,7 @@ public class JSONUtil {
                     if(o!=null){
                         if(o instanceof List){
                             jsonObject.put(propertyName,getJsonArray(o));
-                        }if(o instanceof Date){
+                        }else if(o instanceof Date){
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                             String str = sdf.format(o);
                             jsonObject.put(propertyName,str);
