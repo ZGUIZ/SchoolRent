@@ -24,6 +24,8 @@ public interface IdleTask extends BaseTask{
     int IDLE_SUCESS = 502;
     int IDLE_ERROR = 503;
     int PIC_LOAD_SUCCESS = 504;
+    int LOAD_MORE_SUCCESS = 505;
+    int LOAD_MORE_ERROR = 506;
 
     /**
      * 获取首页分类

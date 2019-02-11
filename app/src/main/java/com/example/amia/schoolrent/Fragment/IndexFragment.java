@@ -19,13 +19,11 @@ import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.MapKeyValue;
-import com.example.amia.schoolrent.Bean.NetBitmap;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.IdleAdapter;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.IndexClassifyAdapter;
 import com.example.amia.schoolrent.Presenter.MainContract;
 import com.example.amia.schoolrent.R;
-import com.example.amia.schoolrent.Util.NetUtils;
-import com.ufo.dwrefresh.view.DWRefreshLayout;
+import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +35,8 @@ import static com.example.amia.schoolrent.Task.IdleTask.ERRORWITHMESSAGE;
 import static com.example.amia.schoolrent.Task.IdleTask.IDLE_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.IDLE_SUCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.INDEX_CLASSIFY;
+import static com.example.amia.schoolrent.Task.IdleTask.LOAD_MORE_ERROR;
+import static com.example.amia.schoolrent.Task.IdleTask.LOAD_MORE_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.PIC_LOAD_SUCCESS;
 import static com.example.amia.schoolrent.Util.COSUtil.PUT_PROGRESS;
 import static com.example.amia.schoolrent.Util.COSUtil.RESULT_ERROR;
@@ -44,7 +44,7 @@ import static com.example.amia.schoolrent.Util.COSUtil.RESULT_SUCCESS;
 
 public class IndexFragment extends Fragment implements MainContract.View{
     private static View view;
-    private DWRefreshLayout refreshLayout;
+    private PullLoadMoreRecyclerView refreshLayout;
     private RecyclerView classifyView;
     private IndexClassifyAdapter adapter;
     private IdleAdapter idleAdapter;
@@ -86,7 +86,10 @@ public class IndexFragment extends Fragment implements MainContract.View{
         classifyView.setAdapter(adapter);
 
         refreshLayout = view.findViewById(R.id.index_refresh_layout);
-        refreshLayout.setOnRefreshListener(new DWRefreshLayout.OnRefreshListener() {
+        refreshLayout.setGridLayout(2);
+        idleAdapter = new IdleAdapter(getActivity());
+        refreshLayout.setAdapter(idleAdapter);
+        refreshLayout.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
             @Override
             public void onRefresh() {
                 refresh();
@@ -97,22 +100,8 @@ public class IndexFragment extends Fragment implements MainContract.View{
                 loadMore();
             }
         });
-
-        //设置闲置ListView
-        RecyclerView idleInfoView = view.findViewById(R.id.idle_info_rv);
-        idleInfoView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-        idleAdapter = new IdleAdapter(new IdleAdapter.LoadIconInterface() {
-            @Override
-            public void loadBitmap(String url, String id, Map<String, String> bitmapHashMap) {
-                presenter.loadIamge(id,url,handler);
-            }
-        },getActivity());
-
-        idleInfoView.setAdapter(idleAdapter);
-
-        //打开时刷新页面
-        refreshLayout.setRefresh(true);
-        //refresh();
+        refreshLayout.refresh();
+        refreshLayout.setIsRefresh(true);
     }
 
     private void refresh(){
@@ -122,12 +111,23 @@ public class IndexFragment extends Fragment implements MainContract.View{
     }
 
     private void loadMore(){
-        idleInfo.setPage(idleInfo.getPage() + 1);
-        //presenter.getIdleByPages(idleInfo,handler);
+        presenter.getIdleByPages(idleInfo,handler);
     }
 
     private void finishFresh(){
-        refreshLayout.setRefresh(false);
+        idleInfo.setPage(idleInfo.getPage() + 1);
+        refreshLayout.setPullLoadMoreCompleted();
+        idleAdapter.notifyDataSetChanged();
+    }
+
+    private void finishLoadMore(Object object){
+        refreshLayout.setPullLoadMoreCompleted();
+        try{
+            List<IdleInfo> idleInfos = (List<IdleInfo>) object;
+            idleAdapter.addIdleInfos(idleInfos);
+        } catch (ClassCastException e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -170,15 +170,6 @@ public class IndexFragment extends Fragment implements MainContract.View{
         }
     }
 
-    protected void setBitmap(Object o){
-        try{
-            NetBitmap bitmap = (NetBitmap) o;
-            idleAdapter.addImage(bitmap.getId(),bitmap.getBitmap());
-        }catch (ClassCastException e){
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -213,10 +204,8 @@ public class IndexFragment extends Fragment implements MainContract.View{
                     loadIcon(msg.obj);
                     break;
                 case PUT_PROGRESS: //上传图片进度回显
-
                     break;
                 case RESULT_SUCCESS:  //上传图片成功
-
                     break;
                 case RESULT_ERROR:  //上传图片失败
                     Toast.makeText(getActivity(),(String)msg.obj,Toast.LENGTH_SHORT).show();
@@ -227,8 +216,11 @@ public class IndexFragment extends Fragment implements MainContract.View{
                 case IDLE_ERROR:
                     linkError();
                     break;
-                case PIC_LOAD_SUCCESS:
-                    setBitmap(msg.obj);
+                case LOAD_MORE_SUCCESS:
+                    finishLoadMore(msg.obj);
+                    break;
+                case LOAD_MORE_ERROR:
+                    linkError();
                     break;
             }
         }
@@ -236,6 +228,7 @@ public class IndexFragment extends Fragment implements MainContract.View{
 
     @Override
     public void linkError() {
+        refreshLayout.setPullLoadMoreCompleted();
         Toast.makeText(getActivity(),R.string.link_error,Toast.LENGTH_SHORT).show();
     }
 

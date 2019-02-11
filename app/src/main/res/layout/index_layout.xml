@@ -1,71 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/main_background"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_marginTop="6dp"
-        android:padding="3dp"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:paddingLeft="6dp"
-            android:src="@drawable/default_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
-        <RelativeLayout
-            android:background="@drawable/search_border"
-            android:layout_marginLeft="5dp"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:fitsSystemWindows="true">
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/search_iv"
-                android:src="@drawable/find"
-                android:padding="5dp"
-                android:layout_centerVertical="true"
-                android:layout_width="25dp"
-                android:layout_height="25dp" />
-            <TextView
-                android:layout_toRightOf="@id/search_iv"
-                android:text="搜索内容"
-                android:textColor="#DCDCDC"
-                android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:paddingBottom="6dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </RelativeLayout>
-    </LinearLayout>
-    <com.ufo.dwrefresh.view.DWRefreshLayout
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_marginTop="6dp"
+                    android:padding="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:paddingLeft="6dp"
+                        android:src="@drawable/default_icon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp" />
+                    <RelativeLayout
+                        android:background="@drawable/search_border"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/search_iv"
+                            android:src="@drawable/find"
+                            android:padding="5dp"
+                            android:layout_centerVertical="true"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp" />
+                        <TextView
+                            android:layout_toRightOf="@id/search_iv"
+                            android:text="搜索内容"
+                            android:textColor="#DCDCDC"
+                            android:layout_centerVertical="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+                </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/index_classify_rv"
+                    android:background="@drawable/search_border"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
+                    android:padding="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
         android:id="@+id/index_refresh_layout"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginTop="6dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
         android:layout_marginBottom="-4dp"
+        android:background="@drawable/search_border"
         android:paddingBottom="4dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/index_classify_rv"
-                android:background="@drawable/search_border"
-                android:padding="6dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </android.support.v7.widget.RecyclerView>
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/idle_info_rv"
-                android:background="@drawable/search_border"
-                android:layout_marginTop="6dp"
-                android:padding="6dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </android.support.v7.widget.RecyclerView>
-        </LinearLayout>
-    </com.ufo.dwrefresh.view.DWRefreshLayout>
-</LinearLayout>
+    </com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+</android.support.design.widget.CoordinatorLayout>
