@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,21 +16,19 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 
+import com.example.amia.schoolrent.Activity.IdleInfoActivity;
 import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
-import com.example.amia.schoolrent.Bean.MapKeyValue;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.IdleAdapter;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.IndexClassifyAdapter;
+import com.example.amia.schoolrent.Fragment.RecyclerAdapter.OnItemClickListener;
 import com.example.amia.schoolrent.Presenter.MainContract;
 import com.example.amia.schoolrent.R;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import static com.example.amia.schoolrent.Task.IdleTask.CLASSIFY_ICON;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.ERRORWITHMESSAGE;
 import static com.example.amia.schoolrent.Task.IdleTask.IDLE_ERROR;
@@ -37,7 +36,6 @@ import static com.example.amia.schoolrent.Task.IdleTask.IDLE_SUCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.INDEX_CLASSIFY;
 import static com.example.amia.schoolrent.Task.IdleTask.LOAD_MORE_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.LOAD_MORE_SUCCESS;
-import static com.example.amia.schoolrent.Task.IdleTask.PIC_LOAD_SUCCESS;
 import static com.example.amia.schoolrent.Util.COSUtil.PUT_PROGRESS;
 import static com.example.amia.schoolrent.Util.COSUtil.RESULT_ERROR;
 import static com.example.amia.schoolrent.Util.COSUtil.RESULT_SUCCESS;
@@ -52,7 +50,6 @@ public class IndexFragment extends Fragment implements MainContract.View{
     private MainContract.Presenter presenter;
 
     private List<Classify> classifyList;
-    //private Map<String, Bitmap> iconMap;
     private IdleInfoExtend idleInfo;
 
     public static IndexFragment newInstance(){
@@ -76,18 +73,26 @@ public class IndexFragment extends Fragment implements MainContract.View{
     protected void init(){
         idleInfo = new IdleInfoExtend();
 
-        //iconMap = new HashMap<>();
         classifyList = presenter.getCacheClassify();
 
         classifyView = view.findViewById(R.id.index_classify_rv);
         classifyView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
         adapter = new IndexClassifyAdapter(classifyList,getActivity());
-        /*adapter.setIconMap(iconMap);*/
         classifyView.setAdapter(adapter);
 
         refreshLayout = view.findViewById(R.id.index_refresh_layout);
         refreshLayout.setGridLayout(2);
         idleAdapter = new IdleAdapter(getActivity());
+        idleAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemCLick(View view, int position) {
+                startInfoActivity(idleAdapter.getIdleInfoByPosition(position));
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+            }
+        });
         refreshLayout.setAdapter(idleAdapter);
         refreshLayout.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
             @Override
@@ -136,6 +141,16 @@ public class IndexFragment extends Fragment implements MainContract.View{
     }
 
     /**
+     * 打开详细页面
+     * @param idleInfo
+     */
+    public void startInfoActivity(IdleInfo idleInfo){
+        Intent intent = new Intent(getActivity(), IdleInfoActivity.class);
+        intent.putExtra("idleInfo",idleInfo);
+        startActivity(intent);
+    }
+
+    /**
      * 加载首页的分类信息
      * @param object
      */
@@ -152,16 +167,6 @@ public class IndexFragment extends Fragment implements MainContract.View{
             linkError();
         }
     }
-
-    /*private void loadIcon(Object object){
-        try{
-            MapKeyValue<Bitmap> keyValue = (MapKeyValue<Bitmap>) object;
-            iconMap.put(keyValue.getId(),keyValue.getData());
-            adapter.notifyDataSetChanged();
-        } catch (ClassCastException e){
-            e.printStackTrace();
-        }
-    }*/
 
     //获取到闲置信息
     protected void setIdleInfoList(Object o){
@@ -207,9 +212,6 @@ public class IndexFragment extends Fragment implements MainContract.View{
                 case ERRORWITHMESSAGE:
                     errorWithMessage(msg.obj);
                     break;
-                /*case CLASSIFY_ICON:
-                    loadIcon(msg.obj);
-                    break;*/
                 case PUT_PROGRESS: //上传图片进度回显
                     break;
                 case RESULT_SUCCESS:  //上传图片成功

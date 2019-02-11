@@ -7,8 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.amia.schoolrent.Activity.BaseAcitivity;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.R;
@@ -59,6 +61,8 @@ public class MineFragment extends Fragment {
         TextView credit = view.findViewById(R.id.credit_tv);
         credit.setText(ActivityUtil.getString(baseAcitivity,R.string.credit)+String.valueOf(student.getCredit()));
 
+        ImageView imageView = view.findViewById(R.id.user_icon);
+        Glide.with(getActivity()).load(student.getUserIcon()).into(imageView);
     }
 
     @Override

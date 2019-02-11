@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,8 @@ public class IdleAdapter extends RecyclerView.Adapter<IdleAdapter.Holder> {
     private List<IdleInfo> idleInfos;
     private Context context;
 
+    private OnItemClickListener onItemClickListener;
+
     public IdleAdapter(Context context) {
         this.idleInfos = new ArrayList<>();
         this.context = context;
@@ -32,7 +35,24 @@ public class IdleAdapter extends RecyclerView.Adapter<IdleAdapter.Holder> {
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Holder holder = new Holder(LayoutInflater.from(context).inflate(R.layout.idle_item_layout,parent,false));
+        final Holder holder = new Holder(LayoutInflater.from(context).inflate(R.layout.idle_item_layout,parent,false));
+
+        //添加点击事件
+        holder.infoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClickListener.onItemCLick(holder.infoLayout,holder.getLayoutPosition());
+            }
+        });
+
+        holder.infoLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                int pos = holder.getLayoutPosition();
+                onItemClickListener.onItemLongClick(holder.infoLayout,pos);
+                return false;
+            }
+        });
         return holder;
     }
 
@@ -69,14 +89,16 @@ public class IdleAdapter extends RecyclerView.Adapter<IdleAdapter.Holder> {
         TextView user_name;
         TextView credit;
 
+        LinearLayout infoLayout;
         public Holder(View itemView) {
             super(itemView);
-
             idle_icon = itemView.findViewById(R.id.info_pic_iv);
             title = itemView.findViewById(R.id.title_tv);
             user_icon = itemView.findViewById(R.id.user_icon);
             user_name = itemView.findViewById(R.id.user_name_tv);
             credit = itemView.findViewById(R.id.credit_tv);
+
+            infoLayout = itemView.findViewById(R.id.idle_info_item_ll);
         }
     }
 
@@ -94,5 +116,13 @@ public class IdleAdapter extends RecyclerView.Adapter<IdleAdapter.Holder> {
             this.idleInfos.add(idleInfos.get(i));
         }
         this.notifyDataSetChanged();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public IdleInfo getIdleInfoByPosition(int poition){
+        return idleInfos.get(poition);
     }
 }
