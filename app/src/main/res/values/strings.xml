@@ -3,7 +3,7 @@
 
     <!--地址-->
 
-    <string name="host">http://192.168.31.199:8080/SpringWind</string>
+   <string name="host">http://192.168.31.199:8080/SpringWind</string>
     <string name="getKey">/account/getPublicKey</string> <!--获取公钥-->
     <string name="getProvince">/school/getProvince</string><!--获取省份-->
     <string name="getCity">/school/getCity?province=</string> <!--获取城市-->
@@ -16,6 +16,11 @@
     <string name="classify_all">/classify/queryList</string>  <!--查询所有分类信息-->
     <string name="idle_pic_package">/idle_pic</string>  <!--闲置图片的路径-->
     <string name="add_idle">/idleInfo/add</string>  <!--发布闲置-->
+    <string name="get_idle_page">/idleInfo/toList</string>  <!--商品分页查询-->
+    <string name="get_current_user">/student/getCurrentUser</string> <!--获取当前用户-->
+    <string name="get_response_info">/responseInfo/toList</string>
+    <string name="add_response_info">/responseInfo/add</string>
+    <string name="add_second_response_info">/secondResponseInfo/add</string>
 
     <!--系统提示-->
     <string name="double_exit">请再按一次返回按钮退出程序</string>
@@ -36,6 +41,10 @@
     <string name="title_null">请填写标题！</string>
     <string name="info_null">请填写描述信息！</string>
     <string name="pic_null">请添加图片信息！</string>
+    <string name="push_success">发布成功！</string>
+    <string name="push_error">发布失败！</string>
+    <string name="no_more">没有更多了...</string>
+    <string name="no_refuse_message_fill">不可发送空的信息！</string>
 
     <!--按钮-->
     <string name="login">登录</string>
@@ -70,4 +79,10 @@
     <string name="classify">分类</string>
     <string name="add_pic">添加图片</string>
     <string name="select_classify">选择分类</string>
+    <string name="deposit">押金：￥</string>
+    <string name="rental">租金/日：￥</string>
+    <string name="num_of_want">申请数：</string>
+    <string name="refuse">留言</string>
+    <string name="no_refuse">还没有人留言</string>
+    <string name="sent">发送</string>
 </resources>
