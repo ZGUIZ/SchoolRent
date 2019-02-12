@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,11 @@ import com.example.amia.schoolrent.Activity.ActivityInterface.IdleInfoInterface;
 import com.example.amia.schoolrent.Bean.IdelPic;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.ResponseInfo;
+import com.example.amia.schoolrent.Bean.SecondResponseInfo;
 import com.example.amia.schoolrent.Bean.Student;
+import com.example.amia.schoolrent.Fragment.RecyclerAdapter.OnItemClickListener;
+import com.example.amia.schoolrent.Fragment.RecyclerAdapter.RefuseAdapter;
+import com.example.amia.schoolrent.Fragment.RecyclerAdapter.SecondRefuseListener;
 import com.example.amia.schoolrent.Presenter.IdleInfoContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
@@ -48,6 +53,8 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
     private RecyclerView refuseRecyclerView; // 回复信息的Layout
 
     private IdleInfoContract.Presenter presenter;
+
+    private SecondResponseInfo secondResponseInfo;
 
     public static IdleInfoFragment newInstance(){
         IdleInfoFragment idleInfoFragment = new IdleInfoFragment();
@@ -179,25 +186,33 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         //校验
         Context context = getContext();
         EditText editText = refuseView.findViewById(R.id.refuse_et);
-        String refuesMessage = editText.getText().toString();
-        if(StringUtils.isEmpty(refuesMessage)){
+        String refuseMessage = editText.getText().toString();
+        if(StringUtils.isEmpty(refuseMessage)){
             Toast.makeText(context,R.string.no_refuse_message_fill,Toast.LENGTH_SHORT).show();
             return;
         }
 
-
-
-        //封装
-        IdleInfoInterface infoInterface = (IdleInfoInterface) getActivity();
-        IdleInfo idleInfo = infoInterface.getIdleInfo();
-        ResponseInfo responseInfo = new ResponseInfo();
-        responseInfo.setInfoId(idleInfo.getInfoId());
-        responseInfo.setResponseInfo(refuesMessage);
-        //发布
-        presenter.addRefuse(context,responseInfo,handler);
+        if(secondResponseInfo==null) {
+            //封装
+            IdleInfoInterface infoInterface = (IdleInfoInterface) getActivity();
+            IdleInfo idleInfo = infoInterface.getIdleInfo();
+            ResponseInfo responseInfo = new ResponseInfo();
+            responseInfo.setInfoId(idleInfo.getInfoId());
+            responseInfo.setResponseInfo(refuseMessage);
+            //发布
+            presenter.addRefuse(context, responseInfo, handler);
+        } else {
+            if(secondResponseInfo.getResponseInfo()!=null){
+                refuseMessage = secondResponseInfo.getResponseInfo() +" \t"+refuseMessage;
+            }
+            secondResponseInfo.setResponseInfo(refuseMessage);
+            presenter.addSecondRefuse(context,secondResponseInfo,handler);
+        }
     }
 
     protected void sendRefuseSuccess(){
+        secondResponseInfo = null;
+
         if(dialog!=null){
             dialog.cancel();
         }
@@ -217,9 +232,61 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                 return;
             }
 
+            final List<ResponseInfo> responseInfos = (List<ResponseInfo>) o;
+            if(responseInfos.size() <=0){
+                view.findViewById(R.id.none_message_tv).setVisibility(View.VISIBLE);
+                refuseRecyclerView.setVisibility(View.GONE);
+                return;
+            }
+
             view.findViewById(R.id.none_message_tv).setVisibility(View.GONE);
             refuseRecyclerView.setVisibility(View.VISIBLE);
+            refuseRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()){
+                @Override
+                public boolean canScrollVertically(){
+                    return false;
+                }
+            });
+            final RefuseAdapter adapter =new RefuseAdapter(getActivity(),responseInfos);
+            refuseRecyclerView.setHasFixedSize(true);
+            refuseRecyclerView.setFocusable(false);
 
+            adapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemCLick(View view, int position) {
+                    secondResponseInfo = new SecondResponseInfo();
+                    ResponseInfo responseInfo = responseInfos.get(position);
+                    secondResponseInfo.setParentId(responseInfo.getResponseId());
+                    secondResponseInfo.setAlterUser(responseInfo.getUserId());
+                    secondResponseInfo.setInfoId(responseInfo.getInfoId());
+
+                    Student student = responseInfo.getStudent();
+                    String msg = "@"+student.getUserName();
+                    secondResponseInfo.setResponseInfo(msg);
+                    pushRefuseDialog(msg);
+                }
+
+                @Override
+                public void onItemLongClick(View view, int position) {
+                }
+            });
+
+            adapter.setSecondClickListener(new SecondRefuseListener() {
+                @Override
+                public void onClick(SecondResponseInfo responseInfo) {
+                    secondResponseInfo = new SecondResponseInfo();
+                    secondResponseInfo.setAlterUser(responseInfo.getUserId());
+                    secondResponseInfo.setInfoId(responseInfo.getInfoId());
+                    secondResponseInfo.setParentId(responseInfo.getParentId());
+
+                    Student student = responseInfo.getStudent();
+                    String msg = "@"+student.getUserName();
+                    secondResponseInfo.setResponseInfo(msg);
+                    pushRefuseDialog(msg);
+                }
+            });
+
+            refuseRecyclerView.setAdapter(adapter);
         }catch (ClassCastException e){
             e.printStackTrace();
             linkError();

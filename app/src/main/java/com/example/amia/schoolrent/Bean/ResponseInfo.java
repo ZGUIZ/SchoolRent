@@ -2,6 +2,7 @@ package com.example.amia.schoolrent.Bean;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -43,6 +44,10 @@ public class ResponseInfo implements Serializable {
 	 * 状态
 	 */
 	private Integer status;
+
+	private Student student;
+
+    private List<SecondResponseInfo> secondResponseInfos;
 
 	public String getResponseId() {
 		return responseId;
@@ -100,4 +105,19 @@ public class ResponseInfo implements Serializable {
 		this.status = status;
 	}
 
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+    public List<SecondResponseInfo> getSecondResponseInfos() {
+        return secondResponseInfos;
+    }
+
+    public void setSecondResponseInfos(List<SecondResponseInfo> secondResponseInfos) {
+        this.secondResponseInfos = secondResponseInfos;
+    }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:padding="10dp"
+    android:id="@+id/refuse_item_rl"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <com.example.amia.schoolrent.View.RoundImageView
@@ -29,6 +30,7 @@
     <TextView
         android:id="@+id/create_time"
         android:text="2019-8-1"
+        android:layout_marginLeft="8dp"
         android:layout_toRightOf="@id/user_icon"
         android:layout_below="@id/refuse_message"
         android:layout_width="wrap_content"
@@ -36,15 +38,17 @@
     <LinearLayout
         android:id="@+id/second_refuse_layout"
         android:orientation="vertical"
+        android:visibility="gone"
         android:layout_toRightOf="@id/user_icon"
         android:layout_below="@id/create_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <View
-            android:background="#F2F2F2"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
     </LinearLayout>
+    <View
+        android:background="#F2F2F2"
+        android:layout_below="@id/second_refuse_layout"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
 </RelativeLayout>

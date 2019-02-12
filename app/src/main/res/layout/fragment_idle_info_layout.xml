@@ -6,7 +6,8 @@
     android:layout_height="match_parent">
     <RelativeLayout
         android:id="@+id/bottom_tool"
-        android:padding="6dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -186,7 +187,7 @@
                 android:id="@+id/refuse_ll"
                 android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

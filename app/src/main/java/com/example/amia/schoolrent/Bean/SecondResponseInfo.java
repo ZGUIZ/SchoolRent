@@ -49,6 +49,7 @@ public class SecondResponseInfo {
      */
 	private String parentId;
 
+	private Student student;
 
 	public String getResponseId() {
 		return responseId;
@@ -114,4 +115,11 @@ public class SecondResponseInfo {
 		this.parentId = parentId;
 	}
 
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
 }

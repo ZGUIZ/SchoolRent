@@ -5,6 +5,7 @@ import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.ResponseInfo;
+import com.example.amia.schoolrent.Bean.SecondResponseInfo;
 import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.IdleInfoContract;
 import com.example.amia.schoolrent.Task.IdleTask;
@@ -22,6 +23,11 @@ public class IdleInfoContractImpl implements IdleInfoContract.Presenter {
     @Override
     public void addRefuse(Context context, ResponseInfo responseInfo, Handler handler) {
         refuseTask.addRefuse(context,responseInfo,handler);
+    }
+
+    @Override
+    public void addSecondRefuse(Context context, SecondResponseInfo secondResponseInfo, Handler handler) {
+        refuseTask.addSecondRefuse(context,secondResponseInfo,handler);
     }
 
     @Override

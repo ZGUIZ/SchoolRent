@@ -3,14 +3,24 @@
     android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <View
+        android:id="@+id/divide_view"
+        android:background="#F2F2F2"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="3dp"/>
     <com.example.amia.schoolrent.View.RoundImageView
         android:id="@+id/sec_user_icon"
+        android:layout_below="@id/divide_view"
         android:src="@drawable/default_icon"
         android:layout_width="30dp"
         android:layout_height="30dp" />
     <TextView
         android:id="@+id/second_user_name"
         android:layout_marginLeft="8dp"
+        android:layout_below="@id/divide_view"
         android:layout_toRightOf="@id/sec_user_icon"
         android:text="用户名"
         android:textSize="16dp"
@@ -29,6 +39,7 @@
     <TextView
         android:id="@+id/create_time"
         android:text="2019-8-1"
+        android:layout_marginLeft="8dp"
         android:layout_toRightOf="@id/sec_user_icon"
         android:layout_below="@id/sec_refuse_message"
         android:layout_width="wrap_content"

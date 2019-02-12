@@ -7,6 +7,7 @@ import android.os.Message;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.ResponseInfo;
 import com.example.amia.schoolrent.Bean.Result;
+import com.example.amia.schoolrent.Bean.SecondResponseInfo;
 import com.example.amia.schoolrent.Presenter.NetCallBack;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.RefuseTask;
@@ -63,6 +64,47 @@ public class RefuseTaskImpl implements RefuseTask {
     }
 
     @Override
+    public void addSecondRefuse(Context context, SecondResponseInfo secondResponseInfo, final Handler handler) {
+        try {
+            secondResponseInfo.setResponseInfo(URLEncoder.encode(secondResponseInfo.getResponseInfo(),"utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String url = ActivityUtil.getString(context, R.string.host)+ActivityUtil.getString(context,R.string.add_second_response_info);
+
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("secondResponseInfo",secondResponseInfo);
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()) {
+                        msg.what = PUSH_REFUSE_SUCCESS;
+                    } else {
+                        msg.what = PUSH_REFUSE_ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = PUSH_REFUSE_ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
     public void getReufseList(Context context, IdleInfo idleInfo, final Handler handler) {
         String url = ActivityUtil.getString(context, R.string.host)+ActivityUtil.getString(context,R.string.get_response_info);
 
@@ -78,6 +120,7 @@ public class RefuseTaskImpl implements RefuseTask {
                     Result result = Result.getObjectWithList(json,ResponseInfo.class);
                     if(result.getResult()) {
                         msg.what = LOAD_REFUSE_SUCCESS;
+                        msg.obj = result.getData();
                     } else {
                         msg.what = LOAD_REFUSE_ERROR;
                         msg.obj = result.getMsg();

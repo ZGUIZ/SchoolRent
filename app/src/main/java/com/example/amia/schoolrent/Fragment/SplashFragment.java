@@ -106,7 +106,7 @@ public class SplashFragment extends Fragment implements SplashContract.View,Spla
         try {
             presenter.onStart(this);
         } catch (Exception e){
-            Toast.makeText(getContext(),ActivityUtil.getString(getContext(),R.string.link_error),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),ActivityUtil.getString(getActivity(),R.string.link_error),Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
