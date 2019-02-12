@@ -86,12 +86,16 @@ public class Result {
 
         if(result.getResult() && className != null) {
             JSONArray jsonArray = object.getJSONArray("data");
-            for(int i = 0;i<jsonArray.length();i++){
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                Object data = JSONUtil.getObject(className,jsonObject);
-                objects.add(data);
+            if(jsonArray!=null) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    Object data = JSONUtil.getObject(className, jsonObject);
+                    objects.add(data);
+                }
+                result.setData(objects);
+            } else {
+                result.setData(null);
             }
-            result.setData(objects);
         } else {
             result.setMsg(object.getString("msg"));
         }

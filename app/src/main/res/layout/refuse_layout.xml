@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@android:color/white"
+    android:padding="3dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageButton
+        android:padding="3dp"
+        android:id="@+id/key_board_down"
+        android:scaleType="fitCenter"
+        android:layout_centerVertical="true"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:src="@drawable/keyboard_hide"
+        android:layout_width="35dp"
+        android:layout_height="35dp" />
+    <com.example.amia.schoolrent.View.RoundImageView
+        android:id="@+id/user_icon_iv"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/key_board_down"
+        android:layout_width="35dp"
+        android:layout_height="35dp" />
+    <Button
+        android:id="@+id/send_btn"
+        android:text="@string/sent"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/refuse_et"
+        android:padding="5dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/search_border"
+        android:layout_toRightOf="@id/user_icon_iv"
+        android:layout_toLeftOf="@id/send_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

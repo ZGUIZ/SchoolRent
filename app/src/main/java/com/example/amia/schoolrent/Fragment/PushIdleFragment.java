@@ -56,6 +56,7 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
     private ProgressView progressView;
     private TextView lastTime;
     private RelativeLayout errorLayout;
+    private RelativeLayout progressLayout;
 
     private int imageCount = 0;
     protected IdleInfo idleInfo;
@@ -109,6 +110,8 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
 
         view.findViewById(R.id.push_button).setOnClickListener(onClickListener);
 
+        progressLayout = view.findViewById(R.id.progress_view);
+
         lastTime = view.findViewById(R.id.last_time);
     }
 
@@ -152,6 +155,9 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
         idleInfo.setPicList(pics);
 
         idleInfo.setAddress(((EditText)view.findViewById(R.id.address_et)).getText().toString());
+
+
+        progressLayout.setVisibility(View.VISIBLE);
 
         presenter.pushIdle(getActivity(),idleInfo,handler);
     }
@@ -276,6 +282,7 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
     }
 
     protected void pushSuccess(){
+        progressLayout.setVisibility(View.GONE);
         view.findViewById(R.id.success_ll).setVisibility(View.VISIBLE);
         new Thread(new Runnable() {
             int time = 3;
@@ -301,6 +308,7 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
     }
 
     protected void pushError(String... msg){
+        progressLayout.setVisibility(View.GONE);
         TextView editText = view.findViewById(R.id.error_message_tv);
         if(msg == null || msg.length <= 0){
             editText.setText(R.string.push_error);

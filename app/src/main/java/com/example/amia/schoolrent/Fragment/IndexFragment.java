@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 
+import com.example.amia.schoolrent.Activity.BaseAcitivity;
 import com.example.amia.schoolrent.Activity.IdleInfoActivity;
 import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
@@ -145,8 +146,10 @@ public class IndexFragment extends Fragment implements MainContract.View{
      * @param idleInfo
      */
     public void startInfoActivity(IdleInfo idleInfo){
-        Intent intent = new Intent(getActivity(), IdleInfoActivity.class);
+        BaseAcitivity acitivity = (BaseAcitivity) getActivity();
+        Intent intent = new Intent(acitivity, IdleInfoActivity.class);
         intent.putExtra("idleInfo",idleInfo);
+        intent.putExtra("student",acitivity.getStudent());
         startActivity(intent);
     }
 

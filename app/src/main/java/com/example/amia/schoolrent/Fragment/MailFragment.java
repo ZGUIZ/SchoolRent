@@ -33,7 +33,7 @@ public class MailFragment extends Fragment implements StudentContract.View {
 
     private View view;
 
-    protected Button sendBtn;
+    private Button sendBtn;
 
     protected StudentContract.Presenter presenter;
 
@@ -129,6 +129,12 @@ public class MailFragment extends Fragment implements StudentContract.View {
      */
     protected void sendValidate(){
         EditText mailET = view.findViewById(R.id.mailAddress);
+        EditText editText = view.findViewById(R.id.validate_code_et);
+
+        //隐藏键盘
+        KeyboardUtil keyboardUtil = KeyboardUtil.getInstance();
+        keyboardUtil.hideKeyBoard(getActivity(),editText);
+
         String address = mailET.getText().toString().trim();
         //空邮箱
         if(address == null || "".equals(address)){
@@ -137,7 +143,6 @@ public class MailFragment extends Fragment implements StudentContract.View {
         }
 
         //空验证码
-        EditText editText = view.findViewById(R.id.validate_code_et);
         String code = editText.getText().toString().trim();
         if(code == null || "".equals(code)){
             Snackbar.make(view,R.string.valid_code,Snackbar.LENGTH_SHORT).show();

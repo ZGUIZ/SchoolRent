@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.example.amia.schoolrent.View.RoundImageView
+        android:id="@+id/user_icon"
+        android:src="@drawable/default_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/user_icon"
+        android:text="用户名"
+        android:textSize="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/refuse_message"
+        android:layout_margin="8dp"
+        android:layout_toRightOf="@id/user_icon"
+        android:layout_below="@id/user_icon"
+        android:text="回复内容"
+        android:textColor="@android:color/black"
+        android:textSize="14dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/create_time"
+        android:text="2019-8-1"
+        android:layout_toRightOf="@id/user_icon"
+        android:layout_below="@id/refuse_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/second_refuse_layout"
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/user_icon"
+        android:layout_below="@id/create_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+            android:background="#F2F2F2"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+    </LinearLayout>
+</RelativeLayout>

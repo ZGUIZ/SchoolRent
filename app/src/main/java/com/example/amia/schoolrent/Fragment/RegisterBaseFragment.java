@@ -32,6 +32,7 @@ import com.example.amia.schoolrent.Presenter.LoginContract;
 import com.example.amia.schoolrent.Presenter.StudentContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
+import com.example.amia.schoolrent.Util.KeyboardUtil;
 import com.rey.material.app.BottomSheetDialog;
 import com.rey.material.widget.ProgressView;
 
@@ -201,6 +202,10 @@ public class RegisterBaseFragment extends Fragment implements StudentContract.Vi
         //获取填写的信息
         RegisterInterface registerInterface = (RegisterInterface) getActivity();
         EditText editText = view.findViewById(R.id.user_name);
+
+        KeyboardUtil keyboardUtil = KeyboardUtil.getInstance();
+        keyboardUtil.hideKeyBoard(getActivity(),editText);
+
         String userName = editText.getText().toString().trim();
         EditText pass = view.findViewById(R.id.password);
         String password = pass.getText().toString().trim();
