@@ -9,6 +9,7 @@ public interface RegisterInterface {
     void setUserName(String userName);
     void setPassword(String password);
     void setConfirmPassword(String confirmPassword);
+    void setPayPassword(String payPassword);
     void setConfirmPayPassword(String confirmPayPassword);
     Student getStudent();
     String getEMail();
