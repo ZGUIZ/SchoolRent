@@ -98,6 +98,8 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         deposit.setText(String.valueOf(idleInfo.getDeposit()));
         TextView rental = view.findViewById(R.id.rental_value_tv);
         rental.setText(String.valueOf(idleInfo.getRetal()));
+        TextView address = view.findViewById(R.id.address_tv);
+        address.setText(idleInfo.getAddress());
 
         TextView idleInfoDes = view.findViewById(R.id.idle_info_detail);
         idleInfoDes.setText(idleInfo.getIdelInfo());
@@ -161,6 +163,8 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
 
         if(hint!=null && hint.length>0){
             editText.setHint(hint[0]);
+        } else {
+            secondResponseInfo = null;
         }
 
         refuseView.findViewById(R.id.key_board_down).setOnClickListener(onClickListener);
