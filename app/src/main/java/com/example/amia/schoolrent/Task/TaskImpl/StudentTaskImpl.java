@@ -204,6 +204,11 @@ public class StudentTaskImpl implements StudentTask {
             encodePassword = RSAUtil.RSAEncode(key,student.getConfirmPassword().getBytes("utf-8"));
             student.setConfirmPassword(Base64.encodeToString(encodePassword,Base64.DEFAULT));
 
+            byte[] payPassword = RSAUtil.RSAEncode(key,student.getPayPassword().getBytes("utf-8"));
+            byte[] confirmPassword = RSAUtil.RSAEncode(key,student.getConfirmPayPassword().getBytes("utf-8"));
+            student.setPayPassword(Base64.encodeToString(payPassword,Base64.DEFAULT));
+            student.setConfirmPayPassword(Base64.encodeToString(confirmPassword,Base64.DEFAULT));
+
             //用户名编码
             student.setUserName(URLEncoder.encode(student.getUserName(),"utf-8"));
         } catch (UnsupportedEncodingException e) {

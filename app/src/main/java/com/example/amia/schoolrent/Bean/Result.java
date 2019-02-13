@@ -27,6 +27,8 @@ public class Result {
      */
     private Object data;
 
+    private Integer code;
+
     public Boolean getResult() {
         return result;
     }
@@ -59,7 +61,15 @@ public class Result {
         this.paramType = paramType;
     }
 
-    public static Result getJSONObject(String json,@Nullable Class className) throws JSONException, InstantiationException, IllegalAccessException {
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public static Result getJSONObject(String json, @Nullable Class className) throws JSONException, InstantiationException, IllegalAccessException {
         if(json== null || "".equals(json)){
             return null;
         }

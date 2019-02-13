@@ -94,10 +94,15 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
     }
 
     public void setConfirmPassword(String confirmPassword) {
-        student.setConfirmPassword(confirmPassword);;
+        student.setConfirmPassword(confirmPassword);
+    }
+
+    @Override
+    public void setPayPassword(String payPassword) {
+        student.setPayPassword(payPassword);
     }
 
     public void setConfirmPayPassword(String confirmPayPassword) {
-        student.setConfirmPassword(confirmPayPassword);
+        student.setConfirmPayPassword(confirmPayPassword);
     }
 }

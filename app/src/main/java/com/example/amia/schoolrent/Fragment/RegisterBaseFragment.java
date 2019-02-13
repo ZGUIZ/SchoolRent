@@ -227,6 +227,23 @@ public class RegisterBaseFragment extends Fragment implements StudentContract.Vi
         registerInterface.setUserName(userName);
         registerInterface.setPassword(password);
         registerInterface.setConfirmPassword(password);
+
+        EditText payPass = view.findViewById(R.id.pay_password);
+        String payPassword = payPass.getText().toString().trim();
+        EditText payPassConfirm = view.findViewById(R.id.pay_password_confirm);
+        String payPasswordConfirm = payPassConfirm.getText().toString().trim();
+        if("".equals(payPassword)){
+            Snackbar.make(view,R.string.pay_password_null,Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        if(!payPassword.equals(payPasswordConfirm)){
+            Snackbar.make(view,R.string.pay_password_not_match,Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
+        registerInterface.setPayPassword(payPassword);
+        registerInterface.setConfirmPayPassword(payPasswordConfirm);
+
         presenter.register(registerInterface.getStudent(),handler);
     }
 
