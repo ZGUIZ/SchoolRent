@@ -15,5 +15,6 @@ public interface BaseInfoContract {
     interface View extends BaseView<Presenter>{
         void linkError();
         void setPresenter(BaseInfoContract.Presenter presenter);
+        void setUserIcon(String path);
     }
 }

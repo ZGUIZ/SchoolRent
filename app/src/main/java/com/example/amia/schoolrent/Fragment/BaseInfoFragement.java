@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.amia.schoolrent.Activity.ActivityInterface.BaseInfoInterface;
 import com.example.amia.schoolrent.Activity.ActivityInterface.StudentInterface;
 import com.example.amia.schoolrent.Activity.ModifyActivity;
 import com.example.amia.schoolrent.Bean.AuthPicture;
@@ -23,19 +24,25 @@ import com.example.amia.schoolrent.Bean.School;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.BaseInfoContract;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Util.ActivityUtil;
+import com.example.amia.schoolrent.Util.COSUtil;
 import com.example.amia.schoolrent.View.SexDialog;
 
+import java.util.Date;
 import java.util.List;
 
 import static com.example.amia.schoolrent.Task.StudentTask.BASE_INFO_ERROR;
 import static com.example.amia.schoolrent.Task.StudentTask.BASE_INFO_SUCCESS;
 import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_STUDENT_ERROR;
 import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_STUDENT_SUCCESS;
+import static com.example.amia.schoolrent.Util.COSUtil.RESULT_ERROR;
+import static com.example.amia.schoolrent.Util.COSUtil.RESULT_SUCCESS;
 
 public class BaseInfoFragement extends Fragment implements BaseInfoContract.View {
     private View view;
     private BaseInfoContract.Presenter presenter;
     private Student student;
+    private Student updateStudent;
 
     public static BaseInfoFragement newInstance(){
         BaseInfoFragement baseInfoFragement = new BaseInfoFragement();
@@ -72,6 +79,7 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
 
         ImageView userIcon = view.findViewById(R.id.user_cion);
         Glide.with(context).load(student.getUserIcon()).into(userIcon);
+        userIcon.setOnClickListener(onClickListener);
 
         TextView userName = view.findViewById(R.id.user_name_tv);
         userName.setText(student.getUserName());
@@ -211,6 +219,13 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
                 case UPDATE_STUDENT_ERROR:
                     Toast.makeText(getContext(),R.string.update_error,Toast.LENGTH_SHORT).show();
                     break;
+                case RESULT_SUCCESS:
+                    presenter.updateStudentInfo(getContext(),updateStudent,handler);
+                    break;
+                case RESULT_ERROR:
+                    student.setUserIcon(null);
+                    linkError();
+                    break;
             }
         }
     };
@@ -225,10 +240,22 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
         this.presenter = presenter;
     }
 
+    @Override
+    public void setUserIcon(String path) {
+        COSUtil cosUtil = new COSUtil(getActivity());
+        String url = cosUtil.uploadFile(student,path,handler,String.valueOf(new Date().getTime()));
+        updateStudent = new Student();
+        updateStudent.setUserId(student.getUserId());
+        updateStudent.setUserIcon(ActivityUtil.getString(getActivity(),R.string.image_host)+url);
+    }
+
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             switch (view.getId()){
+                case R.id.user_cion:
+                    ((BaseInfoInterface)getActivity()).chooseUserIcon();
+                    break;
                 case R.id.sex_ll:
                     showSexDidalog();
                     break;
