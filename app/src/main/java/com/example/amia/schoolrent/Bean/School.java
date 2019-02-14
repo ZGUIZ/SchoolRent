@@ -17,7 +17,7 @@ import java.util.List;
  * @author Yanghu
  * @since 2018-10-30
  */
-public class School {
+public class School implements Serializable{
 
     private static final long serialVersionUID = 1L;
 

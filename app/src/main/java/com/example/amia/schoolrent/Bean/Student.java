@@ -6,6 +6,7 @@ import org.litepal.crud.LitePalSupport;
 
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -91,6 +92,8 @@ public class Student extends LitePalSupport implements Serializable{
 	 * “10000”表示为当前登录用户
 	 */
 	private String beanStatus;
+
+	private List<AuthPicture> authPictureList;
 
 	public String getUserId() {
 		return userId;
@@ -245,6 +248,14 @@ public class Student extends LitePalSupport implements Serializable{
 
 	public void setConfirmPayPassword(String confirmPayPassword) {
 		this.confirmPayPassword = confirmPayPassword;
+	}
+
+	public List<AuthPicture> getAuthPictureList() {
+		return authPictureList;
+	}
+
+	public void setAuthPictureList(List<AuthPicture> authPictureList) {
+		this.authPictureList = authPictureList;
 	}
 
 	/**
