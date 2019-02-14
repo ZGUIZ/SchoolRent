@@ -3,6 +3,7 @@ package com.example.amia.schoolrent.Presenter.PersenterImpl;
 import android.content.Context;
 import android.os.Handler;
 
+import com.example.amia.schoolrent.Bean.AuthPicture;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.BaseInfoContract;
 import com.example.amia.schoolrent.Presenter.BaseView;
@@ -27,6 +28,11 @@ public class BaseInfoContractImpl implements BaseInfoContract.Presenter {
     @Override
     public void updateStudentInfo(Context context, Student student, Handler handler) {
         studentTask.updateInfo(context,student,handler);
+    }
+
+    @Override
+    public void uploadAuthPictrue(Context context, AuthPicture authPicture, Handler handler) {
+        studentTask.addAuthPicture(context,authPicture,handler);
     }
 
     @Override

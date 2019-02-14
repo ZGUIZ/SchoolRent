@@ -1,12 +1,16 @@
 package com.example.amia.schoolrent.Task.TaskImpl;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.widget.Toast;
 
+import com.example.amia.schoolrent.Bean.AuthPicture;
 import com.example.amia.schoolrent.Bean.KeyValue;
+import com.example.amia.schoolrent.Bean.PassWord;
 import com.example.amia.schoolrent.Bean.Result;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.NetCallBack;
@@ -377,6 +381,152 @@ public class StudentTaskImpl implements StudentTask {
 
             @Override
             public void error(String... msg) {
+            }
+        });
+    }
+
+    @Override
+    public void addAuthPicture(Context context, AuthPicture authPicture, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.add_auth_pic);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("authPicture",authPicture);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()) {
+                        msg.what = UPDATE_STUDENT_SUCCESS;
+                        msg.obj = result.getData();
+                    } else {
+                        msg.what = UPDATE_STUDENT_ERROR;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void changePassword(Context context, PassWord passWord,final Handler handler) {
+        List<KeyValue> keyValues = LitePal.where("key = ?","publicKey").find(KeyValue.class);
+        if(keyValues.size()>0) {
+            KeyValue keyValue = keyValues.get(0);
+            byte[] bytes = Base64.decode(keyValue.getValue(), Base64.DEFAULT);
+            //还原公钥
+            //RSAUtil.restorePublicKey(bytes);
+            PublicKey key = RSAUtil.restorePublicKey(bytes);
+            byte[] encodePassword = null;
+            try {
+                encodePassword = RSAUtil.RSAEncode(key, passWord.getOldPassword().getBytes("utf-8"));
+                passWord.setOldPassword(Base64.encodeToString(encodePassword, Base64.DEFAULT));
+                encodePassword = RSAUtil.RSAEncode(key,passWord.getNewPassword().getBytes("utf-8"));
+                passWord.setNewPassword(Base64.encodeToString(encodePassword, Base64.DEFAULT));
+                encodePassword = RSAUtil.RSAEncode(key,passWord.getConfirmPaswword().getBytes("utf-8"));
+                passWord.setConfirmPaswword(Base64.encodeToString(encodePassword, Base64.DEFAULT));
+            } catch (Exception e) {
+                Toast.makeText(context,R.string.link_error,Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        String url = ActivityUtil.getString(context,R.string.host) + ActivityUtil.getString(context,R.string.chang_password);
+
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("passWord",passWord);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()) {
+                        msg.what = UPDATE_STUDENT_SUCCESS;
+                    } else {
+                        msg.what = UPDATE_PASSWORD_ERROR;
+                    }
+                    msg.obj = result.getMsg();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void changePayPassword(Context context, PassWord passWord, final Handler handler) {
+
+        List<KeyValue> keyValues = LitePal.where("key = ?","publicKey").find(KeyValue.class);
+        if(keyValues.size()>0) {
+            KeyValue keyValue = keyValues.get(0);
+            byte[] bytes = Base64.decode(keyValue.getValue(), Base64.DEFAULT);
+            //还原公钥
+            //RSAUtil.restorePublicKey(bytes);
+            PublicKey key = RSAUtil.restorePublicKey(bytes);
+            byte[] encodePassword = null;
+            try {
+                encodePassword = RSAUtil.RSAEncode(key, passWord.getOldPassword().getBytes("utf-8"));
+                passWord.setOldPassword(Base64.encodeToString(encodePassword, Base64.DEFAULT));
+                encodePassword = RSAUtil.RSAEncode(key,passWord.getNewPassword().getBytes("utf-8"));
+                passWord.setNewPassword(Base64.encodeToString(encodePassword, Base64.DEFAULT));
+                encodePassword = RSAUtil.RSAEncode(key,passWord.getConfirmPaswword().getBytes("utf-8"));
+                passWord.setConfirmPaswword(Base64.encodeToString(encodePassword, Base64.DEFAULT));
+            } catch (Exception e) {
+                Toast.makeText(context,R.string.link_error,Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        String url = ActivityUtil.getString(context,R.string.host) + ActivityUtil.getString(context,R.string.chang_pay_password);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("passWord",passWord);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()) {
+                        msg.what = UPDATE_STUDENT_SUCCESS;
+                    } else {
+                        msg.what = UPDATE_PAYPASSWORD_ERROR;
+                    }
+                    msg.obj = result.getMsg();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
             }
         });
     }

@@ -3,6 +3,7 @@ package com.example.amia.schoolrent.Presenter;
 import android.content.Context;
 import android.os.Handler;
 
+import com.example.amia.schoolrent.Bean.AuthPicture;
 import com.example.amia.schoolrent.Bean.Student;
 
 
@@ -10,6 +11,7 @@ public interface BaseInfoContract {
     interface Presenter{
         void loadBaseInfo(Context context, Student student, Handler handler);
         void updateStudentInfo(Context context,Student student,Handler handler);
+        void uploadAuthPictrue(Context context, AuthPicture authPicture,Handler handler);
         void exit();
     }
 
@@ -17,5 +19,6 @@ public interface BaseInfoContract {
         void linkError();
         void setPresenter(BaseInfoContract.Presenter presenter);
         void setUserIcon(String path);
+        void setAuthPictrueInfo(String url);
     }
 }

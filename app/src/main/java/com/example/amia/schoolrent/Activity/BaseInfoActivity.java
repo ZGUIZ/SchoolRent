@@ -76,21 +76,40 @@ public class BaseInfoActivity extends AppCompatActivity implements StudentInterf
     }
 
     @Override
+    public void choolseAuthPic() {
+        Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, CHOOSE_AUT_PIC);
+    }
+
+    private String getPicUrl(Intent data){
+        if(data != null) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String path = cursor.getString(columnIndex);
+            cursor.close();
+            return path;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
             case CHOSE_USER_ICON:
                 if(resultCode == RESULT_OK){
                     //读取图片的路径
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getContentResolver().query(selectedImage,filePathColumn,null,null,null);
-                    cursor.moveToFirst();
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String path = cursor.getString(columnIndex);
-                    cursor.close();
+                    String path = getPicUrl(data);
                     fragment.setUserIcon(path);
                 }
+                break;
+            case CHOOSE_AUT_PIC:
+                String path = getPicUrl(data);
+                fragment.setAuthPictrueInfo(path);
                 break;
         }
     }

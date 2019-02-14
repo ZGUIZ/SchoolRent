@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,6 @@ import com.example.amia.schoolrent.Presenter.BaseInfoContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.Util.COSUtil;
-import com.example.amia.schoolrent.Util.NetUtils;
 import com.example.amia.schoolrent.View.SexDialog;
 
 import java.util.Date;
@@ -46,6 +46,7 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
     private BaseInfoContract.Presenter presenter;
     private Student student;
     private Student updateStudent;
+    private AuthPicture authPicture;
 
     public static BaseInfoFragement newInstance(){
         BaseInfoFragement baseInfoFragement = new BaseInfoFragement();
@@ -68,7 +69,6 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
     private void init(){
         StudentInterface studentInterface = (StudentInterface) getActivity();
         student = studentInterface.getStudent();
-        showStudentInfo(student);
     }
 
     @Override
@@ -89,10 +89,6 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
 
         userName.setOnClickListener(onClickListener);
 
-        TextView realName = view.findViewById(R.id.real_name_tv);
-        realName.setText(student.getRealName());
-        realName.setOnClickListener(onClickListener);
-
         TextView sex = view.findViewById(R.id.sex);
         sex.setText(student.getSex());
         view.findViewById(R.id.sex_ll).setOnClickListener(onClickListener);
@@ -111,10 +107,9 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
         phoneTextView.setText(student.getTelephone());
         phoneTextView.setOnClickListener(onClickListener);
 
-        view.findViewById(R.id.school_cared_validate_layout).setOnClickListener(onClickListener);
-        view.findViewById(R.id.id_card_validate_layout).setOnClickListener(onClickListener);
-
         List<AuthPicture> authPictures = student.getAuthPictureList();
+        boolean flag = true;
+        boolean idFlag = true;
         if(authPictures != null && authPictures.size() > 0){
             //设置验证信息
             for(AuthPicture authPicture:authPictures){
@@ -127,6 +122,7 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
                        case 0:
                            break;
                        case 1:
+                           flag = false;
                            schoolIcon.setImageResource(R.drawable.validate);
                            schoolTV.setText(R.string.validated);
                            break;
@@ -135,7 +131,8 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
                            schoolTV.setText(R.string.validate_no_pass);
                            break;
                        case 3:
-                           schoolIcon.setImageResource(R.drawable.validate);
+                           idFlag = false;
+                           schoolIcon.setImageResource(R.drawable.unvalidate);
                            schoolTV.setText(R.string.validating);
                            break;
                    }
@@ -146,6 +143,7 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
                         case 0:
                             break;
                         case 1:
+                            flag = false;
                             idIcon.setImageResource(R.drawable.validate);
                             idValTv.setText(R.string.validated);
                             break;
@@ -154,12 +152,31 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
                             idValTv.setText(R.string.validate_no_pass);
                             break;
                         case 3:
+                            flag = false;
                             idIcon.setImageResource(R.drawable.validate);
                             idValTv.setText(R.string.validating);
                             break;
                     }
                 }
             }
+
+            if(flag){
+                view.findViewById(R.id.school_cared_validate_layout).setOnClickListener(onClickListener);
+            }
+            if(idFlag){
+                view.findViewById(R.id.id_card_validate_layout).setOnClickListener(onClickListener);
+            }
+        } else {
+            view.findViewById(R.id.school_cared_validate_layout).setOnClickListener(onClickListener);
+            view.findViewById(R.id.id_card_validate_layout).setOnClickListener(onClickListener);
+        }
+
+        TextView realName = view.findViewById(R.id.real_name_tv);
+        realName.setText(student.getRealName());
+
+        //若已经有一项通过验证，则不让其修改真实姓名
+        if(flag && idFlag) {
+            realName.setOnClickListener(onClickListener);
         }
 
         view.findViewById(R.id.password_reset_ll).setOnClickListener(onClickListener);
@@ -205,12 +222,46 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
         presenter.updateStudentInfo(getContext(),student,handler);
     }
 
+    protected void uploadAuthValidate(int type){
+        authPicture = new AuthPicture();
+        authPicture.setType(type);
+
+        BaseInfoInterface infoInterface = (BaseInfoInterface) getActivity();
+        infoInterface.choolseAuthPic();
+    }
+
+    public void setAuthPictrueInfo(String path){
+        if(TextUtils.isEmpty(path)){
+            authPicture = null;
+            return;
+        }
+        COSUtil cosUtil = new COSUtil(getActivity());
+        String url = cosUtil.uploadFile(student,path,validateHandler,String.valueOf(new Date().getTime()));
+        authPicture.setPicUrl(url);
+    }
+
     protected void exit(){
         presenter.exit();
         Activity activity = getActivity();
         Intent intent = new Intent(activity, SplashActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
+    private Handler validateHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case RESULT_SUCCESS:
+                    presenter.uploadAuthPictrue(getContext(),authPicture,handler);
+                    break;
+                case RESULT_ERROR:
+                    authPicture = null;
+                    linkError();
+                    break;
+            }
+        }
+    };
 
     private Handler handler = new Handler(){
         @Override
@@ -225,6 +276,7 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
                     break;
                 case UPDATE_STUDENT_SUCCESS:
                     updateStudent = null;
+                    authPicture = null;
                     presenter.loadBaseInfo(getContext(),student,handler);
                     break;
                 case UPDATE_STUDENT_ERROR:
@@ -254,6 +306,9 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
 
     @Override
     public void setUserIcon(String path) {
+        if(TextUtils.isEmpty(path)){
+            return;
+        }
         COSUtil cosUtil = new COSUtil(getActivity());
         String url = cosUtil.uploadFile(student,path,handler,String.valueOf(new Date().getTime()));
         updateStudent = new Student();
@@ -284,10 +339,10 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
                     showModifyActivity(R.id.telephone_tv);
                     break;
                 case R.id.school_cared_validate_layout:
-
+                    uploadAuthValidate(1);
                     break;
                 case R.id.id_card_validate_layout:
-
+                    uploadAuthValidate(2);
                     break;
                 case R.id.password_reset_ll:
                     showModifyActivity(R.id.password_reset_ll);

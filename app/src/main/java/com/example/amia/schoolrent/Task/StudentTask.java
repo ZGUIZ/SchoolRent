@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 
+import com.example.amia.schoolrent.Bean.AuthPicture;
 import com.example.amia.schoolrent.Bean.KeyValue;
+import com.example.amia.schoolrent.Bean.PassWord;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.LoginContract;
 
@@ -15,6 +17,8 @@ public interface StudentTask extends BaseTask{
     int BASE_INFO_ERROR = 204;
     int UPDATE_STUDENT_SUCCESS =205;
     int UPDATE_STUDENT_ERROR =206;
+    int UPDATE_PASSWORD_ERROR = 207;
+    int UPDATE_PAYPASSWORD_ERROR = 208;
 
     /**
      * 登录
@@ -53,4 +57,10 @@ public interface StudentTask extends BaseTask{
     void getBaseInfo(Context context,Student student,Handler handler);
 
     void exit(Context context);
+
+    void addAuthPicture(Context context, AuthPicture authPicture,Handler handler);
+
+    void changePassword(Context context, PassWord passWord,Handler handler);
+
+    void changePayPassword(Context context,PassWord passWord,Handler handler);
 }
