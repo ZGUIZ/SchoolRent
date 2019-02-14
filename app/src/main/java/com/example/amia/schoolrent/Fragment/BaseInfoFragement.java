@@ -214,9 +214,11 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
                     linkError();
                     break;
                 case UPDATE_STUDENT_SUCCESS:
+                    updateStudent = null;
                     presenter.loadBaseInfo(getContext(),student,handler);
                     break;
                 case UPDATE_STUDENT_ERROR:
+                    updateStudent = null;
                     Toast.makeText(getContext(),R.string.update_error,Toast.LENGTH_SHORT).show();
                     break;
                 case RESULT_SUCCESS:

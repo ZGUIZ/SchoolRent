@@ -16,7 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/TranslucentLayout">
-        <activity android:name=".Activity.IdleInfoActivity"></activity>
+        <activity android:name=".Activity.ModifyActivity"></activity>
+        <activity android:name=".Activity.BaseInfoActivity" />
+        <activity android:name=".Activity.IdleInfoActivity" />
         <activity android:name=".Activity.PushActivity" />
         <activity android:name=".Activity.SplashActivity">
             <intent-filter>
