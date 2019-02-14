@@ -9,6 +9,7 @@ import com.example.amia.schoolrent.Bean.Student;
 public interface BaseInfoContract {
     interface Presenter{
         void loadBaseInfo(Context context, Student student, Handler handler);
+        void updateStudentInfo(Context context,Student student,Handler handler);
     }
 
     interface View extends BaseView<Presenter>{

@@ -23,11 +23,14 @@ import com.example.amia.schoolrent.Bean.School;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.BaseInfoContract;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.View.SexDialog;
 
 import java.util.List;
 
 import static com.example.amia.schoolrent.Task.StudentTask.BASE_INFO_ERROR;
 import static com.example.amia.schoolrent.Task.StudentTask.BASE_INFO_SUCCESS;
+import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_STUDENT_ERROR;
+import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_STUDENT_SUCCESS;
 
 public class BaseInfoFragement extends Fragment implements BaseInfoContract.View {
     private View view;
@@ -81,7 +84,7 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
 
         TextView sex = view.findViewById(R.id.sex);
         sex.setText(student.getSex());
-        sex.setOnClickListener(onClickListener);
+        view.findViewById(R.id.sex_ll).setOnClickListener(onClickListener);
 
         School school = student.getSchool();
         if(school!=null) {
@@ -171,6 +174,26 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
         startActivity(intent);
     }
 
+    private void showSexDidalog(){
+        final SexDialog.Builder builder = new SexDialog.Builder(getActivity());
+        builder.setPositiveButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String sex = builder.getValue();
+                updateSex(sex);
+                builder.cancleDialog();
+            }
+        });
+        SexDialog sexDialog = builder.createDialog();
+        sexDialog.show();
+    }
+
+    protected void updateSex(String sex){
+        Student student = new Student();
+        student.setSex(sex);
+        presenter.updateStudentInfo(getContext(),student,handler);
+    }
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -181,6 +204,12 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
                     break;
                 case BASE_INFO_ERROR:
                     linkError();
+                    break;
+                case UPDATE_STUDENT_SUCCESS:
+                    presenter.loadBaseInfo(getContext(),student,handler);
+                    break;
+                case UPDATE_STUDENT_ERROR:
+                    Toast.makeText(getContext(),R.string.update_error,Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -201,7 +230,7 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.sex_ll:
-
+                    showSexDidalog();
                     break;
                 case R.id.user_name_tv:
                     showModifyActivity(R.id.user_name_tv);

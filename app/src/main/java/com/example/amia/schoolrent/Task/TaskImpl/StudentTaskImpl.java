@@ -333,9 +333,11 @@ public class StudentTaskImpl implements StudentTask {
 
     @Override
     public void getBaseInfo(Context context, Student student, final Handler handler) {
+        Student s = new Student();
+        s.setUserId(student.getUserId());
         String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.get_base_info);
         Map<String,Object> keyValueMap = new HashMap<>();
-        keyValueMap.put("student",student);
+        keyValueMap.put("student",s);
 
         NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
             @Override

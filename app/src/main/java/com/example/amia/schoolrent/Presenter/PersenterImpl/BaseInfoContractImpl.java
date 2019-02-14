@@ -23,4 +23,9 @@ public class BaseInfoContractImpl implements BaseInfoContract.Presenter {
     public void loadBaseInfo(Context context, Student student, Handler handler) {
         studentTask.getBaseInfo(context,student,handler);
     }
+
+    @Override
+    public void updateStudentInfo(Context context, Student student, Handler handler) {
+        studentTask.updateInfo(context,student,handler);
+    }
 }
