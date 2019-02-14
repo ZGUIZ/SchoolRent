@@ -19,6 +19,8 @@ public interface StudentTask extends BaseTask{
     int UPDATE_STUDENT_ERROR =206;
     int UPDATE_PASSWORD_ERROR = 207;
     int UPDATE_PAYPASSWORD_ERROR = 208;
+    int RESET_SUECCESS = 209;
+    int RESET_ERROR = 210;
 
     /**
      * 登录
@@ -63,4 +65,7 @@ public interface StudentTask extends BaseTask{
     void changePassword(Context context, PassWord passWord,Handler handler);
 
     void changePayPassword(Context context,PassWord passWord,Handler handler);
+
+    void resetPayPassword(Context context,Handler handler);
+    void resetPassword(Context context,Handler handler);
 }

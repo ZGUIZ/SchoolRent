@@ -531,4 +531,66 @@ public class StudentTaskImpl implements StudentTask {
         });
     }
 
+    @Override
+    public void resetPayPassword(Context context,final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.reset_pay_password);
+        NetUtils.get(url,new NetCallBack(){
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()) {
+                        msg.what = RESET_SUECCESS;
+                    } else {
+                        msg.what = RESET_ERROR;
+                    }
+                    msg.obj = result.getMsg();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void resetPassword(Context context,final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.reset_password);
+        NetUtils.get(url,new NetCallBack(){
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()) {
+                        msg.what = RESET_SUECCESS;
+                    } else {
+                        msg.what = RESET_ERROR;
+                    }
+                    msg.obj = result.getMsg();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
 }

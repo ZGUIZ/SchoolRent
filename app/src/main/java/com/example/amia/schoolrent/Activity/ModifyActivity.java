@@ -23,6 +23,8 @@ import com.example.amia.schoolrent.Fragment.ModifyFragment;
 import com.example.amia.schoolrent.Fragment.ResetPasswordFragment;
 import com.example.amia.schoolrent.Presenter.BaseInfoContract;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.BaseInfoContractImpl;
+import com.example.amia.schoolrent.Presenter.PersenterImpl.ResetPasswordContractImpl;
+import com.example.amia.schoolrent.Presenter.RetPasswordContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.StudentTask;
 import com.example.amia.schoolrent.Task.TaskImpl.StudentTaskImpl;
@@ -121,6 +123,9 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
             fragment = ResetPasswordFragment.newInstance();
             ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),fragment,R.id.modify_fragment);
         }
+
+        RetPasswordContract.Presenter presenter = new ResetPasswordContractImpl(fragment,studentTask);
+        fragment.setPresenter(presenter);
         modifyPasswordInterface = fragment;
     }
 
