@@ -26,7 +26,10 @@ public abstract class BaseAcitivity extends AppCompatActivity {
             Toast.makeText(this,R.string.double_exit,Toast.LENGTH_SHORT).show();
             lastBackPressTime=secondBackPressTime;
         } else{
-            this.finish();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+            //this.finish();
         }
     }
 

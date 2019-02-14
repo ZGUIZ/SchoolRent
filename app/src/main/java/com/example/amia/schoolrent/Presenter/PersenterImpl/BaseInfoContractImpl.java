@@ -28,4 +28,9 @@ public class BaseInfoContractImpl implements BaseInfoContract.Presenter {
     public void updateStudentInfo(Context context, Student student, Handler handler) {
         studentTask.updateInfo(context,student,handler);
     }
+
+    @Override
+    public void exit() {
+        studentTask.exit(view.getContext());
+    }
 }

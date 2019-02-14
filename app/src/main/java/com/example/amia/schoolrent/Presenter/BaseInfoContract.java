@@ -10,6 +10,7 @@ public interface BaseInfoContract {
     interface Presenter{
         void loadBaseInfo(Context context, Student student, Handler handler);
         void updateStudentInfo(Context context,Student student,Handler handler);
+        void exit();
     }
 
     interface View extends BaseView<Presenter>{

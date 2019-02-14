@@ -51,4 +51,6 @@ public interface StudentTask extends BaseTask{
     void updateInfo(Context context,Student student,Handler handler);
 
     void getBaseInfo(Context context,Student student,Handler handler);
+
+    void exit(Context context);
 }

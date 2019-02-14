@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.amia.schoolrent.Activity.ActivityInterface.BaseInfoInterface;
 import com.example.amia.schoolrent.Activity.ActivityInterface.StudentInterface;
 import com.example.amia.schoolrent.Activity.ModifyActivity;
+import com.example.amia.schoolrent.Activity.SplashActivity;
 import com.example.amia.schoolrent.Bean.AuthPicture;
 import com.example.amia.schoolrent.Bean.School;
 import com.example.amia.schoolrent.Bean.Student;
@@ -26,6 +28,7 @@ import com.example.amia.schoolrent.Presenter.BaseInfoContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.Util.COSUtil;
+import com.example.amia.schoolrent.Util.NetUtils;
 import com.example.amia.schoolrent.View.SexDialog;
 
 import java.util.Date;
@@ -202,6 +205,13 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
         presenter.updateStudentInfo(getContext(),student,handler);
     }
 
+    protected void exit(){
+        presenter.exit();
+        Activity activity = getActivity();
+        Intent intent = new Intent(activity, SplashActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -286,7 +296,7 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
                     showModifyActivity(R.id.pay_password_reset_ll);
                     break;
                 case R.id.exit_tv:
-
+                    exit();
                     break;
             }
         }

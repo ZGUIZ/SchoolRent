@@ -99,7 +99,6 @@ public class SplashFragment extends Fragment implements SplashContract.View,Spla
                 break;
         }
         startActivity(intent);
-        activity.finish();
     }
 
     protected void loadPublicKey(){
