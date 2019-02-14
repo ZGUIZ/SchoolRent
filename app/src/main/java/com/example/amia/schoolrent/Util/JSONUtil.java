@@ -1,7 +1,10 @@
 package com.example.amia.schoolrent.Util;
 
+import com.example.amia.schoolrent.Bean.AuthPicture;
 import com.example.amia.schoolrent.Bean.IdelPic;
 import com.example.amia.schoolrent.Bean.IdleInfo;
+import com.example.amia.schoolrent.Bean.School;
+import com.example.amia.schoolrent.Bean.SecondResponseInfo;
 import com.example.amia.schoolrent.Bean.Student;
 
 import org.json.JSONArray;
@@ -100,26 +103,54 @@ public class JSONUtil {
             if("serialVersionUID".equals(field.getName())||"$change".equals(propertyName)){
                 continue;
             }else if(field.getType().equals(List.class)){
-                Type genericType = field.getGenericType();
-                if (genericType == null){
-                    continue;
-                }
-                if(genericType instanceof ParameterizedType){
-                    ParameterizedType pt = (ParameterizedType) genericType;
-                    Class<?> genericClass = (Class<?>) pt.getActualTypeArguments()[0];
-                    JSONArray jsonArray = jsonObject.getJSONArray(propertyName);
-                    if(genericClass.equals(IdelPic.class)){
-                        List<IdelPic> list = new ArrayList<>();
-                        for(int j = 0;j < jsonArray.length();j++){
-                            IdelPic o = (IdelPic) getObject(IdelPic.class,jsonArray.getJSONObject(j));
-                            list.add(o);
-                        }
-                        field.set(object,list);
+                try {
+                    Type genericType = field.getGenericType();
+                    if (genericType == null) {
+                        continue;
                     }
+                    if (genericType instanceof ParameterizedType) {
+                        ParameterizedType pt = (ParameterizedType) genericType;
+                        Class<?> genericClass = (Class<?>) pt.getActualTypeArguments()[0];
+                        JSONArray jsonArray = jsonObject.getJSONArray(propertyName);
+                        if (genericClass.equals(IdelPic.class)) {
+                            List<IdelPic> list = new ArrayList<>();
+                            for (int j = 0; j < jsonArray.length(); j++) {
+                                IdelPic o = (IdelPic) getObject(IdelPic.class, jsonArray.getJSONObject(j));
+                                list.add(o);
+                            }
+                            field.set(object, list);
+                        } else if (genericClass.equals(SecondResponseInfo.class)) {
+                            List<SecondResponseInfo> list = new ArrayList<>();
+                            for (int j = 0; j < jsonArray.length(); j++) {
+                                SecondResponseInfo o = (SecondResponseInfo) getObject(SecondResponseInfo.class, jsonArray.getJSONObject(j));
+                                list.add(o);
+                            }
+                            field.set(object, list);
+                        } else if (genericClass.equals(AuthPicture.class)) {
+                            List<AuthPicture> authPictures = new ArrayList<>();
+                            for (int j = 0; j < jsonArray.length(); j++) {
+                                AuthPicture authPicture = (AuthPicture) getObject(AuthPicture.class, jsonArray.getJSONObject(j));
+                                authPictures.add(authPicture);
+                            }
+                            field.set(object, authPictures);
+                        }
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
                 continue;
             } else if(field.getType().equals(Student.class)){
                 Object o = getObject(Student.class,jsonObject.getJSONObject(propertyName));
+                field.set(object,o);
+                continue;
+            } else if(field.getType().equals(School.class)){
+                Object o = null;
+                try {
+                    JSONObject jo = jsonObject.getJSONObject(propertyName);
+                    o = getObject(School.class, jo);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
                 field.set(object,o);
                 continue;
             }
@@ -135,7 +166,9 @@ public class JSONUtil {
         try{
             if(cls.equals(Date.class)){
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                return sdf.parse(jsonObject.getString(propertyName));
+                String d = sdf.format(jsonObject.getDouble(propertyName));
+                Date date=sdf.parse(d);
+                return date;
             } else if(cls.equals(IdleInfo.class)){
                 return getObject(IdleInfo.class,jsonObject);
             } else if(cls.equals(Float.class)){

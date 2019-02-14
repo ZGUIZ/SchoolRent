@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.amia.schoolrent.Activity.BaseAcitivity;
+import com.example.amia.schoolrent.Activity.BaseInfoActivity;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
@@ -63,6 +65,8 @@ public class MineFragment extends Fragment {
 
         ImageView imageView = view.findViewById(R.id.user_icon);
         Glide.with(getActivity()).load(student.getUserIcon()).into(imageView);
+
+        view.findViewById(R.id.user_info_layout).setOnClickListener(onClickListener);
     }
 
     @Override
@@ -70,4 +74,23 @@ public class MineFragment extends Fragment {
         super.onDestroy();
         view = null;
     }
+
+    protected void loadInfoActivity(){
+        BaseAcitivity baseAcitivity = (BaseAcitivity) getActivity();
+        Student student = baseAcitivity.getStudent();
+        Intent intent = new Intent(baseAcitivity, BaseInfoActivity.class);
+        intent.putExtra("student",student);
+        startActivity(intent);
+    }
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.user_info_layout:
+                    loadInfoActivity();
+                    break;
+            }
+        }
+    };
 }

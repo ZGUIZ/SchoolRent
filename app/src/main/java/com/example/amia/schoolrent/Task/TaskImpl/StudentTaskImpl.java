@@ -3,6 +3,7 @@ package com.example.amia.schoolrent.Task.TaskImpl;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Base64;
 
 import com.example.amia.schoolrent.Bean.KeyValue;
@@ -276,6 +277,90 @@ public class StudentTaskImpl implements StudentTask {
                 Message message = handler.obtainMessage();
                 message.what = CURRENT_USER_ERROR;
                 handler.sendMessage(message);
+            }
+        });
+    }
+
+    @Override
+    public void updateInfo(Context context, Student student, final Handler handler) {
+        try{
+            String userName = student.getUserName();
+            if(!TextUtils.isEmpty(userName)){
+                student.setUserName(URLEncoder.encode(userName,"utf-8"));
+            }
+            String realName = student.getRealName();
+            if(!TextUtils.isEmpty(realName)){
+                student.setRealName(URLEncoder.encode(realName,"utf-8"));
+            }
+            String sex =student.getSex();
+            if (!TextUtils.isEmpty(sex)) {
+                student.setSex(URLEncoder.encode(sex,"utf-8"));
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.student_update);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("student",student);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()) {
+                        msg.what = UPDATE_STUDENT_SUCCESS;
+                    } else {
+                        msg.what = UPDATE_STUDENT_ERROR;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = UPDATE_STUDENT_ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void getBaseInfo(Context context, Student student, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.get_base_info);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("student",student);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,Student.class);
+                    if(result.getResult()) {
+                        msg.what = BASE_INFO_SUCCESS;
+                        msg.obj = result.getData();
+                    } else {
+                       msg.what = BASE_INFO_ERROR;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
             }
         });
     }

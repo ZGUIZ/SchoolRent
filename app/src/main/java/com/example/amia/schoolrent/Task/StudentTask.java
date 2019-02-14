@@ -11,6 +11,10 @@ import com.example.amia.schoolrent.Presenter.LoginContract;
 public interface StudentTask extends BaseTask{
     int CURRENT_USER_ERROR = 200;
     int CURRENT_USER_SUCCESS = 201;
+    int BASE_INFO_SUCCESS = 203;
+    int BASE_INFO_ERROR = 204;
+    int UPDATE_STUDENT_SUCCESS =205;
+    int UPDATE_STUDENT_ERROR =206;
 
     /**
      * 登录
@@ -43,4 +47,8 @@ public interface StudentTask extends BaseTask{
     void register(Context context,Student student,Handler handler);
 
     void getCurrentUser(Context context,Handler handler);
+
+    void updateInfo(Context context,Student student,Handler handler);
+
+    void getBaseInfo(Context context,Student student,Handler handler);
 }
