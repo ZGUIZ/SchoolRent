@@ -62,6 +62,7 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
     private RelativeLayout rentBtn;
     private TextView rentBtnTextView;
     private InputPayPasswordDialog passwordDialog;
+    private RelativeLayout progressView;
 
     private IdleInfo idleInfo;
 
@@ -92,6 +93,9 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         Student student = idleInfo.getStudent();
 
         this.idleInfo = idleInfo;
+
+        progressView = view.findViewById(R.id.progress_view);
+        progressView.setVisibility(View.VISIBLE);
 
         //加载发布者头像
         //view.findViewById(R.id.back_ib).setOnClickListener(onClickListener);
@@ -500,6 +504,7 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
+            progressView.setVisibility(View.GONE);
             switch (msg.what){
                 case PUSH_REFUSE_SUCCESS:
                     sendRefuseSuccess();

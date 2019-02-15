@@ -225,4 +225,16 @@
                 android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
+    <RelativeLayout
+        android:id="@+id/progress_view"
+        android:background="#66000000"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:layout_centerInParent="true"
+            android:indeterminateTint="#408Af8"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+    </RelativeLayout>
 </RelativeLayout>

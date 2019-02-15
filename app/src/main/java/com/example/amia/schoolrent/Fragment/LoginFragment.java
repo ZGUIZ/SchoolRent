@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.amia.schoolrent.Activity.MainActivity;
@@ -81,8 +82,10 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     }
 
     public void passwordError() {
+        RelativeLayout progressView = view.findViewById(R.id.progress_view);
         Toast.makeText(getActivity(),ActivityUtil.getString(getActivity(),R.string.password_error),Toast.LENGTH_SHORT).show();
-        view.findViewById(R.id.progress_view).setVisibility(View.GONE);
+        progressView.setVisibility(View.GONE);
+        progressView.setOnClickListener(clickListener);
     }
 
     @Override
@@ -123,6 +126,8 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                     break;
                 case R.id.login_btn:
                     login();
+                    break;
+                case R.id.progress_view:
                     break;
             }
         }
