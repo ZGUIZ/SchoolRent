@@ -6,6 +6,7 @@ import android.os.Handler;
 import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
+import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.Student;
 
 import java.util.List;
@@ -26,6 +27,10 @@ public interface IdleTask extends BaseTask{
     int PIC_LOAD_SUCCESS = 504;
     int LOAD_MORE_SUCCESS = 505;
     int LOAD_MORE_ERROR = 506;
+    int LOAD_RELATION_SUCCESS = 507;
+    int LOAD_RELATION_ERROR = 508;
+    int RENT_SUCCESS = 509;
+    int RENT_ERROR = 510;
 
     /**
      * 获取首页分类
@@ -72,4 +77,8 @@ public interface IdleTask extends BaseTask{
     void pushIdle(Context context,IdleInfo idleInfo,Handler handler);
 
     void loadImage(String id,String url,Handler handler);
+
+    void getRelation(Context context,IdleInfo idleInfo,Handler handler);
+
+    void addRent(Context context, Rent rent, Handler handler);
 }

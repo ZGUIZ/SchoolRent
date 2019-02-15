@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.example.amia.schoolrent.Activity.ActivityInterface.IdleInfoInterface;
 import com.example.amia.schoolrent.Bean.IdelPic;
 import com.example.amia.schoolrent.Bean.IdleInfo;
+import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.ResponseInfo;
 import com.example.amia.schoolrent.Bean.SecondResponseInfo;
 import com.example.amia.schoolrent.Bean.Student;
@@ -34,11 +36,16 @@ import com.example.amia.schoolrent.Presenter.IdleInfoContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.Util.KeyboardUtil;
+import com.example.amia.schoolrent.View.InputPayPasswordDialog;
 import com.rey.material.app.BottomSheetDialog;
 import com.tencent.cos.xml.utils.StringUtils;
 
 import java.util.List;
 
+import static com.example.amia.schoolrent.Task.IdleTask.LOAD_RELATION_ERROR;
+import static com.example.amia.schoolrent.Task.IdleTask.LOAD_RELATION_SUCCESS;
+import static com.example.amia.schoolrent.Task.IdleTask.RENT_ERROR;
+import static com.example.amia.schoolrent.Task.IdleTask.RENT_SUCCESS;
 import static com.example.amia.schoolrent.Task.RefuseTask.LOAD_REFUSE_ERROR;
 import static com.example.amia.schoolrent.Task.RefuseTask.LOAD_REFUSE_SUCCESS;
 import static com.example.amia.schoolrent.Task.RefuseTask.PUSH_REFUSE_ERROR;
@@ -51,6 +58,16 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
     private View refuseView;  //回复输入框的View
     private EditText editText;  //回复输入框
     private RecyclerView refuseRecyclerView; // 回复信息的Layout
+
+    private RelativeLayout rentBtn;
+    private TextView rentBtnTextView;
+    private InputPayPasswordDialog passwordDialog;
+
+    private IdleInfo idleInfo;
+
+    //商品和当前用户的关系
+    //0.申请后待确认 -1.正在查询 1.确认 2.拒绝 3.同意后拒绝租赁 4.开始 5.完成 6取消 7无关（客户端回显需要） 8 当前用户发布
+    private int relation;
 
     private IdleInfoContract.Presenter presenter;
 
@@ -73,6 +90,8 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         IdleInfoInterface idleInfoInterface = (IdleInfoInterface) getActivity();
         IdleInfo idleInfo = idleInfoInterface.getIdleInfo();
         Student student = idleInfo.getStudent();
+
+        this.idleInfo = idleInfo;
 
         //加载发布者头像
         //view.findViewById(R.id.back_ib).setOnClickListener(onClickListener);
@@ -114,6 +133,141 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
 
         //加载回复信息
         loadRefuseMessage();
+
+        rentBtn = view.findViewById(R.id.rent_btn);
+        rentBtn.setOnClickListener(onClickListener);
+
+        rentBtnTextView = view.findViewById(R.id.rent_btn_tv);
+
+        Student s = idleInfoInterface.getStudent();
+        setRentBtn(s,idleInfo);
+    }
+
+    private void setRentBtn(Student student,IdleInfo idleInfo){
+        //完成或者已经被禁止显示
+        if(idleInfo.getStatus() == 3 || idleInfo.getStatus() == 100 ){
+            rentBtn.setBackgroundColor(Color.rgb(192,192,192));
+            rentBtnTextView.setText(R.string.close);
+            return;
+        }
+
+        if(student.getUserId().equals(idleInfo.getUserId())){
+            relation = 8;
+            setRentBtnText();
+            return;
+        }
+
+        relation = -1;
+        setRentBtnText();
+
+        //查询当前用户和商品直接由什么关系
+        presenter.getRelation(idleInfo,handler);
+    }
+
+    private void setRelation(Object o){
+        try{
+            Rent rent = (Rent) o;
+            relation = rent.getStatus();
+            setRentBtnText();
+        } catch (ClassCastException e){
+            e.printStackTrace();
+            linkError();
+        }
+    }
+
+    private void setRentBtnText(){
+        switch (relation){
+            case -1:
+                rentBtn.setBackgroundColor(Color.rgb(192,192,192));
+                rentBtnTextView.setText(R.string.close);
+                break;
+            case 0:
+                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
+                rentBtnTextView.setText(R.string.cancel);
+                break;
+            case 1:
+                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
+                rentBtnTextView.setText(R.string.received);
+                break;
+            case 2:
+            case 3:
+                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
+                rentBtnTextView.setText(R.string.rent);
+                break;
+            case 4:
+                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
+                rentBtnTextView.setText(R.string.end_rent);
+                break;
+            case 5:
+                rentBtn.setBackgroundColor(Color.rgb(192,192,192));
+                rentBtnTextView.setText(R.string.close);
+                break;
+            case 6:
+            case 7:
+                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
+                rentBtnTextView.setText(R.string.rent);
+                break;
+            case 8:
+                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
+                rentBtnTextView.setText(R.string.show_rent);
+                break;
+        }
+    }
+
+    protected void rent(){
+        final InputPayPasswordDialog.Builder builder = new InputPayPasswordDialog.Builder(getActivity());
+        builder.setPositiveButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String password = builder.getValue();
+                if(password == null){
+                    return;
+                }
+                Rent rent = new Rent();
+                rent.setIdelId(idleInfo.getInfoId());
+                rent.setPayPassword(password);
+                presenter.addRent(rent,handler);
+            }
+        });
+        passwordDialog= builder.createDialog();
+        passwordDialog.show();
+    }
+
+    /**
+     * 租赁按钮点击之后处理
+     */
+    private void rentBtnClick(){
+        switch (relation){
+            case -1:
+                break;
+            case 0:
+                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
+                rentBtnTextView.setText(R.string.cancel);
+                break;
+            case 1:
+                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
+                rentBtnTextView.setText(R.string.received);
+                break;
+            case 2:
+            case 3:
+                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
+                rentBtnTextView.setText(R.string.rent);
+                break;
+            case 4:
+                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
+                rentBtnTextView.setText(R.string.end_rent);
+                break;
+            case 5:
+                break;
+            case 6:
+            case 7:
+                rent();
+                break;
+            case 8:
+                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
+                rentBtnTextView.setText(R.string.show_rent);
+                break;
+        }
     }
 
     //动态生成ImageView
@@ -297,6 +451,22 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         }
     }
 
+    private void rentSuccess(){
+        passwordDialog.cancel();
+        Toast.makeText(getActivity(),R.string.rent_submit_success,Toast.LENGTH_SHORT).show();
+        presenter.getRelation(idleInfo,handler);
+    }
+
+    private void rentError(Object o){
+        try{
+            String message = (String) o;
+            Toast.makeText(getActivity(),message,Toast.LENGTH_SHORT).show();
+        }catch (ClassCastException e){
+            e.printStackTrace();
+            linkError();
+        }
+    }
+
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -309,6 +479,9 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                     break;
                 case R.id.send_btn:
                     sendRefuseMessage();
+                    break;
+                case R.id.rent_btn:
+                    rentBtnClick();
                     break;
             }
         }
@@ -339,6 +512,18 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                     break;
                 case LOAD_REFUSE_ERROR:
                     linkError();
+                    break;
+                case LOAD_RELATION_SUCCESS:
+                    setRelation(msg.obj);
+                    break;
+                case LOAD_RELATION_ERROR:
+                    linkError();
+                    break;
+                case RENT_SUCCESS:
+                    rentSuccess();
+                    break;
+                case RENT_ERROR:
+                    rentError(msg.obj);
                     break;
             }
             super.handleMessage(msg);

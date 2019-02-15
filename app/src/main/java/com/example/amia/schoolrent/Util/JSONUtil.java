@@ -92,6 +92,9 @@ public class JSONUtil {
     }
 
     public static Object getObject(Class className,JSONObject jsonObject) throws IllegalAccessException, InstantiationException, JSONException {
+        if(jsonObject == null){
+            return null;
+        }
         Object object = className.newInstance();
         Field[] fileds = className.getDeclaredFields();
 
@@ -140,8 +143,12 @@ public class JSONUtil {
                 }
                 continue;
             } else if(field.getType().equals(Student.class)){
-                Object o = getObject(Student.class,jsonObject.getJSONObject(propertyName));
-                field.set(object,o);
+                try {
+                    Object o = getObject(Student.class, jsonObject.getJSONObject(propertyName));
+                    field.set(object, o);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
                 continue;
             } else if(field.getType().equals(School.class)){
                 Object o = null;

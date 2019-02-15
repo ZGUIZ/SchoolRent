@@ -5,12 +5,16 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
+import android.widget.Toast;
 
 import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
+import com.example.amia.schoolrent.Bean.KeyValue;
 import com.example.amia.schoolrent.Bean.MapKeyValue;
 import com.example.amia.schoolrent.Bean.NetBitmap;
+import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.Result;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.NetCallBack;
@@ -20,11 +24,13 @@ import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.Util.COSUtil;
 import com.example.amia.schoolrent.Util.NetImageCallback;
 import com.example.amia.schoolrent.Util.NetUtils;
+import com.example.amia.schoolrent.Util.RSAUtil;
 
 import org.litepal.LitePal;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.security.PublicKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -270,6 +276,92 @@ public class IdleTaskImpl implements IdleTask {
 
             @Override
             public void error() {
+            }
+        });
+    }
+
+    @Override
+    public void getRelation(Context context, IdleInfo idleInfo, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host) + ActivityUtil.getString(context,R.string.get_relation) + idleInfo.getInfoId();
+        NetUtils.get(url, new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json, Rent.class);
+                    if(result.getResult()) {
+                        msg.what = LOAD_RELATION_SUCCESS;
+                        msg.obj = result.getData();
+                    } else {
+                        msg.what = LOAD_RELATION_ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void addRent(Context context, Rent rent, final Handler handler) {
+        List<KeyValue> keyValues = LitePal.where("key = ?","publicKey").find(KeyValue.class);
+        if(keyValues.size()>0) {
+            KeyValue keyValue = keyValues.get(0);
+            byte[] bytes = Base64.decode(keyValue.getValue(), Base64.DEFAULT);
+            //还原公钥
+            //RSAUtil.restorePublicKey(bytes);
+            PublicKey key = RSAUtil.restorePublicKey(bytes);
+            byte[] encodePassword = null;
+            try {
+                encodePassword = RSAUtil.RSAEncode(key, rent.getPayPassword().getBytes("utf-8"));
+                rent.setPayPassword(Base64.encodeToString(encodePassword, Base64.DEFAULT));
+            } catch (Exception e) {
+                Toast.makeText(context,R.string.link_error,Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        String url = ActivityUtil.getString(context,R.string.host) + ActivityUtil.getString(context,R.string.add_rent);
+
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("rent",rent);
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()) {
+                        msg.what = RENT_SUCCESS;
+                        msg.obj = result.getData();
+                    } else {
+                        msg.what = RENT_ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
             }
         });
     }

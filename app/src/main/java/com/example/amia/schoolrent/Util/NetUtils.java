@@ -94,7 +94,11 @@ public class NetUtils {
             throw e;
         }
         finally {
-            connections.remove(size);
+            try {
+                connections.remove(size);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
             try {
                 if (bufReader != null) {
                     bufReader.close();
@@ -176,9 +180,13 @@ public class NetUtils {
             e.printStackTrace();
             throw e;
         } finally {
-            connections.remove(size);
-            if(outputStream != null){
-                outputStream.close();
+            try {
+                connections.remove(size);
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (Exception e){
+                e.printStackTrace();
             }
         }
         return sb.toString();

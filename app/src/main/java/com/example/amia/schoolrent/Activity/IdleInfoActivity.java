@@ -14,7 +14,9 @@ import com.example.amia.schoolrent.Fragment.IdleInfoFragment;
 import com.example.amia.schoolrent.Presenter.IdleInfoContract;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.IdleInfoContractImpl;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Task.IdleTask;
 import com.example.amia.schoolrent.Task.RefuseTask;
+import com.example.amia.schoolrent.Task.TaskImpl.IdleTaskImpl;
 import com.example.amia.schoolrent.Task.TaskImpl.RefuseTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 
@@ -47,7 +49,8 @@ public class IdleInfoActivity extends AppCompatActivity implements IdleInfoInter
         LoginContract.Presenter presenter = new LoginContractImpl(fragment,schoolTask,studentTask);
         fragment.setPresenter(presenter);*/
         RefuseTask refuseTask = new RefuseTaskImpl();
-        IdleInfoContract.Presenter presenter = new IdleInfoContractImpl(fragment,refuseTask);
+        IdleTask idleTask = new IdleTaskImpl();
+        IdleInfoContract.Presenter presenter = new IdleInfoContractImpl(fragment,refuseTask,idleTask);
         fragment.setPresenter(presenter);
 
         setToolBar();
