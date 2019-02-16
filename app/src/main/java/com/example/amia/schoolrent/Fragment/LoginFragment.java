@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.amia.schoolrent.Activity.BaseAcitivity;
 import com.example.amia.schoolrent.Activity.MainActivity;
 import com.example.amia.schoolrent.Activity.RegisterActivity;
 
@@ -101,7 +102,8 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     protected void loginSuccess(Object object){
         try {
             Student student = (Student) object;
-            Activity activity = getActivity();
+            BaseAcitivity activity = (BaseAcitivity) getActivity();
+            activity.setStudent(student);
             Intent intent = new Intent(activity,MainActivity.class);
             intent.putExtra("student",student);
             startActivity(intent);

@@ -14,9 +14,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,8 +34,12 @@ import com.example.amia.schoolrent.Bean.ResponseInfo;
 import com.example.amia.schoolrent.Bean.SecondResponseInfo;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.OnItemClickListener;
+import com.example.amia.schoolrent.Fragment.RecyclerAdapter.RecAdapter;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.RefuseAdapter;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.SecondRefuseListener;
+import com.example.amia.schoolrent.Fragment.RecyclerAdapter.slideswaphelper.PlusItemSlideCallback;
+import com.example.amia.schoolrent.Fragment.RecyclerAdapter.slideswaphelper.WItemTouchHelperPlus;
+import com.example.amia.schoolrent.ListenerAdapter.AnimationListenerAdapter;
 import com.example.amia.schoolrent.Presenter.IdleInfoContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
@@ -42,6 +50,8 @@ import com.tencent.cos.xml.utils.StringUtils;
 
 import java.util.List;
 
+import static com.example.amia.schoolrent.Task.IdleTask.IDLE_RENT_LIST_ERROR;
+import static com.example.amia.schoolrent.Task.IdleTask.IDLE_RENT_LIST_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.LOAD_RELATION_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.LOAD_RELATION_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.RENT_ERROR;
@@ -63,6 +73,11 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
     private TextView rentBtnTextView;
     private InputPayPasswordDialog passwordDialog;
     private RelativeLayout progressView;
+    private RecyclerView rentList;
+    private RelativeLayout rentListLayout;
+    private LinearLayout rentLinearLayout;
+    private RecAdapter recAdapter;  //租赁人员的adapter
+    private boolean isShowList;  //rentList是否已经弹出
 
     private IdleInfo idleInfo;
 
@@ -96,9 +111,12 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
 
         progressView = view.findViewById(R.id.progress_view);
         progressView.setVisibility(View.VISIBLE);
+        rentListLayout = view.findViewById(R.id.rent_list_rl);
+        rentListLayout.setOnClickListener(onClickListener);
+        rentList = view.findViewById(R.id.rent_list_view);
+        rentLinearLayout = view.findViewById(R.id.request_person_ll);
 
         //加载发布者头像
-        //view.findViewById(R.id.back_ib).setOnClickListener(onClickListener);
         ImageView userIcon = view.findViewById(R.id.user_icon_riv);
         Glide.with(getActivity()).load(student.getUserIcon()).into(userIcon);
 
@@ -145,6 +163,14 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
 
         Student s = idleInfoInterface.getStudent();
         setRentBtn(s,idleInfo);
+
+        //设置租赁人员适配器
+        recAdapter = new RecAdapter(getActivity());
+        rentList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rentList.setAdapter(recAdapter);
+        PlusItemSlideCallback callback = new PlusItemSlideCallback(WItemTouchHelperPlus.SLIDE_ITEM_TYPE_ITEMVIEW);
+        WItemTouchHelperPlus extension = new WItemTouchHelperPlus(callback);
+        extension.attachToRecyclerView(rentList);
     }
 
     private void setRentBtn(Student student,IdleInfo idleInfo){
@@ -254,8 +280,7 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                 break;
             case 2:
             case 3:
-                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
-                rentBtnTextView.setText(R.string.rent);
+                rent();
                 break;
             case 4:
                 rentBtn.setBackgroundColor(Color.rgb(238,44,44));
@@ -268,10 +293,55 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                 rent();
                 break;
             case 8:
-                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
-                rentBtnTextView.setText(R.string.show_rent);
+                /*rentBtn.setBackgroundColor(Color.rgb(238,44,44));
+                rentBtnTextView.setText(R.string.show_rent);*/
+                if(isShowList){
+                    hideRentList();
+                } else {
+                    presenter.getRentList(idleInfo,handler);
+                    showRent();
+                }
                 break;
         }
+    }
+
+    private void showRent(){
+        isShowList =true;
+        rentListLayout.setVisibility(View.VISIBLE);
+        Animation inAnimation= AnimationUtils.loadAnimation(getActivity(),R.anim.push_bottom_in_short);
+        Animation alphaAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.alpha_anim);
+        rentListLayout.startAnimation(alphaAnimation);
+        rentLinearLayout.startAnimation(inAnimation);
+    }
+
+    private void loadRentPerson(Object o){
+        try {
+            List<Rent> rents = (List<Rent>) o;
+            recAdapter.setList(rents);
+            if(rents == null ||rents.size()<=0){
+                view.findViewById(R.id.null_person_tv).setVisibility(View.VISIBLE);
+            } else {
+                view.findViewById(R.id.null_person_tv).setVisibility(View.GONE);
+            }
+        } catch (ClassCastException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void hideRentList(){
+        isShowList = false;
+        Animation outAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.push_buttom_out);
+        Animation alphaAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.alpha_out_anim);
+        outAnimation.setFillAfter(true);
+        outAnimation.setAnimationListener(new AnimationListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                super.onAnimationStart(animation);
+                rentListLayout.setVisibility(View.GONE);
+            }
+        });
+        rentLinearLayout.startAnimation(outAnimation);
+        rentListLayout.startAnimation(alphaAnimation);
     }
 
     //动态生成ImageView
@@ -487,6 +557,11 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                 case R.id.rent_btn:
                     rentBtnClick();
                     break;
+                case R.id.progress_view:
+                    break;
+                case R.id.rent_list_rl:
+                    hideRentList();
+                    break;
             }
         }
     };
@@ -529,6 +604,12 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                     break;
                 case RENT_ERROR:
                     rentError(msg.obj);
+                    break;
+                case IDLE_RENT_LIST_SUCCESS:
+                    loadRentPerson(msg.obj);
+                    break;
+                case IDLE_RENT_LIST_ERROR:
+                    linkError();
                     break;
             }
             super.handleMessage(msg);

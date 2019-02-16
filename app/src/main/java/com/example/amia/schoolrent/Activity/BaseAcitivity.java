@@ -11,7 +11,7 @@ import com.example.amia.schoolrent.Util.NetUtils;
 public abstract class BaseAcitivity extends AppCompatActivity {
     private long lastBackPressTime;
 
-    protected Student student;
+    protected static Student student;
 
     protected static boolean isLoading;
     @Override
@@ -39,6 +39,10 @@ public abstract class BaseAcitivity extends AppCompatActivity {
 
     public Student getStudent(){
         return student;
+    }
+
+    public void setStudent(Student student){
+        this.student = student;
     }
 
     /**
