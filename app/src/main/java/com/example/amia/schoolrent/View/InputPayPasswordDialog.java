@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.amia.schoolrent.R;
@@ -28,6 +29,7 @@ public class InputPayPasswordDialog extends Dialog {
         private InputPayPasswordDialog scheTimeDialog;
         private View layout;
         private EditText passWordInput;
+        private TextView payNum;
 
         private Context context;
 
@@ -39,6 +41,7 @@ public class InputPayPasswordDialog extends Dialog {
             scheTimeDialog=new InputPayPasswordDialog(context, R.style.Theme_AppCompat_Light_Dialog);
             LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             layout=inflater.inflate(R.layout.pay_password_input_layout,null);
+            payNum = layout.findViewById(R.id.pay_num);
             scheTimeDialog.addContentView(layout,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
 
@@ -67,6 +70,10 @@ public class InputPayPasswordDialog extends Dialog {
                 return null;
             }
             return password;
+        }
+
+        public void setPayNum(float payNum){
+            this.payNum.setText(String.valueOf(payNum));
         }
 
         public Builder setNegativeButton(String negativeButtonText, View.OnClickListener listener) {

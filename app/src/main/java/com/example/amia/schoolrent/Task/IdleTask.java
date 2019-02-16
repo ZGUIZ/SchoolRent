@@ -31,6 +31,12 @@ public interface IdleTask extends BaseTask{
     int LOAD_RELATION_ERROR = 508;
     int RENT_SUCCESS = 509;
     int RENT_ERROR = 510;
+    int IDLE_RENT_LIST_SUCCESS = 511;
+    int IDLE_RENT_LIST_ERROR = 512;
+    int RENT_AGREE_SUCCESS = 513;
+    int RENT_AGREE_ERROR = 514;
+    int RENT_REFUSE_SUCCESS = 515;
+    int RENT_REFUSE_ERROR = 516;
 
     /**
      * 获取首页分类
@@ -78,7 +84,23 @@ public interface IdleTask extends BaseTask{
 
     void loadImage(String id,String url,Handler handler);
 
+    /**
+     * 加载商品和用户关系
+     * @param context
+     * @param idleInfo
+     * @param handler
+     */
     void getRelation(Context context,IdleInfo idleInfo,Handler handler);
 
+    /**
+     * 提交租赁请求
+     * @param context
+     * @param rent
+     * @param handler
+     */
     void addRent(Context context, Rent rent, Handler handler);
+
+    void getIdleRentList(Context context,IdleInfo idleInfo,Handler handler);
+
+    void agree(Context context,Rent rent,Handler handler);
 }

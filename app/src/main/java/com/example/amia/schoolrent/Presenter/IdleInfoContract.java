@@ -15,6 +15,8 @@ public interface IdleInfoContract {
         void getReufseList(Context context, IdleInfo idleInfo, Handler handler);
         void getRelation(IdleInfo idleInfo,Handler handler);
         void addRent(Rent rent, Handler handler);
+        void getRentList(IdleInfo idleInfo,Handler handler);
+        void agreeRent(Rent rent,Handler handler);
     }
 
     interface View extends BaseView<Presenter>{

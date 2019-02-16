@@ -373,6 +373,7 @@ public class StudentTaskImpl implements StudentTask {
 
     @Override
     public void exit(Context context) {
+        NetUtils.setIsClearSession(true);
         String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.exit_login);
         NetUtils.get(url, new NetCallBack() {
             @Override

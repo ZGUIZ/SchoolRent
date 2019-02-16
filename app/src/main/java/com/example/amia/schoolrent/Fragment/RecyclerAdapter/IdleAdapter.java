@@ -112,9 +112,10 @@ public class IdleAdapter extends RecyclerView.Adapter<IdleAdapter.Holder> {
     }
 
     public void addIdleInfos(List<IdleInfo> idleInfos){
-        for(int i = 0 ;i<idleInfos.size();i++){
+        /*for(int i = 0 ;i<idleInfos.size();i++){
             this.idleInfos.add(idleInfos.get(i));
-        }
+        }*/
+        this.idleInfos.addAll(idleInfos);
         this.notifyDataSetChanged();
     }
 

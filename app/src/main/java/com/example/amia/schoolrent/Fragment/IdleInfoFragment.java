@@ -50,10 +50,13 @@ import com.tencent.cos.xml.utils.StringUtils;
 
 import java.util.List;
 
+import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.IDLE_RENT_LIST_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.IDLE_RENT_LIST_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.LOAD_RELATION_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.LOAD_RELATION_SUCCESS;
+import static com.example.amia.schoolrent.Task.IdleTask.RENT_AGREE_ERROR;
+import static com.example.amia.schoolrent.Task.IdleTask.RENT_AGREE_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.RENT_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.RENT_SUCCESS;
 import static com.example.amia.schoolrent.Task.RefuseTask.LOAD_REFUSE_ERROR;
@@ -165,12 +168,27 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         setRentBtn(s,idleInfo);
 
         //设置租赁人员适配器
-        recAdapter = new RecAdapter(getActivity());
+        recAdapter = new RecAdapter(getActivity(), new RecAdapter.ResponseRentInterface() {
+            @Override
+            public void agree(Rent rent) {
+                presenter.agreeRent(rent,handler);
+            }
+
+            @Override
+            public void refuse(Rent rent) {
+
+            }
+        });
+
         rentList.setLayoutManager(new LinearLayoutManager(getActivity()));
         rentList.setAdapter(recAdapter);
-        PlusItemSlideCallback callback = new PlusItemSlideCallback(WItemTouchHelperPlus.SLIDE_ITEM_TYPE_ITEMVIEW);
-        WItemTouchHelperPlus extension = new WItemTouchHelperPlus(callback);
-        extension.attachToRecyclerView(rentList);
+        //只有未租赁的商品允许侧滑
+        if(idleInfo.getStatus()==0) {
+            PlusItemSlideCallback callback = new PlusItemSlideCallback(WItemTouchHelperPlus.SLIDE_ITEM_TYPE_ITEMVIEW);
+            WItemTouchHelperPlus extension = new WItemTouchHelperPlus(callback);
+            extension.attachToRecyclerView(rentList);
+        }
+
     }
 
     private void setRentBtn(Student student,IdleInfo idleInfo){
@@ -259,6 +277,7 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                 presenter.addRent(rent,handler);
             }
         });
+        builder.setPayNum(idleInfo.getDeposit());
         passwordDialog= builder.createDialog();
         passwordDialog.show();
     }
@@ -541,6 +560,11 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         }
     }
 
+    protected void agreeSuccess(){
+        Toast.makeText(getActivity(),R.string.agree_success,Toast.LENGTH_SHORT).show();
+        presenter.getRentList(idleInfo,handler);
+    }
+
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -609,6 +633,15 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                     loadRentPerson(msg.obj);
                     break;
                 case IDLE_RENT_LIST_ERROR:
+                    linkError();
+                    break;
+                case RENT_AGREE_SUCCESS:
+                    agreeSuccess();
+                    break;
+                case RENT_AGREE_ERROR:
+
+                    break;
+                case ERROR:
                     linkError();
                     break;
             }

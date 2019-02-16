@@ -365,4 +365,75 @@ public class IdleTaskImpl implements IdleTask {
             }
         });
     }
+
+    @Override
+    public void getIdleRentList(Context context, IdleInfo idleInfo, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host) + ActivityUtil.getString(context,R.string.idle_rent_list)+idleInfo.getInfoId();
+        NetUtils.get(url, new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getObjectWithList(json,Rent.class);
+                    if(result.getResult()) {
+                        msg.what = IDLE_RENT_LIST_SUCCESS;
+                        msg.obj = result.getData();
+                    } else {
+                        msg.what = IDLE_RENT_LIST_ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = IDLE_RENT_LIST_ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void agree(Context context, Rent rent,final Handler handler) {
+        Rent param = new Rent();
+        param.setRentId(rent.getRentId());
+        param.setIdelId(rent.getIdelId());
+        String url = ActivityUtil.getString(context,R.string.host) + ActivityUtil.getString(context,R.string.rent_agree);
+
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("rent",param);
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()) {
+                        msg.what = RENT_AGREE_SUCCESS;
+                    } else {
+                        msg.what = RENT_AGREE_ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
 }

@@ -47,4 +47,14 @@ public class IdleInfoContractImpl implements IdleInfoContract.Presenter {
     public void addRent(Rent rent, Handler handler) {
         idleTask.addRent(view.getContext(),rent,handler);
     }
+
+    @Override
+    public void getRentList(IdleInfo idleInfo, Handler handler) {
+        idleTask.getIdleRentList(view.getContext(),idleInfo,handler);
+    }
+
+    @Override
+    public void agreeRent(Rent rent, Handler handler) {
+        idleTask.agree(view.getContext(),rent,handler);
+    }
 }

@@ -33,6 +33,7 @@ public class NetUtils {
     private static List<HttpURLConnection> connections = new ArrayList<>();
 
     private static String sessionId;
+    protected static boolean isClearSession = false;
     /**
      * get方法发送请求
      * @param url
@@ -86,6 +87,10 @@ public class NetUtils {
             String line;
             while((line=bufReader.readLine())!=null){
                 sb.append(line);
+            }
+            if(isClearSession){
+                sessionId = null;
+                isClearSession = false;
             }
             return sb.toString();
         }
@@ -164,10 +169,15 @@ public class NetUtils {
             int resultCode = httpConnection.getResponseCode();
             if (HttpURLConnection.HTTP_OK == resultCode) {
                 //获取session
-                String cookieval  = httpConnection.getHeaderField("Set-Cookie");
-                if(cookieval!=null){
-                    sessionId = cookieval.substring(0,cookieval.indexOf(";"));
+                if(!isClearSession) {
+                    String cookieval = httpConnection.getHeaderField("Set-Cookie");
+                    if (cookieval != null) {
+                        sessionId = cookieval.substring(0, cookieval.indexOf(";"));
+                    }
+                } else{
+                    sessionId = null;
                 }
+                isClearSession = false;
 
                 String readLine = null;
                 BufferedReader responseReader = new BufferedReader(new InputStreamReader(httpConnection.getInputStream(), "UTF-8"));
@@ -262,5 +272,9 @@ public class NetUtils {
 
     public static void setSessionId(String sessionId) {
         NetUtils.sessionId = sessionId;
+    }
+
+    public static void setIsClearSession(boolean isClearSession) {
+        NetUtils.isClearSession = isClearSession;
     }
 }

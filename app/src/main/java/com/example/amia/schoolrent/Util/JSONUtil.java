@@ -3,6 +3,7 @@ package com.example.amia.schoolrent.Util;
 import com.example.amia.schoolrent.Bean.AuthPicture;
 import com.example.amia.schoolrent.Bean.IdelPic;
 import com.example.amia.schoolrent.Bean.IdleInfo;
+import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.School;
 import com.example.amia.schoolrent.Bean.SecondResponseInfo;
 import com.example.amia.schoolrent.Bean.Student;
@@ -136,6 +137,13 @@ public class JSONUtil {
                                 authPictures.add(authPicture);
                             }
                             field.set(object, authPictures);
+                        } else if(genericClass.equals(Rent.class)){
+                            List<Rent> rentList = new ArrayList<>();
+                            for(int j = 0;j<jsonArray.length();j++){
+                                Rent rent = (Rent)getObject(Rent.class,jsonArray.getJSONObject(j));
+                                rentList.add(rent);
+                            }
+                            field.set(object,rentList);
                         }
                     }
                 }catch (Exception e){
