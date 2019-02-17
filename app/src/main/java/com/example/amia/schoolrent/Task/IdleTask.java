@@ -37,6 +37,8 @@ public interface IdleTask extends BaseTask{
     int RENT_AGREE_ERROR = 514;
     int RENT_REFUSE_SUCCESS = 515;
     int RENT_REFUSE_ERROR = 516;
+    int MY_IDLE_SUCCESS = 517;
+    int MY_IDLE_ERROR =518;
 
     /**
      * 获取首页分类
@@ -103,4 +105,6 @@ public interface IdleTask extends BaseTask{
     void getIdleRentList(Context context,IdleInfo idleInfo,Handler handler);
 
     void agree(Context context,Rent rent,Handler handler);
+
+    void getMyPushList(Context context,IdleInfoExtend idleInfoExtend,Handler handler);
 }

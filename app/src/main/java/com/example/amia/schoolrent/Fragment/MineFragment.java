@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.amia.schoolrent.Activity.BaseAcitivity;
 import com.example.amia.schoolrent.Activity.BaseInfoActivity;
+import com.example.amia.schoolrent.Activity.MyPushActivity;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
@@ -67,6 +68,7 @@ public class MineFragment extends Fragment {
         Glide.with(getActivity()).load(student.getUserIcon()).into(imageView);
 
         view.findViewById(R.id.user_info_layout).setOnClickListener(onClickListener);
+        view.findViewById(R.id.mine_push).setOnClickListener(onClickListener);
     }
 
     @Override
@@ -83,12 +85,23 @@ public class MineFragment extends Fragment {
         startActivity(intent);
     }
 
+    protected void loadMyPushActivity(){
+        BaseAcitivity baseAcitivity = (BaseAcitivity) getActivity();
+        Student student = baseAcitivity.getStudent();
+        Intent intent = new Intent(baseAcitivity, MyPushActivity.class);
+        intent.putExtra("student",student);
+        startActivity(intent);
+    }
+
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.user_info_layout:
                     loadInfoActivity();
+                    break;
+                case R.id.mine_push:
+                    loadMyPushActivity();
                     break;
             }
         }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+        android:id="@+id/my_push_rv"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_margin="6dp"
+        android:background="@drawable/list_border"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+</RelativeLayout>

@@ -63,7 +63,7 @@
     <RelativeLayout
         android:id="@+id/mine_check"
         android:padding="10dp"
-        android:background="?android:selectableItemBackgroundBorderless"
+        android:background="?android:selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -85,7 +85,7 @@
     <RelativeLayout
         android:id="@+id/mine_push"
         android:padding="10dp"
-        android:background="?android:selectableItemBackgroundBorderless"
+        android:background="?android:selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -107,7 +107,7 @@
     <RelativeLayout
         android:id="@+id/mine_need"
         android:padding="10dp"
-        android:background="?android:selectableItemBackgroundBorderless"
+        android:background="?android:selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView

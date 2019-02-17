@@ -16,12 +16,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/TranslucentLayout">
-        <activity android:name=".Activity.ModifyActivity"></activity>
-        <activity android:name=".Activity.BaseInfoActivity"
-            android:launchMode="singleInstance"/>
+        <activity android:name=".Activity.MyPushActivity"></activity>
+        <activity android:name=".Activity.ModifyActivity" />
+        <activity
+            android:name=".Activity.BaseInfoActivity"
+            android:launchMode="singleInstance" />
         <activity android:name=".Activity.IdleInfoActivity" />
         <activity android:name=".Activity.PushActivity" />
-        <activity android:name=".Activity.SplashActivity"
+        <activity
+            android:name=".Activity.SplashActivity"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
