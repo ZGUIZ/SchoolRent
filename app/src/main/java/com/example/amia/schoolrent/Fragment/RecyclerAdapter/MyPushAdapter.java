@@ -81,6 +81,9 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
             case 3:
                 status = ActivityUtil.getString(context,R.string.finished);
                 break;
+            case 4:
+                status = ActivityUtil.getString(context,R.string.close_by_self);
+                break;
             case 100:
                 status = ActivityUtil.getString(context,R.string.admin_close);
                 break;

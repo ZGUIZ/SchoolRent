@@ -12,7 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.StudentInterface;
 import com.example.amia.schoolrent.Activity.IdleInfoActivity;
@@ -28,6 +30,7 @@ import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.List;
 
+import static com.example.amia.schoolrent.Task.IdleTask.CLOSE_IDLE_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.MY_IDLE_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.MY_IDLE_SUCCESS;
@@ -40,6 +43,7 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
 
     private PullLoadMoreRecyclerView recyclerView;
     private MyPushAdapter adapter;
+    private RelativeLayout progressView;
 
     private IdleInfoExtend idleInfo;
 
@@ -69,6 +73,7 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
     private void init(){
         student = ((StudentInterface)getActivity()).getStudent();
 
+        progressView = view.findViewById(R.id.progress_view);
         recyclerView = view.findViewById(R.id.my_push_rv);
 
         recyclerView.setGridLayout(1);
@@ -80,7 +85,8 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
 
             @Override
             public void closeIdle(IdleInfo idleInfo) {
-
+                progressView.setVisibility(View.VISIBLE);
+                presenter.closeIdle(idleInfo,handler);
             }
         });
 
@@ -170,13 +176,22 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
         }
     }
 
+    protected void closeSuccess(){
+        Toast.makeText(getActivity(),R.string.close_success, Toast.LENGTH_SHORT).show();
+        refresh();
+    }
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            progressView.setVisibility(View.GONE);
             switch (msg.what){
                 case MY_IDLE_SUCCESS:
                     setList(msg.obj);
+                    break;
+                case CLOSE_IDLE_SUCCESS:
+                    closeSuccess();
                     break;
                 case MY_IDLE_ERROR:
                 case ERROR:

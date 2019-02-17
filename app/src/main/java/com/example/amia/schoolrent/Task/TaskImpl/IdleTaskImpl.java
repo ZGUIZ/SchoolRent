@@ -436,4 +436,77 @@ public class IdleTaskImpl implements IdleTask {
             }
         });
     }
+
+    @Override
+    public void getMyPushList(Context context,IdleInfoExtend idleInfoExtend, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.get_my_push);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("idleInfo",idleInfoExtend);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack()  {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result r = Result.getObjectWithList(json,IdleInfo.class);
+                    if(r.getResult()){
+                        List<Classify> results = (List<Classify>) r.getData();
+                        msg.what = MY_IDLE_SUCCESS;
+                        msg.obj = results;
+                    } else {
+                        msg.what = MY_IDLE_ERROR;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = MY_IDLE_ERROR;
+                }finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void closeIdle(Context context, IdleInfo idleInfo, final Handler handler) {
+        IdleInfo param = new IdleInfo();
+        param.setInfoId(idleInfo.getInfoId());
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.idle_close);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("idleInfo",param);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack()  {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result r = Result.getObjectWithList(json,null);
+                    if(r.getResult()){
+                        msg.what = CLOSE_IDLE_SUCCESS;
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = r.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                }finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
 }
