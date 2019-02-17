@@ -40,6 +40,7 @@ public interface IdleTask extends BaseTask{
     int MY_IDLE_SUCCESS = 517;
     int MY_IDLE_ERROR =518;
     int CLOSE_IDLE_SUCCESS = 519;
+    int CANCLE_SUCCESS = 520;
 
     /**
      * 获取首页分类
@@ -110,4 +111,6 @@ public interface IdleTask extends BaseTask{
     void getMyPushList(Context context,IdleInfoExtend idleInfoExtend,Handler handler);
 
     void closeIdle(Context context,IdleInfo idleInfo,Handler handler);
+
+    void cancelRent(Context context,IdleInfo idleInfo,Handler handler);
 }

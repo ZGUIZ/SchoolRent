@@ -10,6 +10,7 @@ public interface MyPushContract {
     interface Presenter{
        void loadMyPush(IdleInfoExtend idleInfoExtend, Handler handler);
        void closeIdle(IdleInfo idleInfo,Handler handler);
+       void cancelRent(IdleInfo idleInfo,Handler handler);
     }
 
     interface View extends BaseView<Presenter>{

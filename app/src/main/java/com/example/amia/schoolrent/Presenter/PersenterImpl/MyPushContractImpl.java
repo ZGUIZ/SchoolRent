@@ -27,4 +27,9 @@ public class MyPushContractImpl implements MyPushContract.Presenter {
     public void closeIdle(IdleInfo idleInfo, Handler handler) {
         task.closeIdle(view.getContext(),idleInfo,handler);
     }
+
+    @Override
+    public void cancelRent(IdleInfo idleInfo, Handler handler) {
+        task.cancelRent(view.getContext(),idleInfo,handler);
+    }
 }

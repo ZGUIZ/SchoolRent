@@ -90,10 +90,23 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
         }
         holder.status.setText(status);
 
-        if(idleInfo.getStatus()!=0){
-            holder.close.setBackgroundColor(Color.rgb(200,199,205));
-        } else {
-            holder.close.setBackgroundColor(Color.rgb(254,60,49));
+        switch (idleInfo.getStatus()){
+            case 0:
+                holder.close.setBackgroundColor(Color.rgb(254,60,49));
+                holder.close.setText(R.string.close_btn);
+                break;
+            case 1:
+                holder.close.setBackgroundColor(Color.rgb(255,157,0));
+                holder.close.setText(R.string.cancle_rent);
+                break;
+            case 2:
+                holder.close.setBackgroundColor(Color.rgb(255,157,0));
+                holder.close.setText(R.string.finish);
+                break;
+            default:
+                holder.close.setBackgroundColor(Color.rgb(200,199,205));
+                holder.close.setText(R.string.delete);
+                break;
         }
 
         holder.slideItem.setOnClickListener(new View.OnClickListener() {
@@ -106,9 +119,19 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
         holder.close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //只有未开始租赁的可以下架
-                if(idleInfo.getStatus() == 0){
-                    responseRentInterface.closeIdle(idleInfo);
+                switch (idleInfo.getStatus()){
+                    case 0:
+                        //下架
+                        responseRentInterface.closeIdle(idleInfo);
+                        break;
+                    case 1:
+                    case 2:
+                        //取消或完成
+                        responseRentInterface.cancleOrFinish(idleInfo);
+                        break;
+                    default:
+                        //删除
+                        break;
                 }
             }
         });
@@ -171,5 +194,6 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
     public interface ResponseRentInterface{
         void loadDetail(IdleInfo idleInfo);
         void closeIdle(IdleInfo idleInfo);
+        void cancleOrFinish(IdleInfo idleInfo);
     }
 }

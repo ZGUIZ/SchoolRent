@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.StudentInterface;
 import com.example.amia.schoolrent.Activity.IdleInfoActivity;
@@ -30,6 +29,7 @@ import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.List;
 
+import static com.example.amia.schoolrent.Task.IdleTask.CANCLE_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.CLOSE_IDLE_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.MY_IDLE_ERROR;
@@ -87,6 +87,12 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
             public void closeIdle(IdleInfo idleInfo) {
                 progressView.setVisibility(View.VISIBLE);
                 presenter.closeIdle(idleInfo,handler);
+            }
+
+            @Override
+            public void cancleOrFinish(IdleInfo idleInfo) {
+                progressView.setVisibility(View.VISIBLE);
+                presenter.cancelRent(idleInfo,handler);
             }
         });
 
@@ -181,6 +187,11 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
         refresh();
     }
 
+    protected void behaviorSuccess(){
+        Toast.makeText(getActivity(),R.string.behavior_success,Toast.LENGTH_SHORT).show();
+        refresh();
+    }
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -192,6 +203,9 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
                     break;
                 case CLOSE_IDLE_SUCCESS:
                     closeSuccess();
+                    break;
+                case CANCLE_SUCCESS:
+                    behaviorSuccess();
                     break;
                 case MY_IDLE_ERROR:
                 case ERROR:
