@@ -1,6 +1,5 @@
 package com.example.amia.schoolrent.Presenter.PersenterImpl;
 
-import android.content.Context;
 import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.IdleInfo;
@@ -31,5 +30,10 @@ public class MyPushContractImpl implements MyPushContract.Presenter {
     @Override
     public void cancelRent(IdleInfo idleInfo, Handler handler) {
         task.cancelRent(view.getContext(),idleInfo,handler);
+    }
+
+    @Override
+    public void delIdle(IdleInfo idleInfo, Handler handler) {
+        task.delIdleInfo(view.getContext(),idleInfo,handler);
     }
 }

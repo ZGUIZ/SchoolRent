@@ -91,7 +91,7 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
         idleInfo.setUserId(student.getUserId());
         idleInfo.setSchoolId(student.getSchoolId());
 
-        view.findViewById(R.id.back_button).setOnClickListener(onClickListener);
+        //view.findViewById(R.id.back_button).setOnClickListener(onClickListener);
 
         //初始化添加图片的RecyclerView
         RecyclerView recyclerView = view.findViewById(R.id.idle_image_rv);
@@ -178,9 +178,9 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
         @Override
         public void onClick(View view) {
             switch (view.getId()){
-                case R.id.back_button:
+                /*case R.id.back_button:
                     leavePage();
-                    break;
+                    break;*/
                 case R.id.classify_rl:
                     showClassifySelector();
                     break;

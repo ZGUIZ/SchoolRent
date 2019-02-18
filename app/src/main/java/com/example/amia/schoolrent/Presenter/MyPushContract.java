@@ -11,6 +11,7 @@ public interface MyPushContract {
        void loadMyPush(IdleInfoExtend idleInfoExtend, Handler handler);
        void closeIdle(IdleInfo idleInfo,Handler handler);
        void cancelRent(IdleInfo idleInfo,Handler handler);
+       void delIdle(IdleInfo idleInfo,Handler handler);
     }
 
     interface View extends BaseView<Presenter>{

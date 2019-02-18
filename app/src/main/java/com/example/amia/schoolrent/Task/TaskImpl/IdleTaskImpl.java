@@ -546,4 +546,86 @@ public class IdleTaskImpl implements IdleTask {
             }
         });
     }
+
+    @Override
+    public void updateIdleInfo(Context context, IdleInfo idleInfo, final Handler handler) {
+        try {
+            idleInfo.setTitle(URLEncoder.encode(idleInfo.getTitle(),"utf-8"));
+            idleInfo.setIdelInfo(URLEncoder.encode(idleInfo.getIdelInfo(),"utf-8"));
+            if(idleInfo.getAddress()!=null){
+                idleInfo.setAddress(URLEncoder.encode(idleInfo.getAddress(),"utf-8"));
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.update_idle);
+
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("idleInfo",idleInfo);
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()) {
+                        msg.what = UPDATE_IDLE_SUCCESS;
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void delIdleInfo(Context context, IdleInfo idleInfo, final Handler handler) {
+        IdleInfo param = new IdleInfo();
+        param.setInfoId(idleInfo.getInfoId());
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.del_idle);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("idleInfo",param);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack()  {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result r = Result.getObjectWithList(json,null);
+                    if(r.getResult()){
+                        msg.what = DEL_SUCCESS;
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = r.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                }finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
 }

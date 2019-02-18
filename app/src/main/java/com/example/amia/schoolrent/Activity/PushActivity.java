@@ -7,8 +7,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.PushIdleInterface;
 import com.example.amia.schoolrent.Bean.IdleInfo;
@@ -57,11 +60,23 @@ public class PushActivity extends AppCompatActivity implements PushIdleInterface
     }
 
     protected void init(){
+        setToolBar();
+
         Intent intent = getIntent();
         student = (Student) intent.getSerializableExtra("student");
 
         idleInfo = new IdleInfo();
         idleInfo.setUserId(student.getUserId());
+    }
+
+    protected void setToolBar(){
+        Toolbar toolbar=findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(onClickListener);
+
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle(R.string.push_idle);
     }
 
     private void loadFragment(){
@@ -107,4 +122,11 @@ public class PushActivity extends AppCompatActivity implements PushIdleInterface
                 break;
         }
     }
+
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            PushActivity.this.finish();
+        }
+    };
 }

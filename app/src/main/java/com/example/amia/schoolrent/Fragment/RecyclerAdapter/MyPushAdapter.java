@@ -67,6 +67,21 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
         holder.money.setText(String.valueOf(idleInfo.getRetal()));
         holder.deposit.setText(String.valueOf(idleInfo.getDeposit()));
 
+        if(idleInfo.getStatus() == 0 || idleInfo.getStatus() == 1){
+            holder.edit.setBackgroundColor(Color.rgb(255,157,0));
+            holder.edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(idleInfo.getStatus()!=0 && idleInfo.getStatus()!=1){
+                        return;
+                    }
+                    responseRentInterface.updateIdle(idleInfo);
+                }
+            });
+        } else {
+            holder.edit.setBackgroundColor(Color.rgb(200,199,205));
+        }
+
         String status = null;
         switch (idleInfo.getStatus()){
             case 0:
@@ -104,7 +119,7 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
                 holder.close.setText(R.string.finish);
                 break;
             default:
-                holder.close.setBackgroundColor(Color.rgb(200,199,205));
+                holder.close.setBackgroundColor(Color.rgb(254,60,49));
                 holder.close.setText(R.string.delete);
                 break;
         }
@@ -131,6 +146,7 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
                         break;
                     default:
                         //删除
+                        responseRentInterface.delIdle(idleInfo);
                         break;
                 }
             }
@@ -153,6 +169,7 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
         TextView money;
         TextView status;
         TextView deposit;
+        TextView edit;
 
         TextView close;
 
@@ -166,6 +183,7 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
             money = itemView.findViewById(R.id.money);
             status = itemView.findViewById(R.id.status);
             deposit = itemView.findViewById(R.id.deposit);
+            edit = itemView.findViewById(R.id.edit_tv);
 
             close = itemView.findViewById(R.id.close_tv);
             slideItem = itemView.findViewById(R.id.slide_itemView);
@@ -175,7 +193,7 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
         @Override
         public float getActionWidth() {
             //布局隐藏超过父布局的范围的时候这里得不到宽度
-            return  dip2px(context,80);
+            return  dip2px(context,160);
         }
 
     }
@@ -195,5 +213,7 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
         void loadDetail(IdleInfo idleInfo);
         void closeIdle(IdleInfo idleInfo);
         void cancleOrFinish(IdleInfo idleInfo);
+        void delIdle(IdleInfo idleInfo);
+        void updateIdle(IdleInfo idleInfo);
     }
 }

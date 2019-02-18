@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.StudentInterface;
 import com.example.amia.schoolrent.Activity.IdleInfoActivity;
+import com.example.amia.schoolrent.Activity.UpdateIdleActivity;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.Student;
@@ -31,6 +32,7 @@ import java.util.List;
 
 import static com.example.amia.schoolrent.Task.IdleTask.CANCLE_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.CLOSE_IDLE_SUCCESS;
+import static com.example.amia.schoolrent.Task.IdleTask.DEL_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.MY_IDLE_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.MY_IDLE_SUCCESS;
@@ -93,6 +95,17 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
             public void cancleOrFinish(IdleInfo idleInfo) {
                 progressView.setVisibility(View.VISIBLE);
                 presenter.cancelRent(idleInfo,handler);
+            }
+
+            @Override
+            public void delIdle(IdleInfo idleInfo) {
+                progressView.setVisibility(View.VISIBLE);
+                presenter.delIdle(idleInfo,handler);
+            }
+
+            @Override
+            public void updateIdle(IdleInfo idleInfo) {
+                loadUpdateActivity(idleInfo);
             }
         });
 
@@ -158,6 +171,13 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
         }
     }
 
+    protected void loadUpdateActivity(IdleInfo idleInfo){
+        Intent intent = new Intent(getActivity(), UpdateIdleActivity.class);
+        intent.putExtra("student",student);
+        intent.putExtra("idleInfo",idleInfo);
+        startActivity(intent);
+    }
+
     @Override
     public void linkError() {
         Toast.makeText(getActivity(),R.string.link_error,Toast.LENGTH_SHORT).show();
@@ -204,6 +224,7 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
                 case CLOSE_IDLE_SUCCESS:
                     closeSuccess();
                     break;
+                case DEL_SUCCESS:
                 case CANCLE_SUCCESS:
                     behaviorSuccess();
                     break;

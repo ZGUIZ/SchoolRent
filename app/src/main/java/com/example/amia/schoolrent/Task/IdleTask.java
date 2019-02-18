@@ -41,6 +41,8 @@ public interface IdleTask extends BaseTask{
     int MY_IDLE_ERROR =518;
     int CLOSE_IDLE_SUCCESS = 519;
     int CANCLE_SUCCESS = 520;
+    int UPDATE_IDLE_SUCCESS = 521;
+    int DEL_SUCCESS = 522;
 
     /**
      * 获取首页分类
@@ -113,4 +115,14 @@ public interface IdleTask extends BaseTask{
     void closeIdle(Context context,IdleInfo idleInfo,Handler handler);
 
     void cancelRent(Context context,IdleInfo idleInfo,Handler handler);
+
+    /**
+     * 更新闲置信息
+     * @param context
+     * @param idleInfo
+     * @param handler
+     */
+    void updateIdleInfo(Context context,IdleInfo idleInfo,Handler handler);
+
+    void delIdleInfo(Context context,IdleInfo idleInfo,Handler handler);
 }

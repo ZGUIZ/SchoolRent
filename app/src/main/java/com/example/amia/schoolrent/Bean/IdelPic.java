@@ -28,6 +28,8 @@ public class IdelPic implements Serializable{
      */
 	private String idelId;
 
+	private String beanStatus;
+
 
 	public String getPicId() {
 		return picId;
@@ -53,4 +55,11 @@ public class IdelPic implements Serializable{
 		this.idelId = idelId;
 	}
 
+	public String getBeanStatus() {
+		return beanStatus;
+	}
+
+	public void setBeanStatus(String beanStatus) {
+		this.beanStatus = beanStatus;
+	}
 }
