@@ -26,11 +26,20 @@
     <string name="student_update">/student/updateInfo</string>  <!--更新用户信息-->
     <string name="get_base_info">/student/getBaseInfo</string>  <!--获取用户基本信息-->
     <string name="add_auth_pic">/authPicture/add</string>  <!--添加认证图片-->
-    <string name="exit_login">/student/exitLogin</string>
-    <string name="chang_password">/student/updatePassword</string>
-    <string name="chang_pay_password">/student/updatePayPassword</string>
-    <string name="reset_pay_password">/student/restPayPassword</string>
-    <string name="reset_password">/student/restPassword</string>
+    <string name="exit_login">/student/exitLogin</string>  <!--退出登录-->
+    <string name="chang_password">/student/updatePassword</string>  <!--修改密码-->
+    <string name="chang_pay_password">/student/updatePayPassword</string>  <!--修改支付密码-->
+    <string name="reset_pay_password">/student/restPayPassword</string>  <!--重置支付密码-->
+    <string name="reset_password">/student/restPassword</string>    <!--重置密码-->
+    <string name="get_relation">/rent/getRelation/id/</string>    <!--获取当前用户和该商品的关系-->
+    <string name="idle_rent_list">/rent/list/id/</string>  <!--获取指定编号商品的请求租赁人员-->
+    <string name="rent_agree">/rent/agree</string>
+    <string name="get_my_push">/idleInfo/getMinePush</string>  <!--获取当前用户发布的租赁-->
+    <string name="idle_close">/idleInfo/close</string>  <!--商品下架-->
+    <string name="rent_finish">/idleInfo/cancel</string> <!--完成或取消租赁-->
+    <string name="update_idle">/idleInfo/update</string> <!--更新商品信息-->
+    <string name="del_idle">/idleInfo/del</string>  <!--删除闲置信息-->
+    <string name="get_classify_name">/classify/getName/id/</string>
 
     <!--系统提示-->
     <string name="double_exit">请再按一次返回按钮退出程序</string>
@@ -64,6 +73,9 @@
     <string name="old_password_null">旧密码不能为空！</string>
     <string name="password_update_error">密码更新失败</string>
     <string name="pay_password_update_error">支付密码更新失败</string>
+    <string name="agree_success">已经同意该用户的请求</string>
+    <string name="close_success">下架成功！</string>
+    <string name="behavior_success">操作成功！</string>
 
     <!--按钮-->
     <string name="login">登录</string>
@@ -86,7 +98,7 @@
     <string name="mine">我的</string>
     <string name="mine_need">我的需求</string>
     <string name="mine_push">我发布的</string>
-    <string name="mine_rent">我租到的</string>
+    <string name="mine_rent">我要租的</string>
     <string name="credit">信誉分：</string>
     <string name="mine_check">我的账单</string>
     <string name="push_idle">发布闲置</string>
@@ -122,13 +134,32 @@
     <string name="old_password">旧密码</string>
     <string name="new_password">新密码</string>
     <string name="cancle_rent">取消租赁</string>
-    <string name="refuse_rent">拒绝租赁</string>
-    <string name="show_rent">查看租赁人员</string>
+    <string name="agree">同意</string>
+    <string name="refuse_rent">拒绝</string>
+    <string name="edit">编辑</string>
+    <string name="close_btn">下架</string>
+    <string name="show_rent">查看申请</string>
+    <string name="delete">删除</string>
     <string name="rented">已经租赁</string>
+    <string name="received">已经收到</string>
+    <string name="end_rent">终止租赁</string>
     <string name="close">已经下架</string>
     <string name="forgot_password">忘记密码？</string>
     <string name="forgot_title">找回密码</string>
     <string name="forgot_context">是否要重置您的密码并将密码发送至您的邮箱？</string>
     <string name="sure">确定</string>
     <string name="cancel">取消</string>
+    <string name="input_pay_password">请输入支付密码</string>
+    <string name="rent_submit_success">请求已经发送，请耐心等待！</string>
+    <string name="rent_pepole">申请人</string>
+    <string name="null_person">暂时没有人申请</string>
+    <string name="had_to_pay">需要支付(元)</string>
+    <string name="never_rent">未租赁</string>
+    <string name="confirm_rent">已确认租户</string>
+    <string name="renting">正在出租</string>
+    <string name="finished">已完成</string>
+    <string name="my_push_title">我的闲置</string>
+    <string name="close_by_self">已下架</string>
+    <string name="admin_close">非法下架</string>
+    <string name="alter_idle">修改闲置</string>
 </resources>
