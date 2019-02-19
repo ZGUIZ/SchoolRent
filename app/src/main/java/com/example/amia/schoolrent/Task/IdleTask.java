@@ -43,6 +43,7 @@ public interface IdleTask extends BaseTask{
     int CANCLE_SUCCESS = 520;
     int UPDATE_IDLE_SUCCESS = 521;
     int DEL_SUCCESS = 522;
+    int CLASS_NAME_SUCCESS = 523;
 
     /**
      * 获取首页分类
@@ -125,4 +126,6 @@ public interface IdleTask extends BaseTask{
     void updateIdleInfo(Context context,IdleInfo idleInfo,Handler handler);
 
     void delIdleInfo(Context context,IdleInfo idleInfo,Handler handler);
+
+    void getClassifyName(Context context,Classify classify,Handler handler);
 }

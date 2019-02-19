@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.view.View;
 
+import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.UpdateIdleContract;
@@ -22,5 +23,15 @@ public class UpdateIdleContractImpl implements UpdateIdleContract.Presenter {
     @Override
     public void updateIdleInfo(IdleInfo idleInfo, Handler handler) {
         idleTask.updateIdleInfo(view.getContext(),idleInfo,handler);
+    }
+
+    @Override
+    public void getClassifyName(Classify classify, Handler handler) {
+        idleTask.getClassifyName(view.getContext(),classify,handler);
+    }
+
+    @Override
+    public void getAllClassify(Handler handler) {
+        idleTask.getAllClassify(view.getContext(),handler);
     }
 }

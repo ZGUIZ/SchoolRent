@@ -549,6 +549,7 @@ public class IdleTaskImpl implements IdleTask {
 
     @Override
     public void updateIdleInfo(Context context, IdleInfo idleInfo, final Handler handler) {
+        idleInfo.setStudent(null);
         try {
             idleInfo.setTitle(URLEncoder.encode(idleInfo.getTitle(),"utf-8"));
             idleInfo.setIdelInfo(URLEncoder.encode(idleInfo.getIdelInfo(),"utf-8"));
@@ -616,6 +617,39 @@ public class IdleTaskImpl implements IdleTask {
                     e.printStackTrace();
                     msg.what = ERROR;
                 }finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void getClassifyName(Context context, Classify classify, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host) + ActivityUtil.getString(context,R.string.get_classify_name)+classify.getClassifyId();
+        NetUtils.get(url, new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,Classify.class);
+                    if(result.getResult()) {
+                        msg.what = CLASS_NAME_SUCCESS;
+                        msg.obj = result.getData();
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
                     handler.sendMessage(msg);
                 }
             }
