@@ -61,6 +61,8 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewholder> {
             holder.agreeIcon.setImageResource(R.drawable.agree);
         } else if(rent.getStatus() == 2 || rent.getStatus() == 3){
             holder.agreeIcon.setImageResource(R.drawable.not_agree);
+        } else {
+            holder.agreeIcon.setVisibility(View.GONE);
         }
 
         holder.agree.setOnClickListener(new View.OnClickListener() {
