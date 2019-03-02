@@ -15,6 +15,7 @@ import com.example.amia.schoolrent.Bean.KeyValue;
 import com.example.amia.schoolrent.Bean.MapKeyValue;
 import com.example.amia.schoolrent.Bean.NetBitmap;
 import com.example.amia.schoolrent.Bean.Rent;
+import com.example.amia.schoolrent.Bean.RentExtend;
 import com.example.amia.schoolrent.Bean.Result;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.NetCallBack;
@@ -650,6 +651,82 @@ public class IdleTaskImpl implements IdleTask {
                     e.printStackTrace();
                     msg.what = ERROR;
                 } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void loadMineRent(Context context, RentExtend rentExtend, final Handler handler, final int flag) {
+        String url  = ActivityUtil.getString(context,R.string.host) + ActivityUtil.getString(context,R.string.query_mine_rent);
+
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("rent",rentExtend);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack()  {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result r = Result.getObjectWithList(json,Rent.class);
+                    if(r.getResult()){
+                        msg.what = flag;
+                        msg.obj = r.getData();
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = r.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                }finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void cancelRent(Context context, Rent rent, final Handler handler) {
+        Rent r = new Rent();
+        r.setRentId(rent.getRentId());
+        r.setIdelId(rent.getIdelId());
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.cancel_rent);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("rent",r);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack()  {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result r = Result.getObjectWithList(json,null);
+                    if(r.getResult()){
+                        msg.what = CANCEL_RENT;
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = r.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                    msg.obj = e.getMessage();
+                }finally {
                     handler.sendMessage(msg);
                 }
             }

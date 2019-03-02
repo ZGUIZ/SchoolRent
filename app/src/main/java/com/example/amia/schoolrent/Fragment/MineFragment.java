@@ -15,7 +15,10 @@ import com.bumptech.glide.Glide;
 import com.example.amia.schoolrent.Activity.BaseAcitivity;
 import com.example.amia.schoolrent.Activity.BaseInfoActivity;
 import com.example.amia.schoolrent.Activity.MyPushActivity;
+import com.example.amia.schoolrent.Activity.MyRentActivity;
+import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.Student;
+import com.example.amia.schoolrent.Fragment.RecyclerAdapter.MyPushAdapter;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 
@@ -69,6 +72,7 @@ public class MineFragment extends Fragment {
 
         view.findViewById(R.id.user_info_layout).setOnClickListener(onClickListener);
         view.findViewById(R.id.mine_push).setOnClickListener(onClickListener);
+        view.findViewById(R.id.mine_rent).setOnClickListener(onClickListener);
     }
 
     @Override
@@ -78,17 +82,21 @@ public class MineFragment extends Fragment {
     }
 
     protected void loadInfoActivity(){
-        BaseAcitivity baseAcitivity = (BaseAcitivity) getActivity();
-        Student student = baseAcitivity.getStudent();
-        Intent intent = new Intent(baseAcitivity, BaseInfoActivity.class);
-        intent.putExtra("student",student);
-        startActivity(intent);
+        loadActivity(BaseInfoActivity.class);
     }
 
     protected void loadMyPushActivity(){
+        loadActivity(MyPushActivity.class);
+    }
+
+    protected void loadMyRent(){
+        loadActivity(MyRentActivity.class);
+    }
+
+    protected void loadActivity(Class<?> cls){
         BaseAcitivity baseAcitivity = (BaseAcitivity) getActivity();
         Student student = baseAcitivity.getStudent();
-        Intent intent = new Intent(baseAcitivity, MyPushActivity.class);
+        Intent intent = new Intent(baseAcitivity, cls);
         intent.putExtra("student",student);
         startActivity(intent);
     }
@@ -102,6 +110,9 @@ public class MineFragment extends Fragment {
                     break;
                 case R.id.mine_push:
                     loadMyPushActivity();
+                    break;
+                case R.id.mine_rent:
+                    loadMyRent();
                     break;
             }
         }

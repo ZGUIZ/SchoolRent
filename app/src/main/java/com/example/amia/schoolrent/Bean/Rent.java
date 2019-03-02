@@ -47,6 +47,10 @@ public class Rent{
 	 */
 	private Double lastRental;
 
+	private Date createTime;
+
+	private IdleInfo idleInfo;
+
 	/**
 	 * 支付密码
 	 */
@@ -122,5 +126,21 @@ public class Rent{
 
 	public void setPayPassword(String payPassword) {
 		this.payPassword = payPassword;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public IdleInfo getIdleInfo() {
+		return idleInfo;
+	}
+
+	public void setIdleInfo(IdleInfo idleInfo) {
+		this.idleInfo = idleInfo;
 	}
 }

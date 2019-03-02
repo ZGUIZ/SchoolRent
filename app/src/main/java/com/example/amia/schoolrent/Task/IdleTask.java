@@ -7,6 +7,7 @@ import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.Rent;
+import com.example.amia.schoolrent.Bean.RentExtend;
 import com.example.amia.schoolrent.Bean.Student;
 
 import java.util.List;
@@ -44,6 +45,12 @@ public interface IdleTask extends BaseTask{
     int UPDATE_IDLE_SUCCESS = 521;
     int DEL_SUCCESS = 522;
     int CLASS_NAME_SUCCESS = 523;
+    int LOAD_MINE_REQUEST = 524;
+    int LOAD_AGREE = 525;
+    int LOAD_RENTING = 526;
+    int LOAD_FINISH = 527;
+    int LOAD_DISAGREE = 528;
+    int CANCEL_RENT = 529;
 
     /**
      * 获取首页分类
@@ -128,4 +135,8 @@ public interface IdleTask extends BaseTask{
     void delIdleInfo(Context context,IdleInfo idleInfo,Handler handler);
 
     void getClassifyName(Context context,Classify classify,Handler handler);
+
+    void loadMineRent(Context context, RentExtend rentExtend,Handler handler,int flag);
+
+    void cancelRent(Context context,Rent rent,Handler handler);
 }
