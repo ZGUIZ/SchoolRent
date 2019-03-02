@@ -87,12 +87,24 @@ public class MyRequestAdapter extends RecyclerView.Adapter<MyRequestAdapter.RecV
         }
         holder.status.setText(status);
 
-        holder.cancelBtn.setOnClickListener(new View.OnClickListener() {
+
+
+        View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                responseRentInterface.cancel(rent);
+                switch (view.getId()){
+                    case R.id.my_request_item_rl:
+                        responseRentInterface.toIdle(rent.getIdleInfo());
+                        break;
+                    case R.id.cancel_btn:
+                        responseRentInterface.cancel(rent);
+                        break;
+                }
             }
-        });
+        };
+
+        holder.cancelBtn.setOnClickListener(onClickListener);
+        holder.item.setOnClickListener(onClickListener);
     }
 
     @Override
@@ -114,6 +126,8 @@ public class MyRequestAdapter extends RecyclerView.Adapter<MyRequestAdapter.RecV
 
         Button cancelBtn;
 
+        RelativeLayout item;
+
         public RelativeLayout slideItem;
 
         public RecViewholder(View itemView) {
@@ -126,10 +140,12 @@ public class MyRequestAdapter extends RecyclerView.Adapter<MyRequestAdapter.RecV
 
             slideItem = itemView.findViewById(R.id.slide_itemView);
             cancelBtn = itemView.findViewById(R.id.cancel_btn);
+            item = itemView.findViewById(R.id.my_request_item_rl);
         }
 
     }
     public interface ResponseRentInterface{
         void cancel(Rent rent);
+        void toIdle(IdleInfo idleInfo);
     }
 }

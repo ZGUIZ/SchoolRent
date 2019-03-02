@@ -40,4 +40,9 @@ public class MineRentContractImpl implements MineRentContract.Presenter {
     public void cancelRent(Rent rent, Handler handler) {
         task.cancelRent(view.getContext(),rent,handler);
     }
+
+    @Override
+    public void findById(String id, Handler handler) {
+        task.findIdleById(view.getContext(),id,handler);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.amia.schoolrent.Activity.ActivityInterface.StudentInterface;
+import com.example.amia.schoolrent.Activity.IdleInfoActivity;
+import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.RentExtend;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.MyRequestAdapter;
@@ -26,6 +30,7 @@ import java.util.List;
 
 import static com.example.amia.schoolrent.Task.IdleTask.CANCEL_RENT;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
+import static com.example.amia.schoolrent.Task.IdleTask.FIND_BY_ID;
 import static com.example.amia.schoolrent.Task.IdleTask.LOAD_MINE_REQUEST;
 
 public class MySendRequestFragment extends Fragment implements MineRentContract.View {
@@ -68,6 +73,11 @@ public class MySendRequestFragment extends Fragment implements MineRentContract.
             public void cancel(Rent rent) {
                 progressView.setVisibility(View.VISIBLE);
                 presenter.cancelRent(rent,handler);
+            }
+
+            @Override
+            public void toIdle(IdleInfo idleInfo) {
+                loadIdleInfo(idleInfo);
             }
         });
         recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -152,6 +162,18 @@ public class MySendRequestFragment extends Fragment implements MineRentContract.
         presenter = null;
     }
 
+    private void loadIdleInfo(IdleInfo idleInfo){
+        presenter.findById(idleInfo.getInfoId(),handler);
+    }
+
+    private void toIdleInfoActivity(IdleInfo info){
+        StudentInterface studentInterface = (StudentInterface) getActivity();
+        Intent intent = new Intent(getActivity(),IdleInfoActivity.class);
+        intent.putExtra("idleInfo",info);
+        intent.putExtra("student",studentInterface.getStudent());
+        startActivity(intent);
+    }
+
     @Override
     public void linkError() {
         Toast.makeText(getContext(),R.string.link_error,Toast.LENGTH_SHORT).show();
@@ -172,6 +194,14 @@ public class MySendRequestFragment extends Fragment implements MineRentContract.
                     break;
                 case CANCEL_RENT:
                     refresh();
+                    break;
+                case FIND_BY_ID:
+                    try {
+                        toIdleInfoActivity((IdleInfo) msg.obj);
+                    } catch (ClassCastException e){
+                        e.printStackTrace();
+                        linkError();
+                    }
                     break;
                 case ERROR:
                 default:

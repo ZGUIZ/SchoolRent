@@ -739,4 +739,37 @@ public class IdleTaskImpl implements IdleTask {
             }
         });
     }
+
+    @Override
+    public void findIdleById(Context context, String id, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host) + ActivityUtil.getString(context,R.string.find_idle)+id;
+        NetUtils.get(url, new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,IdleInfo.class);
+                    if(result.getResult()) {
+                        msg.what = FIND_BY_ID;
+                        msg.obj = result.getData();
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
 }

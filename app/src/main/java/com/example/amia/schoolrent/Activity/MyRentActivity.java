@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.example.amia.schoolrent.Activity.ActivityInterface.StudentInterface;
+import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Fragment.MineAgreeFragement;
 import com.example.amia.schoolrent.Fragment.MyRentFragmentAdapter;
 import com.example.amia.schoolrent.Fragment.MySendRequestFragment;
@@ -22,13 +24,15 @@ import com.example.amia.schoolrent.Util.ActivityUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyRentActivity extends AppCompatActivity {
+public class MyRentActivity extends AppCompatActivity implements StudentInterface {
 
     protected List<Fragment> fragmentList;
     protected List<String> titleList;
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
+
+    private Student student;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,8 @@ public class MyRentActivity extends AppCompatActivity {
 
     private void init(){
         setToolBar();
+
+        student = (Student) getIntent().getSerializableExtra("student");
 
         fragmentList = new ArrayList<>();
         titleList = new ArrayList<>();
@@ -78,4 +84,9 @@ public class MyRentActivity extends AppCompatActivity {
             MyRentActivity.this.finish();
         }
     };
+
+    @Override
+    public Student getStudent() {
+        return student;
+    }
 }

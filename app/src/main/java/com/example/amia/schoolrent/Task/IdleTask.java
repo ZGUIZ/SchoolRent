@@ -51,6 +51,7 @@ public interface IdleTask extends BaseTask{
     int LOAD_FINISH = 527;
     int LOAD_DISAGREE = 528;
     int CANCEL_RENT = 529;
+    int FIND_BY_ID = 530;
 
     /**
      * 获取首页分类
@@ -139,4 +140,6 @@ public interface IdleTask extends BaseTask{
     void loadMineRent(Context context, RentExtend rentExtend,Handler handler,int flag);
 
     void cancelRent(Context context,Rent rent,Handler handler);
+
+    void findIdleById(Context context,String id,Handler handler);
 }
