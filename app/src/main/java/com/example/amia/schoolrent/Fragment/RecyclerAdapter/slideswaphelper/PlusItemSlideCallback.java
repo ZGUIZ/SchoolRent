@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.MyPushAdapter;
+import com.example.amia.schoolrent.Fragment.RecyclerAdapter.MyRequestAdapter;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.RecAdapter;
 
 
@@ -66,7 +67,14 @@ public class PlusItemSlideCallback extends WItemTouchHelperPlus.Callback {
                 dX = -actionWidth;
             }
             holder.slideItem.setTranslationX(dX);
-        }
+        } /*else if(viewHolder instanceof MyRequestAdapter.RecViewholder){
+            MyRequestAdapter.RecViewholder holder = (MyRequestAdapter.RecViewholder) viewHolder;
+            float actionWidth = holder.getActionWidth();
+            if (dX < -actionWidth) {
+                dX = -actionWidth;
+            }
+            holder.slideItem.setTranslationX(dX);
+        }*/
         return;
     }
 
