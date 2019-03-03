@@ -99,12 +99,16 @@ public class MyAgreeAdapter extends RecyclerView.Adapter<MyAgreeAdapter.RecViewh
                     case R.id.cancel_btn:
                         responseRentInterface.cancel(rent);
                         break;
+                    case R.id.start:
+                        responseRentInterface.startRent(rent);
+                        break;
                 }
             }
         };
 
         holder.cancelBtn.setOnClickListener(onClickListener);
         holder.item.setOnClickListener(onClickListener);
+        holder.startBtn.setOnClickListener(onClickListener);
     }
 
     @Override
@@ -125,6 +129,7 @@ public class MyAgreeAdapter extends RecyclerView.Adapter<MyAgreeAdapter.RecViewh
         TextView deposit;
 
         Button cancelBtn;
+        Button startBtn;
 
         RelativeLayout item;
 
@@ -141,11 +146,13 @@ public class MyAgreeAdapter extends RecyclerView.Adapter<MyAgreeAdapter.RecViewh
             slideItem = itemView.findViewById(R.id.slide_itemView);
             cancelBtn = itemView.findViewById(R.id.cancel_btn);
             item = itemView.findViewById(R.id.my_request_item_rl);
+            startBtn = itemView.findViewById(R.id.start);
         }
 
     }
     public interface ResponseRentInterface{
         void cancel(Rent rent);
         void toIdle(IdleInfo idleInfo);
+        void startRent(Rent rent);
     }
 }
