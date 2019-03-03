@@ -168,6 +168,14 @@ public class JSONUtil {
                 }
                 field.set(object,o);
                 continue;
+            } else if(field.getType().equals(IdleInfo.class)){
+                try{
+                    Object o = getObject(IdleInfo.class,jsonObject.getJSONObject(propertyName));
+                    field.set(object,o);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                continue;
             }
             field.set(object,getFieldVal(field.getType(),jsonObject,propertyName));
         }

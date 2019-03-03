@@ -58,6 +58,8 @@ public class MyRentActivity extends AppCompatActivity implements StudentInterfac
         titleList.add(requestTitle);
 
         MineAgreeFragement agreeFragement = MineAgreeFragement.newInstance();
+        MineRentContract.Presenter presenter1 = new MineRentContractImpl(agreeFragement,idleTask);
+        agreeFragement.setPresenter(presenter1);
         String agreeTitle = ActivityUtil.getString(this,R.string.agree_request);
         fragmentList.add(agreeFragement);
         titleList.add(agreeTitle);

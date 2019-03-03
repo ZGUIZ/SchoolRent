@@ -30,7 +30,7 @@ import java.util.concurrent.Executors;
 public class NetUtils {
 
     private static ExecutorService executorService = Executors.newFixedThreadPool(4);
-    private static List<HttpURLConnection> connections = new ArrayList<>();
+    //private static List<HttpURLConnection> connections = new ArrayList<>();
 
     private static String sessionId;
     protected static boolean isClearSession = false;
@@ -65,7 +65,7 @@ public class NetUtils {
         BufferedReader bufReader=null;
         HttpURLConnection conn=null;
         StringBuffer sb=new StringBuffer();
-        int size = connections.size();  //记录当前连接的数量
+        //int size = connections.size();  //记录当前连接的数量
         try{
             conn=(HttpURLConnection) url.openConnection();
 
@@ -73,7 +73,7 @@ public class NetUtils {
                 conn.setRequestProperty("cookie",sessionId);
             }
 
-            connections.add(conn);
+            //connections.add(conn);
            /* //设置session
             String cookieval  = conn.getHeaderField("set-cookie");
             if(cookieval!=null){
@@ -99,11 +99,11 @@ public class NetUtils {
             throw e;
         }
         finally {
-            try {
+            /*try {
                 connections.remove(size);
             } catch (Exception e){
                 e.printStackTrace();
-            }
+            }*/
             try {
                 if (bufReader != null) {
                     bufReader.close();
@@ -139,11 +139,11 @@ public class NetUtils {
     public static String post(String url, Map<String,Object> param,Map<String,String> header) throws IOException {
         StringBuffer sb =new StringBuffer();
         DataOutputStream outputStream = null;
-        int size=connections.size();
+        //int size=connections.size();
         try {
             URL urlPath = new URL(url);
             HttpURLConnection httpConnection = (HttpURLConnection) urlPath.openConnection();
-            connections.add(httpConnection);
+            //connections.add(httpConnection);
 
             if(sessionId != null){
                 httpConnection.setRequestProperty("cookie",sessionId);
@@ -191,7 +191,7 @@ public class NetUtils {
             throw e;
         } finally {
             try {
-                connections.remove(size);
+                //connections.remove(size);
                 if (outputStream != null) {
                     outputStream.close();
                 }
@@ -260,10 +260,10 @@ public class NetUtils {
      * 中断连接
      */
     public static void disConnection(){
-        if(connections.size()>0){
+        /*if(connections.size()>0){
             HttpURLConnection httpURLConnection = connections.get(connections.size()-1);
             httpURLConnection.disconnect();
-        }
+        }*/
     }
 
     public static String getSessionId() {
