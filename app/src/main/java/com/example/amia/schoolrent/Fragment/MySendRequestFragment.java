@@ -109,6 +109,7 @@ public class MySendRequestFragment extends Fragment implements MineRentContract.
     }
 
     protected void loadSuccess(Object o){
+        recyclerView.setPullLoadMoreCompleted();
         progressView.setVisibility(View.GONE);
         TextView nullInfo = view.findViewById(R.id.list_null_tv);
         try{

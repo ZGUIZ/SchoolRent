@@ -83,13 +83,14 @@ public class MineAgreeFragement extends Fragment implements MineRentContract.Vie
                 loadIdleInfo(idleInfo);
             }
         });
-        recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity()));
+        //recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setGridLayout(1);
         recyclerView.setAdapter(adapter);
 
         recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
             @Override
             public void onRefresh() {
-                refresh();
+                MineAgreeFragement.this.refresh();
             }
 
             @Override
@@ -112,6 +113,7 @@ public class MineAgreeFragement extends Fragment implements MineRentContract.Vie
     }
 
     protected void loadSuccess(Object o){
+        recyclerView.setPullLoadMoreCompleted();
         progressView.setVisibility(View.GONE);
         TextView nullInfo = view.findViewById(R.id.list_null_tv);
         try{
