@@ -33,7 +33,7 @@ public class MineRentContractImpl implements MineRentContract.Presenter {
 
     @Override
     public void startRent(Rent rent, Handler handler) {
-
+        task.startRent(view.getContext(),rent,handler);
     }
 
     @Override

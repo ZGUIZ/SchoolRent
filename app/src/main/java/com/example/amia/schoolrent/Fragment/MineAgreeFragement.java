@@ -34,6 +34,7 @@ import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.FIND_BY_ID;
 import static com.example.amia.schoolrent.Task.IdleTask.LOAD_AGREE;
 import static com.example.amia.schoolrent.Task.IdleTask.LOAD_MINE_REQUEST;
+import static com.example.amia.schoolrent.Task.IdleTask.START_RENT;
 
 public class MineAgreeFragement extends Fragment implements MineRentContract.View{
 
@@ -82,9 +83,14 @@ public class MineAgreeFragement extends Fragment implements MineRentContract.Vie
             public void toIdle(IdleInfo idleInfo) {
                 loadIdleInfo(idleInfo);
             }
+
+            @Override
+            public void startRent(Rent rent) {
+                progressView.setVisibility(View.VISIBLE);
+                presenter.startRent(rent,handler);
+            }
         });
-        //recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setGridLayout(1);
+        recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 
         recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
@@ -179,6 +185,12 @@ public class MineAgreeFragement extends Fragment implements MineRentContract.Vie
         startActivity(intent);
     }
 
+    private void changeSuccess(){
+        progressView.setVisibility(View.GONE);
+        refresh();
+        recyclerView.setIsRefresh(true);
+    }
+
     @Override
     public void linkError() {
         Toast.makeText(getContext(),R.string.link_error,Toast.LENGTH_SHORT).show();
@@ -204,6 +216,10 @@ public class MineAgreeFragement extends Fragment implements MineRentContract.Vie
                         e.printStackTrace();
                         linkError();
                     }
+                    break;
+                case CANCEL_RENT:
+                case START_RENT:
+                    changeSuccess();
                     break;
                 case ERROR:
                 default:

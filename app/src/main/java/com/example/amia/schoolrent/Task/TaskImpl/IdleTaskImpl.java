@@ -772,4 +772,43 @@ public class IdleTaskImpl implements IdleTask {
             }
         });
     }
+
+    @Override
+    public void startRent(Context context, Rent rent, final Handler handler) {
+        Rent r = new Rent();
+        r.setRentId(rent.getRentId());
+        r.setIdelId(rent.getIdelId());
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.start_rent);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("rent",r);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack()  {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result r = Result.getObjectWithList(json,null);
+                    if(r.getResult()){
+                        msg.what = START_RENT;
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = r.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                    msg.obj = e.getMessage();
+                }finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
 }
