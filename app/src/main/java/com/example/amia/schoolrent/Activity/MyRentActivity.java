@@ -14,6 +14,7 @@ import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Fragment.MineAgreeFragement;
 import com.example.amia.schoolrent.Fragment.MyRentFragmentAdapter;
 import com.example.amia.schoolrent.Fragment.MySendRequestFragment;
+import com.example.amia.schoolrent.Fragment.RentingFragment;
 import com.example.amia.schoolrent.Presenter.MineRentContract;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.MineRentContractImpl;
 import com.example.amia.schoolrent.R;
@@ -63,6 +64,13 @@ public class MyRentActivity extends AppCompatActivity implements StudentInterfac
         String agreeTitle = ActivityUtil.getString(this,R.string.agree_request);
         fragmentList.add(agreeFragement);
         titleList.add(agreeTitle);
+
+        RentingFragment rentingFragment = RentingFragment.newInstance();
+        MineRentContract.Presenter presenter2 = new MineRentContractImpl(rentingFragment,idleTask);
+        rentingFragment.setPresenter(presenter2);
+        String rentingTitle = ActivityUtil.getString(this,R.string.renting);
+        fragmentList.add(rentingFragment);
+        titleList.add(rentingTitle);
 
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tab_layout);
