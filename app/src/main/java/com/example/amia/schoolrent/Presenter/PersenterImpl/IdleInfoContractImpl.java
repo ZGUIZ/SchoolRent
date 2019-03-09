@@ -57,4 +57,9 @@ public class IdleInfoContractImpl implements IdleInfoContract.Presenter {
     public void agreeRent(Rent rent, Handler handler) {
         idleTask.agree(view.getContext(),rent,handler);
     }
+
+    @Override
+    public void disagreeRent(Rent rent, Handler handler) {
+        idleTask.disagreeRent(view.getContext(),rent,handler);
+    }
 }

@@ -54,6 +54,7 @@ public interface IdleTask extends BaseTask{
     int FIND_BY_ID = 530;
     int START_RENT = 531;
     int DEL_RENT = 532;
+    int DIS_RENT = 533;
 
     /**
      * 获取首页分类
@@ -148,4 +149,6 @@ public interface IdleTask extends BaseTask{
     void startRent(Context context,Rent rent,Handler handler);
 
     void delRent(Context context,Rent rent,Handler handler);
+
+    void disagreeRent(Context context, Rent rent, final Handler handler);
 }

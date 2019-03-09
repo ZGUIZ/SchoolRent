@@ -50,6 +50,8 @@ import com.tencent.cos.xml.utils.StringUtils;
 
 import java.util.List;
 
+import static com.example.amia.schoolrent.Task.IdleTask.CANCEL_RENT;
+import static com.example.amia.schoolrent.Task.IdleTask.DIS_RENT;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.IDLE_RENT_LIST_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.IDLE_RENT_LIST_SUCCESS;
@@ -176,7 +178,8 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
 
             @Override
             public void refuse(Rent rent) {
-
+                progressView.setVisibility(View.VISIBLE);
+                presenter.disagreeRent(rent,handler);
             }
         });
 
@@ -565,6 +568,12 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         presenter.getRentList(idleInfo,handler);
     }
 
+    protected void cancelSuccess(){
+        progressView.setVisibility(View.GONE);
+        Toast.makeText(getContext(),R.string.behavior_success,Toast.LENGTH_SHORT).show();
+        presenter.getRentList(idleInfo,handler);
+    }
+
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -626,6 +635,10 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                 case RENT_SUCCESS:
                     rentSuccess();
                     break;
+                case DIS_RENT:
+                case CANCEL_RENT:
+                    cancelSuccess();
+                    break;
                 case RENT_ERROR:
                     rentError(msg.obj);
                     break;
@@ -639,7 +652,6 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                     agreeSuccess();
                     break;
                 case RENT_AGREE_ERROR:
-
                     break;
                 case ERROR:
                     linkError();

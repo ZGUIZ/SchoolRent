@@ -17,6 +17,7 @@ public interface IdleInfoContract {
         void addRent(Rent rent, Handler handler);
         void getRentList(IdleInfo idleInfo,Handler handler);
         void agreeRent(Rent rent,Handler handler);
+        void disagreeRent(Rent rent,Handler handler);
     }
 
     interface View extends BaseView<Presenter>{
