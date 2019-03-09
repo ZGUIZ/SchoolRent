@@ -45,4 +45,9 @@ public class MineRentContractImpl implements MineRentContract.Presenter {
     public void findById(String id, Handler handler) {
         task.findIdleById(view.getContext(),id,handler);
     }
+
+    @Override
+    public void delRent(Rent rent, Handler handler) {
+        task.delRent(view.getContext(),rent,handler);
+    }
 }

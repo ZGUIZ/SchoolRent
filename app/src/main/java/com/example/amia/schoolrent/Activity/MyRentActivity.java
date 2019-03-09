@@ -11,6 +11,8 @@ import android.view.View;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.StudentInterface;
 import com.example.amia.schoolrent.Bean.Student;
+import com.example.amia.schoolrent.Fragment.DissagreeFragment;
+import com.example.amia.schoolrent.Fragment.FinishedFragment;
 import com.example.amia.schoolrent.Fragment.MineAgreeFragement;
 import com.example.amia.schoolrent.Fragment.MyRentFragmentAdapter;
 import com.example.amia.schoolrent.Fragment.MySendRequestFragment;
@@ -71,6 +73,19 @@ public class MyRentActivity extends AppCompatActivity implements StudentInterfac
         String rentingTitle = ActivityUtil.getString(this,R.string.renting);
         fragmentList.add(rentingFragment);
         titleList.add(rentingTitle);
+
+        FinishedFragment finishedFragment = FinishedFragment.newInstance();
+        MineRentContract.Presenter presenter3 = new MineRentContractImpl(finishedFragment,idleTask);
+        finishedFragment.setPresenter(presenter3);
+        String finishTitle = ActivityUtil.getString(this,R.string.finished);
+        titleList.add(finishTitle);
+        fragmentList.add(finishedFragment);
+
+        DissagreeFragment dissagreeFragment = DissagreeFragment.newInstance();
+        MineRentContract.Presenter presenter4 = new MineRentContractImpl(dissagreeFragment,idleTask);
+        dissagreeFragment.setPresenter(presenter4);
+        titleList.add(ActivityUtil.getString(this,R.string.disagree));
+        fragmentList.add(dissagreeFragment);
 
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tab_layout);

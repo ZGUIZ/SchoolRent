@@ -3,7 +3,7 @@
 
     <!--地址-->
 
-    <string name="host">http://192.168.31.199:8080/SpringWind</string>
+    <string name="host">http://192.168.1.107:8080/SpringWind</string>
     <string name="getKey">/account/getPublicKey</string> <!--获取公钥-->
     <string name="getProvince">/school/getProvince</string><!--获取省份-->
     <string name="getCity">/school/getCity?province=</string> <!--获取城市-->
@@ -39,7 +39,12 @@
     <string name="rent_finish">/idleInfo/cancel</string> <!--完成或取消租赁-->
     <string name="update_idle">/idleInfo/update</string> <!--更新商品信息-->
     <string name="del_idle">/idleInfo/del</string>  <!--删除闲置信息-->
-    <string name="get_classify_name">/classify/getName/id/</string>
+    <string name="get_classify_name">/classify/getName/id/</string>  <!--根据ID获取分类名-->
+    <string name="query_mine_rent">/rent/queryMineRent</string>
+    <string name="cancel_rent">/rent/cancel</string>
+    <string name="find_idle">/idleInfo/id/</string>
+    <string name="start_rent">/rent/startRent</string>
+    <string name="del_rent">/rent/delRent</string>
 
     <!--系统提示-->
     <string name="double_exit">请再按一次返回按钮退出程序</string>
@@ -76,6 +81,7 @@
     <string name="agree_success">已经同意该用户的请求</string>
     <string name="close_success">下架成功！</string>
     <string name="behavior_success">操作成功！</string>
+    <string name="null_info">暂无信息</string>
 
     <!--按钮-->
     <string name="login">登录</string>
@@ -162,4 +168,14 @@
     <string name="close_by_self">已下架</string>
     <string name="admin_close">非法下架</string>
     <string name="alter_idle">修改闲置</string>
+    <string name="start">开始</string>
+    <string name="add_des_info">损毁填写</string>
+    <string name="return_back">归还</string>
+    <string name="request_return">申请归还</string>
+
+    <string name="requested">已申请</string>
+    <string name="agree_request">已同意</string>
+    <string name="rent_now">租赁中</string>
+    <string name="finish_rent">已完成</string>
+    <string name="disagree">被拒绝</string>
 </resources>

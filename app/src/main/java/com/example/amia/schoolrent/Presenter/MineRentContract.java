@@ -12,6 +12,7 @@ public interface MineRentContract {
         void startRent(Rent rent,Handler handler);
         void cancelRent(Rent rent,Handler handler);
         void findById(String id,Handler handler);
+        void delRent(Rent rent,Handler handler);
     }
 
     interface View extends BaseView<Presenter>{
