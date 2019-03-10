@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/info_layout"
+    android:orientation="vertical"
+    android:background="@drawable/item_ripple"
+    android:padding="6dp"
+    android:layout_margin="3dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.example.amia.schoolrent.View.RoundImageView
+            android:id="@+id/user_icon"
+            android:src="@drawable/default_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_toRightOf="@id/user_icon"
+            android:layout_marginLeft="6dp"
+            android:layout_centerVertical="true"
+            android:text="用户名"
+            android:textSize="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:padding="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="76dp">
+        <TextView
+            android:id="@+id/title"
+            android:text="标题"
+            android:textSize="18dp"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_below="@id/title"
+            android:background="#f3f4f8"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+        <TextView
+            android:id="@+id/context"
+            android:text="内容"
+            android:textSize="17dp"
+            android:layout_margin="3dp"
+            android:lines="2"
+            android:ellipsize="end"
+            android:layout_below="@id/title"
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/create_date"
+        android:padding="3dp"
+        android:text="日期"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

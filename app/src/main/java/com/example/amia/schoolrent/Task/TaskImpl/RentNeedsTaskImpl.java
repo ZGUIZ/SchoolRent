@@ -6,6 +6,7 @@ import android.os.Message;
 
 import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.RentNeeds;
+import com.example.amia.schoolrent.Bean.RentNeedsExtend;
 import com.example.amia.schoolrent.Bean.Result;
 import com.example.amia.schoolrent.Presenter.NetCallBack;
 import com.example.amia.schoolrent.R;
@@ -44,7 +45,6 @@ public class RentNeedsTaskImpl implements RentNeedsTask {
                     Result r = Result.getJSONObject(json, null);
                     if(r.getResult()){
                         msg.what = ADD_ARTICLE;
-                        msg.obj = r.getData();
                     } else {
                         msg.what = ERROR;
                         msg.obj = r.getMsg();
@@ -69,5 +69,42 @@ public class RentNeedsTaskImpl implements RentNeedsTask {
     @Override
     public void delArticle(Context context, RentNeeds needs, Handler handler) {
 
+    }
+
+    @Override
+    public void queryArticle(Context context, RentNeedsExtend needs, final Handler handler) {
+        String url  = ActivityUtil.getString(context, R.string.host) + ActivityUtil.getString(context,R.string.needs_list);
+
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("rentNeeds",needs);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack()  {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result r = Result.getObjectWithList(json, RentNeeds.class);
+                    if(r.getResult()){
+                        msg.what = ARTICLE_LIST;
+                        msg.obj = r.getData();
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = r.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                }finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
     }
 }

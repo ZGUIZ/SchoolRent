@@ -1,9 +1,9 @@
 package com.example.amia.schoolrent.Presenter.PersenterImpl;
 
-import android.content.Context;
 import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.RentNeeds;
+import com.example.amia.schoolrent.Bean.RentNeedsExtend;
 import com.example.amia.schoolrent.Bean.ResponseInfo;
 import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.PushArticleContract;
@@ -35,5 +35,10 @@ public class PushArticleContractImpl implements PushArticleContract.Presenter {
     @Override
     public void addRefuse(ResponseInfo responseInfo, Handler handler) {
         refuseTask.addRefuse(view.getContext(),responseInfo,handler);
+    }
+
+    @Override
+    public void queryArticleList(RentNeedsExtend rentNeedsExtend, Handler handler) {
+        rentNeedsTask.queryArticle(view.getContext(),rentNeedsExtend,handler);
     }
 }

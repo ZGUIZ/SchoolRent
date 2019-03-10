@@ -20,11 +20,20 @@ import com.example.amia.schoolrent.Activity.PushActivity;
 import com.example.amia.schoolrent.Activity.PushArticleActivity;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.ListenerAdapter.AnimationListenerAdapter;
+import com.example.amia.schoolrent.Presenter.ArticleContract;
+import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.MainContract;
+import com.example.amia.schoolrent.Presenter.PersenterImpl.ArticleContractImpl;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.MainContractImpl;
+import com.example.amia.schoolrent.Presenter.PersenterImpl.PushArticleContractImpl;
+import com.example.amia.schoolrent.Presenter.PushArticleContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.IdleTask;
+import com.example.amia.schoolrent.Task.RefuseTask;
+import com.example.amia.schoolrent.Task.RentNeedsTask;
 import com.example.amia.schoolrent.Task.TaskImpl.IdleTaskImpl;
+import com.example.amia.schoolrent.Task.TaskImpl.RefuseTaskImpl;
+import com.example.amia.schoolrent.Task.TaskImpl.RentNeedsTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.View.ClearButtonStatus;
 import com.example.amia.schoolrent.View.ToolBarButton;
@@ -40,6 +49,7 @@ public class MainFragement extends Fragment {
     private FrameLayout frameLayout;
     private Fragment mineFragment;
     private Fragment indexFragment;
+    private Fragment articleListFragment;
 
     private RelativeLayout pushLayout;
     private RelativeLayout idleBtn;
@@ -48,6 +58,9 @@ public class MainFragement extends Fragment {
 
     //被选中的Fragment
     private Fragment selected;
+
+    private RentNeedsTask rentNeedsTask;
+    private RefuseTask refuseTask;
 
     public static MainFragement newInstance(){
         MainFragement mainFragement=new MainFragement();
@@ -152,6 +165,29 @@ public class MainFragement extends Fragment {
         ActivityUtil.replaceFragment(activity.getSupportFragmentManager(),mineFragment,R.id.main_frame_layout);
     }
 
+    protected void loadArticle(){
+        BaseAcitivity activity = (BaseAcitivity) getActivity();
+        //如果没有学生资料，则直接断开连接
+        Student student = activity.getStudent();
+        if(student == null){
+            activity.exitLogin();
+            return;
+        }
+        if(articleListFragment == null){
+            articleListFragment = ArticleListFragment.newInstance();
+            rentNeedsTask = new RentNeedsTaskImpl();
+            refuseTask = new RefuseTaskImpl();
+        }
+        selected = articleListFragment;
+        ActivityUtil.replaceFragment(activity.getSupportFragmentManager(),articleListFragment,R.id.main_frame_layout);
+
+        ArticleContract.Presenter presenter = new ArticleContractImpl((BaseView) articleListFragment,rentNeedsTask,refuseTask);
+        ((ArticleListFragment) articleListFragment).setPresenter(presenter);
+    }
+
+    /**
+     * 加载新增闲置页面
+     */
     private void loadPushActivity(){
         MainActivity mainActivity = (MainActivity) getActivity();
         Intent intent = new Intent(mainActivity, PushActivity.class);
@@ -160,6 +196,9 @@ public class MainFragement extends Fragment {
         hidePushLayout();
     }
 
+    /**
+     * 加载需求页面
+     */
     private void loadPushArticleActivity(){
         MainActivity mainActivity = (MainActivity) getActivity();
         Intent intent = new Intent(mainActivity, PushArticleActivity.class);
@@ -211,6 +250,9 @@ public class MainFragement extends Fragment {
                     break;
                 case R.id.article_btn:
                     loadPushArticleActivity();
+                    break;
+                case R.id.newest:
+                    loadArticle();
                     break;
             }
         }

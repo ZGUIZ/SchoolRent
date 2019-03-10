@@ -51,6 +51,8 @@ public class RentNeeds {
 	 */
 	private String schoolId;
 
+	private Student student;
+
 	public String getInfoId() {
 		return infoId;
 	}
@@ -114,4 +116,11 @@ public class RentNeeds {
 		this.schoolId = schoolId;
 	}
 
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
 }
