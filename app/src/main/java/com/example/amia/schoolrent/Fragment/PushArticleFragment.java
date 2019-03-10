@@ -99,6 +99,7 @@ public class PushArticleFragment extends Fragment implements PushArticleContract
     @Override
     public void leavePage(){
         //对话框，是否退出
+
         getActivity().finish();
     }
 
