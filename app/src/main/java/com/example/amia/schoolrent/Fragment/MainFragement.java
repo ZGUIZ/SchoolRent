@@ -2,21 +2,24 @@ package com.example.amia.schoolrent.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.example.amia.schoolrent.Activity.BaseAcitivity;
 import com.example.amia.schoolrent.Activity.MainActivity;
 import com.example.amia.schoolrent.Activity.PushActivity;
+import com.example.amia.schoolrent.Activity.PushArticleActivity;
 import com.example.amia.schoolrent.Bean.Student;
+import com.example.amia.schoolrent.ListenerAdapter.AnimationListenerAdapter;
 import com.example.amia.schoolrent.Presenter.MainContract;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.MainContractImpl;
 import com.example.amia.schoolrent.R;
@@ -29,10 +32,6 @@ import com.example.amia.schoolrent.View.ToolBarButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
-import static com.example.amia.schoolrent.Task.IdleTask.ERRORWITHMESSAGE;
-import static com.example.amia.schoolrent.Task.IdleTask.INDEX_CLASSIFY;
-
 public class MainFragement extends Fragment {
 
     protected View view;
@@ -41,6 +40,11 @@ public class MainFragement extends Fragment {
     private FrameLayout frameLayout;
     private Fragment mineFragment;
     private Fragment indexFragment;
+
+    private RelativeLayout pushLayout;
+    private RelativeLayout idleBtn;
+    private RelativeLayout articleBtn;
+    private LinearLayout pushBorder;
 
     //被选中的Fragment
     private Fragment selected;
@@ -85,6 +89,14 @@ public class MainFragement extends Fragment {
         ToolBarButton mineButton = view.findViewById(R.id.mine);
         toolBarButtons.add(mineButton);
         mineButton.setOnClickListener(clickListener,clearButtonStatus);
+
+        pushLayout = view.findViewById(R.id.push_type_ll);
+        idleBtn = view.findViewById(R.id.idle_btn);
+        articleBtn = view.findViewById(R.id.article_btn);
+        pushLayout.setOnClickListener(clickListener);
+        idleBtn.setOnClickListener(clickListener);
+        articleBtn.setOnClickListener(clickListener);
+        pushBorder = view.findViewById(R.id.push_border);
     }
 
     @Override
@@ -145,6 +157,37 @@ public class MainFragement extends Fragment {
         Intent intent = new Intent(mainActivity, PushActivity.class);
         intent.putExtra("student",mainActivity.getStudent());
         startActivity(intent);
+        hidePushLayout();
+    }
+
+    private void loadPushArticleActivity(){
+        MainActivity mainActivity = (MainActivity) getActivity();
+        Intent intent = new Intent(mainActivity, PushArticleActivity.class);
+        intent.putExtra("student",mainActivity.getStudent());
+        startActivity(intent);
+        hidePushLayout();
+    }
+
+    private void showPushLayout(){
+        if(pushLayout.getVisibility() ==View.VISIBLE){
+            hidePushLayout();
+        } else {
+            pushLayout.setVisibility(View.VISIBLE);
+            Animation inAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.push_bottom_in_short);
+            pushBorder.startAnimation(inAnimation);
+        }
+    }
+
+    private void hidePushLayout(){
+        Animation outAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.push_buttom_out);
+        outAnimation.setAnimationListener(new AnimationListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                super.onAnimationEnd(animation);
+                pushLayout.setVisibility(View.GONE);
+            }
+        });
+        pushBorder.startAnimation(outAnimation);
     }
 
     View.OnClickListener clickListener = new View.OnClickListener() {
@@ -158,7 +201,16 @@ public class MainFragement extends Fragment {
                     loadIndex();
                     break;
                 case R.id.push:
+                    showPushLayout();
+                    break;
+                case R.id.push_type_ll:
+                    hidePushLayout();
+                    break;
+                case R.id.idle_btn:
                     loadPushActivity();
+                    break;
+                case R.id.article_btn:
+                    loadPushArticleActivity();
                     break;
             }
         }
