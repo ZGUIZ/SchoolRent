@@ -40,11 +40,14 @@
     <string name="update_idle">/idleInfo/update</string> <!--更新商品信息-->
     <string name="del_idle">/idleInfo/del</string>  <!--删除闲置信息-->
     <string name="get_classify_name">/classify/getName/id/</string>  <!--根据ID获取分类名-->
-    <string name="query_mine_rent">/rent/queryMineRent</string>
-    <string name="cancel_rent">/rent/cancel</string>
-    <string name="find_idle">/idleInfo/id/</string>
-    <string name="start_rent">/rent/startRent</string>
-    <string name="del_rent">/rent/delRent</string>
+    <string name="query_mine_rent">/rent/queryMineRent</string>  <!--我请求的租赁-->
+    <string name="cancel_rent">/rent/cancel</string>  <!--取消租赁-->
+    <string name="find_idle">/idleInfo/id/</string>   <!--查询指定的闲置信息-->
+    <string name="start_rent">/rent/startRent</string> <!--开始租赁-->
+    <string name="del_rent">/rent/delRent</string>   <!--删除租赁请求信息-->
+    <string name="disagree_rent">/rent/disagreeRent</string>  <!--不同意租赁-->
+    <string name="add_article">/rentNeeds/add</string>  <!--新增需求信息-->
+    <string name="needs_list">/rentNeeds/list</string>  <!--分页查询需求列表-->
 
     <!--系统提示-->
     <string name="double_exit">请再按一次返回按钮退出程序</string>
@@ -108,7 +111,10 @@
     <string name="credit">信誉分：</string>
     <string name="mine_check">我的账单</string>
     <string name="push_idle">发布闲置</string>
+    <string name="push_article">发布帖子</string>
     <string name="push_title">标题 品牌型号都是买家喜欢搜索的</string>
+    <string name="push_article_title">标题</string>
+    <string name="context">内容</string>
     <string name="push_hint">商品描述</string>
     <string name="cost">押金（元）</string>
     <string name="cost_day">每天（元）</string>
@@ -172,6 +178,7 @@
     <string name="add_des_info">损毁填写</string>
     <string name="return_back">归还</string>
     <string name="request_return">申请归还</string>
+    <string name="idle">闲置</string>
 
     <string name="requested">已申请</string>
     <string name="agree_request">已同意</string>
