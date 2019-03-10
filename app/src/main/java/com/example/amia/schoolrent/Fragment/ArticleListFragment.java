@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,8 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.amia.schoolrent.Activity.ArticleInfoActivity;
+import com.example.amia.schoolrent.Activity.BaseAcitivity;
 import com.example.amia.schoolrent.Bean.RentNeeds;
 import com.example.amia.schoolrent.Bean.RentNeedsExtend;
+import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.ArticleAdapter;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.OnItemClickListener;
 import com.example.amia.schoolrent.Presenter.ArticleContract;
@@ -33,6 +37,8 @@ public class ArticleListFragment extends Fragment implements ArticleContract.Vie
 
     private RentNeedsExtend rentNeedsExtend;
 
+    private Student student;
+
     public static ArticleListFragment newInstance(){
         ArticleListFragment articleListFragment = new ArticleListFragment();
         return articleListFragment;
@@ -48,6 +54,9 @@ public class ArticleListFragment extends Fragment implements ArticleContract.Vie
     public void onStart() {
         super.onStart();
 
+        BaseAcitivity baseAcitivity = (BaseAcitivity) getActivity();
+        student = baseAcitivity.getStudent();
+
         recyclerView = view.findViewById(R.id.article_list);
         adapter = new ArticleAdapter(getContext());
         recyclerView.setGridLayout(1);
@@ -55,7 +64,8 @@ public class ArticleListFragment extends Fragment implements ArticleContract.Vie
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemCLick(View view, int position) {
-
+                RentNeeds rentNeeds = adapter.getIdleInfoByPosition(position);
+                loadRentInfoActivity(rentNeeds);
             }
 
             @Override
@@ -111,6 +121,13 @@ public class ArticleListFragment extends Fragment implements ArticleContract.Vie
         }
     }
 
+    private void loadRentInfoActivity(RentNeeds rentNeeds){
+        Intent intent = new Intent(getActivity(), ArticleInfoActivity.class);
+        intent.putExtra("student",student);
+        intent.putExtra("rentNeeds",rentNeeds);
+        startActivity(intent);
+    }
+
     private void linkError(){
         Toast.makeText(getContext(),R.string.link_error,Toast.LENGTH_SHORT).show();
     }
@@ -133,12 +150,6 @@ public class ArticleListFragment extends Fragment implements ArticleContract.Vie
                     errorWithMessge(msg.obj);
                     break;
             }
-        }
-    };
-
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
         }
     };
 

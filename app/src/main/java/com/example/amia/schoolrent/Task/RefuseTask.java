@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.IdleInfo;
+import com.example.amia.schoolrent.Bean.RentNeeds;
 import com.example.amia.schoolrent.Bean.ResponseInfo;
 import com.example.amia.schoolrent.Bean.SecondResponseInfo;
 
@@ -16,4 +17,5 @@ public interface RefuseTask {
     void addRefuse(Context context, ResponseInfo responseInfo, Handler handler);
     void addSecondRefuse(Context context, SecondResponseInfo secondResponseInfo, Handler handler);
     void getReufseList(Context context, IdleInfo idleInfo,Handler handler);
+    void getReufseList(Context context, RentNeeds rentNeeds,Handler handler);
 }

@@ -60,7 +60,6 @@ public class MainFragement extends Fragment {
     private Fragment selected;
 
     private RentNeedsTask rentNeedsTask;
-    private RefuseTask refuseTask;
 
     public static MainFragement newInstance(){
         MainFragement mainFragement=new MainFragement();
@@ -176,12 +175,11 @@ public class MainFragement extends Fragment {
         if(articleListFragment == null){
             articleListFragment = ArticleListFragment.newInstance();
             rentNeedsTask = new RentNeedsTaskImpl();
-            refuseTask = new RefuseTaskImpl();
         }
         selected = articleListFragment;
         ActivityUtil.replaceFragment(activity.getSupportFragmentManager(),articleListFragment,R.id.main_frame_layout);
 
-        ArticleContract.Presenter presenter = new ArticleContractImpl((BaseView) articleListFragment,rentNeedsTask,refuseTask);
+        ArticleContract.Presenter presenter = new ArticleContractImpl((BaseView) articleListFragment,rentNeedsTask);
         ((ArticleListFragment) articleListFragment).setPresenter(presenter);
     }
 

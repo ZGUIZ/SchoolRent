@@ -1,5 +1,7 @@
 package com.example.amia.schoolrent.Util;
 
+import android.util.Log;
+
 import com.example.amia.schoolrent.Bean.AuthPicture;
 import com.example.amia.schoolrent.Bean.IdelPic;
 import com.example.amia.schoolrent.Bean.IdleInfo;

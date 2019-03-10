@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author Yanghu
  * @since 2018-10-30
  */
-public class RentNeeds {
+public class RentNeeds implements Serializable{
 
     private static final long serialVersionUID = 1L;
 

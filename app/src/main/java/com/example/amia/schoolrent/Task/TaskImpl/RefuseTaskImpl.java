@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.example.amia.schoolrent.Bean.IdleInfo;
+import com.example.amia.schoolrent.Bean.RentNeeds;
 import com.example.amia.schoolrent.Bean.ResponseInfo;
 import com.example.amia.schoolrent.Bean.Result;
 import com.example.amia.schoolrent.Bean.SecondResponseInfo;
@@ -105,12 +106,23 @@ public class RefuseTaskImpl implements RefuseTask {
     }
 
     @Override
-    public void getReufseList(Context context, IdleInfo idleInfo, final Handler handler) {
+    public void getReufseList(Context context, IdleInfo idleInfo, Handler handler) {
+        ResponseInfo responseInfo = new ResponseInfo();
+        responseInfo.setInfoId(idleInfo.getInfoId());
+        getReufseList(context,responseInfo,handler);
+    }
+
+    @Override
+    public void getReufseList(Context context, RentNeeds rentNeeds, Handler handler) {
+        ResponseInfo responseInfo = new ResponseInfo();
+        responseInfo.setInfoId(rentNeeds.getInfoId());
+        getReufseList(context,responseInfo,handler);
+    }
+
+    protected void getReufseList(Context context,ResponseInfo responseInfo,final Handler handler){
         String url = ActivityUtil.getString(context, R.string.host)+ActivityUtil.getString(context,R.string.get_response_info);
 
         Map<String,Object> keyValueMap = new HashMap<>();
-        ResponseInfo responseInfo = new ResponseInfo();
-        responseInfo.setInfoId(idleInfo.getInfoId());
         keyValueMap.put("responseInfo",responseInfo);
         NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
             @Override
