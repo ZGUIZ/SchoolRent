@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
+import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.RentNeeds;
 import com.example.amia.schoolrent.Bean.RentNeedsExtend;
@@ -67,13 +68,77 @@ public class RentNeedsTaskImpl implements RentNeedsTask {
     }
 
     @Override
-    public void delArticle(Context context, RentNeeds needs, Handler handler) {
+    public void delArticle(Context context, RentNeeds needs, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host) + ActivityUtil.getString(context,R.string.del_needs)+needs.getInfoId();
+        NetUtils.get(url, new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json, null);
+                    if(result.getResult()) {
+                        msg.what = DEL_ARTICLE;
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
 
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
     }
 
     @Override
     public void queryArticle(Context context, RentNeedsExtend needs, final Handler handler) {
         String url  = ActivityUtil.getString(context, R.string.host) + ActivityUtil.getString(context,R.string.needs_list);
+
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("rentNeeds",needs);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack()  {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result r = Result.getObjectWithList(json, RentNeeds.class);
+                    if(r.getResult()){
+                        msg.what = ARTICLE_LIST;
+                        msg.obj = r.getData();
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = r.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                }finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void queryMyArticle(Context context, RentNeedsExtend needs, final Handler handler) {
+        String url  = ActivityUtil.getString(context, R.string.host) + ActivityUtil.getString(context,R.string.my_needs);
 
         Map<String,Object> keyValueMap = new HashMap<>();
         keyValueMap.put("rentNeeds",needs);

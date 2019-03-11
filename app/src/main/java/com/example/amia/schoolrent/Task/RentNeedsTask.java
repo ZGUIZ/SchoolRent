@@ -15,4 +15,5 @@ public interface RentNeedsTask {
     void pushArticle(Context context,RentNeeds needs, Handler handler);
     void delArticle(Context context,RentNeeds needs,Handler handler);
     void queryArticle(Context context, RentNeedsExtend needsExtend,Handler handler);
+    void queryMyArticle(Context context,RentNeedsExtend needsExtend,Handler handler);
 }

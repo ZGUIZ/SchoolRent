@@ -259,6 +259,9 @@ public class MainFragement extends Fragment {
     ClearButtonStatus clearButtonStatus = new ClearButtonStatus() {
         @Override
         public void clearButtonStatus() {
+            if(pushBorder.getVisibility() == View.VISIBLE){
+                hidePushLayout();
+            }
             for(ToolBarButton toolBarButton: toolBarButtons){
                 toolBarButton.setClicked(false);
             }
