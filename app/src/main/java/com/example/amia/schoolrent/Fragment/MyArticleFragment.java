@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.StudentInterface;
+import com.example.amia.schoolrent.Activity.ArticleInfoActivity;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.RentNeeds;
 import com.example.amia.schoolrent.Bean.RentNeedsExtend;
@@ -30,6 +32,7 @@ import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import java.util.List;
 
 import static com.example.amia.schoolrent.Task.RentNeedsTask.ARTICLE_LIST;
+import static com.example.amia.schoolrent.Task.RentNeedsTask.DEL_ARTICLE;
 
 public class MyArticleFragment extends Fragment implements MyArticleContract.View {
 
@@ -42,6 +45,8 @@ public class MyArticleFragment extends Fragment implements MyArticleContract.Vie
 
     private Student student;
     private RentNeedsExtend rentNeedsExtend;
+
+    private RelativeLayout progressView;
 
     public static MyArticleFragment newInstance(){
         MyArticleFragment myArticleFragment=new MyArticleFragment();
@@ -70,12 +75,19 @@ public class MyArticleFragment extends Fragment implements MyArticleContract.Vie
         student = ((StudentInterface)getActivity()).getStudent();
 
         recyclerView = view.findViewById(R.id.my_push_rv);
+        progressView = view.findViewById(R.id.progress_view);
 
         recyclerView.setGridLayout(1);
         adapter = new MyArticleAdapter(getActivity(), new MyArticleAdapter.ResponseRentInterface() {
             @Override
             public void del(RentNeeds rent) {
+                progressView.setVisibility(View.VISIBLE);
                 presenter.del(rent,handler);
+            }
+
+            @Override
+            public void toInfo(RentNeeds rentNeeds) {
+                toNeedInfoActivity(rentNeeds);
             }
         });
 
@@ -102,6 +114,13 @@ public class MyArticleFragment extends Fragment implements MyArticleContract.Vie
         });
         recyclerView.refresh();
         recyclerView.setIsRefresh(true);
+    }
+
+    protected void toNeedInfoActivity(RentNeeds rentNeeds){
+        Intent intent = new Intent(getActivity(), ArticleInfoActivity.class);
+        intent.putExtra("student",student);
+        intent.putExtra("rentNeeds",rentNeeds);
+        startActivity(intent);
     }
 
     protected void refresh(){
@@ -140,6 +159,11 @@ public class MyArticleFragment extends Fragment implements MyArticleContract.Vie
         }
     }
 
+    protected void delSuccess(){
+        refresh();
+        progressView.setVisibility(View.GONE);
+    }
+
     @Override
     public void linkError() {
         Toast.makeText(getActivity(),R.string.link_error,Toast.LENGTH_SHORT).show();
@@ -157,6 +181,9 @@ public class MyArticleFragment extends Fragment implements MyArticleContract.Vie
             switch (msg.what){
                 case ARTICLE_LIST:
                     loadArticleSuccess(msg.obj);
+                    break;
+                case DEL_ARTICLE:
+                    delSuccess();
                     break;
                 default:
                     showMessage(msg.obj);

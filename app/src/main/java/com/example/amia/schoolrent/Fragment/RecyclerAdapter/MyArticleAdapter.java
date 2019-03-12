@@ -59,12 +59,21 @@ public class MyArticleAdapter extends RecyclerView.Adapter<MyArticleAdapter.RecV
         holder.artile.setText(rentNeeds.getIdelInfo());
         holder.createDate.setText(DateUtil.formatDate(rentNeeds.getCreateDate(),"yyyy-MM-dd"));
 
-        holder.del.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                responseRentInterface.del(rentNeeds);
+                switch (view.getId()){
+                    case R.id.close_tv:
+                        responseRentInterface.del(rentNeeds);
+                        break;
+                    case R.id.slide_itemView:
+                        responseRentInterface.toInfo(rentNeeds);
+                        break;
+                }
             }
-        });
+        };
+        holder.del.setOnClickListener(onClickListener);
+        holder.slideItem.setOnClickListener(onClickListener);
     }
 
     @Override
@@ -118,5 +127,6 @@ public class MyArticleAdapter extends RecyclerView.Adapter<MyArticleAdapter.RecV
 
     public interface ResponseRentInterface{
         void del(RentNeeds rent);
+        void toInfo(RentNeeds rentNeeds);
     }
 }

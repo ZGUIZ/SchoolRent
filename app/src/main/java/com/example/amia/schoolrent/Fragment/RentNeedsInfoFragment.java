@@ -39,7 +39,6 @@ import com.tencent.cos.xml.utils.StringUtils;
 
 import java.util.List;
 
-import static com.example.amia.schoolrent.Task.RefuseTask.LOAD_REFUSE_ERROR;
 import static com.example.amia.schoolrent.Task.RefuseTask.LOAD_REFUSE_SUCCESS;
 import static com.example.amia.schoolrent.Task.RefuseTask.PUSH_REFUSE_SUCCESS;
 
@@ -75,7 +74,7 @@ public class RentNeedsInfoFragment extends Fragment implements RentNeedsContract
 
         RentNeedsInterface rentNeedsInterface = (RentNeedsInterface) getActivity();
         rentNeeds = rentNeedsInterface.getRentNeeds();
-        student = rentNeeds.getStudent();
+        student = ((RentNeedsInterface) getActivity()).getStudent();
 
         RoundImageView imageView = view.findViewById(R.id.user_icon_riv);
         Glide.with(getActivity()).load(student.getUserIcon()).into(imageView);
