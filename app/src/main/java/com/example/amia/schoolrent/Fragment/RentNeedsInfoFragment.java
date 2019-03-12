@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.amia.schoolrent.Activity.ActivityInterface.IdleInfoInterface;
 import com.example.amia.schoolrent.Activity.ActivityInterface.RentNeedsInterface;
 import com.example.amia.schoolrent.Bean.RentNeeds;
 import com.example.amia.schoolrent.Bean.ResponseInfo;
@@ -31,6 +30,7 @@ import com.example.amia.schoolrent.Fragment.RecyclerAdapter.RefuseAdapter;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.SecondRefuseListener;
 import com.example.amia.schoolrent.Presenter.RentNeedsContract;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.Util.DateUtil;
 import com.example.amia.schoolrent.Util.KeyboardUtil;
 import com.example.amia.schoolrent.View.RoundImageView;
@@ -76,10 +76,11 @@ public class RentNeedsInfoFragment extends Fragment implements RentNeedsContract
         rentNeeds = rentNeedsInterface.getRentNeeds();
         student = ((RentNeedsInterface) getActivity()).getStudent();
 
+        Student needStudent = rentNeeds.getStudent();
         RoundImageView imageView = view.findViewById(R.id.user_icon_riv);
-        Glide.with(getActivity()).load(student.getUserIcon()).into(imageView);
+        Glide.with(getActivity()).load(needStudent.getUserIcon()).into(imageView);
         TextView userName = view.findViewById(R.id.user_name_tv);
-        userName.setText(student.getUserName());
+        userName.setText(needStudent.getUserName());
         TextView info = view.findViewById(R.id.idle_info_detail);
         info.setText(rentNeeds.getIdelInfo());
         TextView time = view.findViewById(R.id.create_time);
@@ -89,6 +90,9 @@ public class RentNeedsInfoFragment extends Fragment implements RentNeedsContract
 
         view.findViewById(R.id.refuse_rl).setOnClickListener(onClickListener);
         refuseRecyclerView = view.findViewById(R.id.refuse_ll);
+
+        TextView credit = view.findViewById(R.id.credit_tv);
+        credit.setText(ActivityUtil.getString(getActivity(),R.string.credit)+needStudent.getCredit());
 
         loadResponseInfo();
     }

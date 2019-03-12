@@ -137,7 +137,16 @@ public class MyArticleFragment extends Fragment implements MyArticleContract.Vie
         recyclerView.setPullLoadMoreCompleted();
         try{
             List<RentNeeds> rentNeedsList = (List<RentNeeds>) o;
-            adapter.setList(rentNeedsList);
+            if(rentNeedsExtend.getPage() == 1) {
+                adapter.setList(rentNeedsList);
+            } else {
+                if(rentNeedsList == null || rentNeedsList.size()<=0){
+                    Toast.makeText(getContext(),R.string.no_more,Toast.LENGTH_SHORT).show();
+                } else {
+                    adapter.addData(rentNeedsList);
+                }
+            }
+            rentNeedsExtend.setPage(rentNeedsExtend.getPageSize()+1);
         } catch (ClassCastException e){
             e.printStackTrace();
             linkError();

@@ -46,6 +46,10 @@ public class MyArticleAdapter extends RecyclerView.Adapter<MyArticleAdapter.RecV
         notifyDataSetChanged();
     }
 
+    public void addData(List<RentNeeds> list){
+        data.addAll(list);
+    }
+
     @Override
     public RecViewholder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.my_article_item, parent, false);
