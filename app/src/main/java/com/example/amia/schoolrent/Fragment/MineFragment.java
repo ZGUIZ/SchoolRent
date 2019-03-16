@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.amia.schoolrent.Activity.BaseAcitivity;
 import com.example.amia.schoolrent.Activity.BaseInfoActivity;
+import com.example.amia.schoolrent.Activity.CheckStatActivity;
 import com.example.amia.schoolrent.Activity.MyNeedActivity;
 import com.example.amia.schoolrent.Activity.MyPushActivity;
 import com.example.amia.schoolrent.Activity.MyRentActivity;
@@ -75,6 +76,7 @@ public class MineFragment extends Fragment {
         view.findViewById(R.id.mine_push).setOnClickListener(onClickListener);
         view.findViewById(R.id.mine_rent).setOnClickListener(onClickListener);
         view.findViewById(R.id.mine_need).setOnClickListener(onClickListener);
+        view.findViewById(R.id.mine_check).setOnClickListener(onClickListener);
     }
 
     @Override
@@ -97,6 +99,10 @@ public class MineFragment extends Fragment {
 
     protected void loadMyArticle(){
         loadActivity(MyNeedActivity.class);
+    }
+
+    protected void loadMyCapital(){
+        loadActivity(CheckStatActivity.class);
     }
 
     protected void loadActivity(Class<?> cls){
@@ -122,6 +128,9 @@ public class MineFragment extends Fragment {
                     break;
                 case R.id.mine_need:
                     loadMyArticle();
+                    break;
+                case R.id.mine_check:
+                    loadMyCapital();
                     break;
             }
         }

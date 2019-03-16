@@ -9,6 +9,7 @@ import android.util.Base64;
 import android.widget.Toast;
 
 import com.example.amia.schoolrent.Bean.AuthPicture;
+import com.example.amia.schoolrent.Bean.Capital;
 import com.example.amia.schoolrent.Bean.KeyValue;
 import com.example.amia.schoolrent.Bean.PassWord;
 import com.example.amia.schoolrent.Bean.Result;
@@ -578,6 +579,38 @@ public class StudentTaskImpl implements StudentTask {
                         msg.what = RESET_ERROR;
                     }
                     msg.obj = result.getMsg();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void getMyCapital(Context context, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.get_capital);
+        NetUtils.get(url,new NetCallBack(){
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json, Capital.class);
+                    if(result.getResult()) {
+                        msg.what = GET_CAPITAL;
+                        msg.obj = result.getData();
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = result.getMsg();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
