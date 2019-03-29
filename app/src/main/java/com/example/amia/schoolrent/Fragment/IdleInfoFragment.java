@@ -151,6 +151,7 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         //加载发布者头像
         ImageView userIcon = view.findViewById(R.id.user_icon_riv);
         Glide.with(getActivity()).load(student.getUserIcon()).into(userIcon);
+        userIcon.setOnClickListener(onClickListener);
 
         //加载发布者用户信息
         TextView userName = view.findViewById(R.id.user_name_tv);
@@ -705,9 +706,19 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                 case R.id.resp_user_layout:
                     hideInfoLayout();
                     break;
+                case R.id.user_icon_riv:
+                    currentIdleUser();
+                    break;
             }
         }
     };
+
+    private void currentIdleUser(){
+        IdleInfoInterface idleInfoInterface = (IdleInfoInterface) getActivity();
+        IdleInfo idleInfo = idleInfoInterface.getIdleInfo();
+        Student student = idleInfo.getStudent();
+        loadUserInfo(student);
+    }
 
     @Override
     public void linkError() {
