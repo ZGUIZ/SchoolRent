@@ -95,9 +95,13 @@ public class UserIdleFragment extends Fragment implements UserIdleContract.View{
                 Toast.makeText(getActivity(),R.string.no_more,Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            if(extend.getPage() == 1){
+                adapter.setIdleInfos(idleInfos);
+            } else{
+                adapter.addIdleInfos(idleInfos);
+            }
             extend.setPage(extend.getPage() + 1);
-            adapter.addIdleInfos(idleInfos);
+
         } catch (ClassCastException e){
             e.printStackTrace();
         }
