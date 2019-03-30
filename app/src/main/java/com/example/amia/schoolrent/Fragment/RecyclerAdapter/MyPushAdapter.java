@@ -99,6 +99,12 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
             case 4:
                 status = ActivityUtil.getString(context,R.string.close_by_self);
                 break;
+            case 8:
+                status = ActivityUtil.getString(context,R.string.request_return);
+                break;
+            case 9:
+                status = ActivityUtil.getString(context,R.string.had_eval);
+                break;
             case 100:
                 status = ActivityUtil.getString(context,R.string.admin_close);
                 break;
@@ -115,6 +121,7 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
                 holder.close.setText(R.string.cancle_rent);
                 break;
             case 2:
+            case 8:
                 holder.close.setBackgroundColor(Color.rgb(255,157,0));
                 holder.close.setText(R.string.finish);
                 break;
@@ -141,6 +148,7 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
                         break;
                     case 1:
                     case 2:
+                    case 8:
                         //取消或完成
                         responseRentInterface.cancleOrFinish(idleInfo);
                         break;

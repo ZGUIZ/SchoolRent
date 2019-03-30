@@ -110,7 +110,13 @@ public class RentingAdapter extends RecyclerView.Adapter<RentingAdapter.RecViewh
             }
         };
 
-        holder.backBtn.setOnClickListener(onClickListener);
+        if(idleInfo.getStatus() == 8){
+            holder.backBtn.setVisibility(View.GONE);
+        } else{
+            holder.backBtn.setVisibility(View.VISIBLE);
+            holder.backBtn.setOnClickListener(onClickListener);
+        }
+
         holder.item.setOnClickListener(onClickListener);
     }
 
