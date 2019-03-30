@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/TranslucentLayout">
-        <activity android:name=".Activity.MyNeedActivity"></activity>
+        <activity android:name=".Activity.CheckStatActivity"></activity>
+        <activity android:name=".Activity.MyNeedActivity" />
         <activity android:name=".Activity.ArticleInfoActivity" />
         <activity android:name=".Activity.PushArticleActivity" />
         <activity android:name=".Activity.MyRentActivity" />

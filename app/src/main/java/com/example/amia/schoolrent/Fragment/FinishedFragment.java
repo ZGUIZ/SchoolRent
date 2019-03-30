@@ -218,6 +218,7 @@ public class FinishedFragment extends Fragment implements MineRentContract.View 
 
     private void evalSuccess(){
         dialog.hide();
+        refresh();
     }
 
     @Override
