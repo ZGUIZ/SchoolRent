@@ -25,6 +25,8 @@ public class FinishedAdapter extends RecyclerView.Adapter<FinishedAdapter.RecVie
     private List<Rent> data = new ArrayList<>();
     private LayoutInflater layoutInflater;
 
+    private boolean canEval;
+
     private ResponseRentInterface responseRentInterface;
 
     public FinishedAdapter(Context context, ResponseRentInterface responseRentInterface) {
@@ -90,6 +92,9 @@ public class FinishedAdapter extends RecyclerView.Adapter<FinishedAdapter.RecVie
             case 8:
                 status = ActivityUtil.getString(context,R.string.request_return);
                 break;
+            case 9:
+                status = ActivityUtil.getString(context,R.string.had_eval);
+                break;
             case 100:
                 status = ActivityUtil.getString(context,R.string.admin_close);
                 break;
@@ -106,12 +111,22 @@ public class FinishedAdapter extends RecyclerView.Adapter<FinishedAdapter.RecVie
                     case R.id.delete_btn:
                         responseRentInterface.delete(rent);
                         break;
+                    case R.id.eval_btn:
+                        responseRentInterface.eval(rent);
+                        break;
                 }
             }
         };
 
         holder.deleteBtn.setOnClickListener(onClickListener);
         holder.item.setOnClickListener(onClickListener);
+
+        if(idleInfo.getStatus() == 9){
+            holder.evalBtn.setVisibility(View.GONE);
+        } else {
+            holder.evalBtn.setVisibility(View.VISIBLE);
+            holder.evalBtn.setOnClickListener(onClickListener);
+        }
     }
 
     @Override
@@ -119,6 +134,9 @@ public class FinishedAdapter extends RecyclerView.Adapter<FinishedAdapter.RecVie
         return data.size();
     }
 
+    public void canEval(boolean eval){
+        canEval = eval;
+    }
 
     /**
      * view.getWidth()获取的是屏幕中可以看到的大小.
@@ -132,6 +150,7 @@ public class FinishedAdapter extends RecyclerView.Adapter<FinishedAdapter.RecVie
         TextView deposit;
 
         Button deleteBtn;
+        Button evalBtn;
 
         RelativeLayout item;
 
@@ -148,11 +167,20 @@ public class FinishedAdapter extends RecyclerView.Adapter<FinishedAdapter.RecVie
             slideItem = itemView.findViewById(R.id.slide_itemView);
             item = itemView.findViewById(R.id.my_request_item_rl);
             deleteBtn = itemView.findViewById(R.id.delete_btn);
+
+            evalBtn = itemView.findViewById(R.id.eval_btn);
+            if(canEval){
+                evalBtn.setVisibility(View.VISIBLE);
+            } else {
+                evalBtn.setVisibility(View.GONE);
+            }
+
         }
 
     }
     public interface ResponseRentInterface{
         void delete(Rent rent);
         void toIdle(IdleInfo idleInfo);
+        void eval(Rent rent);
     }
 }

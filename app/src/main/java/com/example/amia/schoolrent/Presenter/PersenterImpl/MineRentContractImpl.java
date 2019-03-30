@@ -2,12 +2,15 @@ package com.example.amia.schoolrent.Presenter.PersenterImpl;
 
 import android.os.Handler;
 
+import com.example.amia.schoolrent.Bean.Eval;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.RentExtend;
 import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.MineRentContract;
 import com.example.amia.schoolrent.Task.IdleTask;
+
+import java.io.UnsupportedEncodingException;
 
 public class MineRentContractImpl implements MineRentContract.Presenter {
 
@@ -49,5 +52,10 @@ public class MineRentContractImpl implements MineRentContract.Presenter {
     @Override
     public void delRent(Rent rent, Handler handler) {
         task.delRent(view.getContext(),rent,handler);
+    }
+
+    @Override
+    public void eval(Eval eval, Handler handler) throws UnsupportedEncodingException {
+        task.addEval(view.getContext(),eval,handler);
     }
 }

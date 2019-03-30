@@ -84,7 +84,13 @@ public class DissagreeFragment extends Fragment implements MineRentContract.View
             public void toIdle(IdleInfo idleInfo) {
                 loadIdleInfo(idleInfo);
             }
+
+            @Override
+            public void eval(Rent rent) {
+            }
         });
+        adapter.canEval(false);
+
         recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 

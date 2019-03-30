@@ -17,18 +17,20 @@ import android.widget.Toast;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.StudentInterface;
 import com.example.amia.schoolrent.Activity.IdleInfoActivity;
+import com.example.amia.schoolrent.Bean.Eval;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.RentExtend;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.FinishedAdapter;
-import com.example.amia.schoolrent.Fragment.RecyclerAdapter.RentingAdapter;
 import com.example.amia.schoolrent.Presenter.MineRentContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
+import com.example.amia.schoolrent.View.EvalDialog;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.List;
 
+import static com.example.amia.schoolrent.Task.IdleTask.ADD_EVAL;
 import static com.example.amia.schoolrent.Task.IdleTask.CANCEL_RENT;
 import static com.example.amia.schoolrent.Task.IdleTask.DEL_RENT;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
@@ -46,6 +48,8 @@ public class FinishedFragment extends Fragment implements MineRentContract.View 
     private RelativeLayout progressView;
     private PullLoadMoreRecyclerView recyclerView;
     private FinishedAdapter adapter;
+
+    private EvalDialog dialog;
 
     private RentExtend rentExtend;
 
@@ -84,7 +88,15 @@ public class FinishedFragment extends Fragment implements MineRentContract.View 
             public void toIdle(IdleInfo idleInfo) {
                 loadIdleInfo(idleInfo);
             }
+
+            @Override
+            public void eval(Rent rent) {
+                FinishedFragment.this.eval(rent);
+            }
         });
+
+        adapter.canEval(true);
+
         recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 
@@ -101,6 +113,24 @@ public class FinishedFragment extends Fragment implements MineRentContract.View 
         });
         recyclerView.refresh();
         recyclerView.setIsRefresh(true);
+    }
+
+    protected void eval(Rent rent){
+        final EvalDialog.Builder builder = new EvalDialog.Builder(getContext(),rent);
+        builder.setPositiveButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Eval eval = builder.getEval();
+                try {
+                    presenter.eval(eval, handler);
+                } catch (Exception e){
+                    e.printStackTrace();
+                    linkError();
+                }
+            }
+        });
+        dialog = builder.createDialog();
+        dialog.show();
     }
 
     private void refresh(){
@@ -186,6 +216,10 @@ public class FinishedFragment extends Fragment implements MineRentContract.View 
         recyclerView.setIsRefresh(true);
     }
 
+    private void evalSuccess(){
+        dialog.hide();
+    }
+
     @Override
     public void linkError() {
         Toast.makeText(getContext(),R.string.link_error,Toast.LENGTH_SHORT).show();
@@ -216,6 +250,9 @@ public class FinishedFragment extends Fragment implements MineRentContract.View 
                 case CANCEL_RENT:
                 case START_RENT:
                     changeSuccess();
+                    break;
+                case ADD_EVAL:
+                    evalSuccess();
                     break;
                 case ERROR:
                 default:

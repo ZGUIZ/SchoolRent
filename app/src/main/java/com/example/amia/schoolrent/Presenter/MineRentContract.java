@@ -2,8 +2,11 @@ package com.example.amia.schoolrent.Presenter;
 
 import android.os.Handler;
 
+import com.example.amia.schoolrent.Bean.Eval;
 import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.RentExtend;
+
+import java.io.UnsupportedEncodingException;
 
 public interface MineRentContract {
     interface Presenter{
@@ -13,6 +16,7 @@ public interface MineRentContract {
         void cancelRent(Rent rent,Handler handler);
         void findById(String id,Handler handler);
         void delRent(Rent rent,Handler handler);
+        void eval(Eval eval, Handler handler) throws UnsupportedEncodingException;
     }
 
     interface View extends BaseView<Presenter>{

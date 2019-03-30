@@ -9,6 +9,7 @@ import android.util.Base64;
 import android.widget.Toast;
 
 import com.example.amia.schoolrent.Bean.Classify;
+import com.example.amia.schoolrent.Bean.Eval;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.KeyValue;
@@ -906,6 +907,42 @@ public class IdleTaskImpl implements IdleTask {
                     if(result.getResult()) {
                         msg.what = USER_PUSH;
                         msg.obj = result.getData();
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void addEval(Context context, Eval eval, final Handler handler) throws UnsupportedEncodingException {
+        eval.setContent(URLEncoder.encode(eval.getContent(),"utf-8"));
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.add_eval);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("eval",eval);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getObjectWithList(json,null);
+                    if(result.getResult()) {
+                        msg.what = ADD_EVAL;
                     } else {
                         msg.what = ERROR;
                         msg.obj = result.getMsg();

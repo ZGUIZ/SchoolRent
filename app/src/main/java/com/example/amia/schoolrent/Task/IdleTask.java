@@ -4,12 +4,14 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.Classify;
+import com.example.amia.schoolrent.Bean.Eval;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.RentExtend;
 import com.example.amia.schoolrent.Bean.Student;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface IdleTask extends BaseTask{
@@ -56,6 +58,7 @@ public interface IdleTask extends BaseTask{
     int DEL_RENT = 532;
     int DIS_RENT = 533;
     int USER_PUSH = 534;
+    int ADD_EVAL = 535;
 
     /**
      * 获取首页分类
@@ -154,4 +157,6 @@ public interface IdleTask extends BaseTask{
     void disagreeRent(Context context, Rent rent, final Handler handler);
 
     void getUserPush(Context context, IdleInfoExtend extend,Handler handler);
+
+    void addEval(Context context, Eval eval,Handler handler) throws UnsupportedEncodingException;
 }

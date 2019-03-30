@@ -27,6 +27,7 @@ public class RefuseAdapter extends RecyclerView.Adapter<RefuseAdapter.Holder> {
 
     private OnItemClickListener onItemClickListener;
     private SecondRefuseListener onClickListener;
+    private IconClickListener iconClickListener;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -45,8 +46,15 @@ public class RefuseAdapter extends RecyclerView.Adapter<RefuseAdapter.Holder> {
     @Override
     public void onBindViewHolder(@NonNull final Holder holder, final int position) {
         ResponseInfo responseInfo = responseInfos.get(position);
-        Student student = responseInfo.getStudent();
+        final Student student = responseInfo.getStudent();
         Glide.with(context).load(student.getUserIcon()).into(holder.userIcon);
+        holder.userIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iconClickListener.onClick(student);
+            }
+        });
+
         holder.userName.setText(student.getUserName());
         holder.message.setText(responseInfo.getResponseInfo());
         holder.createDate.setText(sdf.format(responseInfo.getResponseDate()));
@@ -57,7 +65,7 @@ public class RefuseAdapter extends RecyclerView.Adapter<RefuseAdapter.Holder> {
             holder.linearLayout.removeAllViews();
             holder.linearLayout.setVisibility(View.VISIBLE);
             for(final SecondResponseInfo secondResponseInfo :secondResponseInfos){
-                Student s = secondResponseInfo.getStudent();
+                final Student s = secondResponseInfo.getStudent();
                 if(s == null){
                     continue;
                 }
@@ -72,6 +80,14 @@ public class RefuseAdapter extends RecyclerView.Adapter<RefuseAdapter.Holder> {
                 date.setText(sdf.format(secondResponseInfo.getResponseDate()));
 
                 ImageView icon = view.findViewById(R.id.sec_user_icon);
+
+                icon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        iconClickListener.onClick(s);
+                    }
+                });
+
                 Glide.with(context).load(s.getUserIcon()).into(icon);
                 TextView userName = view.findViewById(R.id.second_user_name);
                 userName.setText(s.getUserName());
@@ -134,5 +150,9 @@ public class RefuseAdapter extends RecyclerView.Adapter<RefuseAdapter.Holder> {
 
     public void setSecondClickListener(SecondRefuseListener onClickListener){
         this.onClickListener = onClickListener;
+    }
+
+    public void setIconClickListener(IconClickListener iconClickListener) {
+        this.iconClickListener = iconClickListener;
     }
 }

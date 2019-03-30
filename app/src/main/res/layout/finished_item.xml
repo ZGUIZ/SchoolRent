@@ -88,6 +88,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <Button
+            android:id="@+id/eval_btn"
+            android:text="@string/eval"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp" />
+        <Button
             android:id="@+id/delete_btn"
             android:text="@string/delete"
             android:layout_width="wrap_content"
