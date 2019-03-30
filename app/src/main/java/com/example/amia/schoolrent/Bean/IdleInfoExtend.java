@@ -7,6 +7,7 @@ public class IdleInfoExtend extends IdleInfo{
     private int pageSize;
     private String search;
     private Date createDate;
+    private String userId;
 
     public IdleInfoExtend() {
         super();
@@ -40,6 +41,16 @@ public class IdleInfoExtend extends IdleInfo{
 
     public void setSearch(String search) {
         this.search = search;
+    }
+
+    @Override
+    public String getUserId() {
+        return userId;
+    }
+
+    @Override
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override

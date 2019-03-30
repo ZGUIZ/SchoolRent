@@ -3,7 +3,7 @@
 
     <!--地址-->
 
-    <string name="host">http://192.168.1.107:8080/SpringWind</string>
+    <string name="host">http://192.168.31.199:8080/SpringWind</string>
     <string name="getKey">/account/getPublicKey</string> <!--获取公钥-->
     <string name="getProvince">/school/getProvince</string><!--获取省份-->
     <string name="getCity">/school/getCity?province=</string> <!--获取城市-->
@@ -48,6 +48,12 @@
     <string name="disagree_rent">/rent/disagreeRent</string>  <!--不同意租赁-->
     <string name="add_article">/rentNeeds/add</string>  <!--新增需求信息-->
     <string name="needs_list">/rentNeeds/list</string>  <!--分页查询需求列表-->
+    <string name="my_needs">/rentNeeds/mineNeeds</string>  <!--查询我发布的帖子-->
+    <string name="del_needs">/rentNeeds/del/id/</string>  <!--删除帖子-->
+    <string name="get_check">/checkStatement/list</string>  <!--查询账单-->
+    <string name="get_capital">/capital/getMyCapital</string>  <!--获取我的余额信息-->
+    <string name="get_user_push">/idleInfo/getUserPush</string>  <!--获取指定用户发布信息-->
+    <string name="add_eval">/eval/add</string>  <!--添加评价-->
 
     <!--系统提示-->
     <string name="double_exit">请再按一次返回按钮退出程序</string>
@@ -85,6 +91,9 @@
     <string name="close_success">下架成功！</string>
     <string name="behavior_success">操作成功！</string>
     <string name="null_info">暂无信息</string>
+    <string name="fill_eval">请填写评价内容，您的评价会成为其他用户的参考</string>
+    <string name="fill_score">满意度评分</string>
+    <string name="eval_null">评价内容不能为空！</string>
 
     <!--按钮-->
     <string name="login">登录</string>
@@ -105,7 +114,7 @@
     <string name="add">发布</string>
     <string name="message">消息</string>
     <string name="mine">我的</string>
-    <string name="mine_need">我的需求</string>
+    <string name="mine_need">我的帖子</string>
     <string name="mine_push">我发布的</string>
     <string name="mine_rent">我要租的</string>
     <string name="credit">信誉分：</string>
@@ -179,10 +188,17 @@
     <string name="return_back">归还</string>
     <string name="request_return">申请归还</string>
     <string name="idle">闲置</string>
+    <string name="capital">余额</string>
+    <string name="last_capital">账户余额</string>
+    <string name="recharge">充值</string>
+    <string name="cash">提现</string>
+    <string name="eval">评价</string>
+    <string name="had_eval">已评价</string>
 
     <string name="requested">已申请</string>
     <string name="agree_request">已同意</string>
     <string name="rent_now">租赁中</string>
     <string name="finish_rent">已完成</string>
     <string name="disagree">被拒绝</string>
+    <string name="user_push">发布的</string>
 </resources>
