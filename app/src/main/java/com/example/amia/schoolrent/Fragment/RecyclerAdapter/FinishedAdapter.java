@@ -124,7 +124,11 @@ public class FinishedAdapter extends RecyclerView.Adapter<FinishedAdapter.RecVie
         if(idleInfo.getStatus() == 9){
             holder.evalBtn.setVisibility(View.GONE);
         } else {
-            holder.evalBtn.setVisibility(View.VISIBLE);
+            if(rent.getStatus() == 2 || rent.getStatus() == 3){
+                holder.evalBtn.setVisibility(View.GONE);
+            } else {
+                holder.evalBtn.setVisibility(View.VISIBLE);
+            }
             holder.evalBtn.setOnClickListener(onClickListener);
         }
     }

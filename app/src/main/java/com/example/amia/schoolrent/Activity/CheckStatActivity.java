@@ -1,7 +1,10 @@
 package com.example.amia.schoolrent.Activity;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.example.amia.schoolrent.Fragment.CheckStateFragment;
 import com.example.amia.schoolrent.Presenter.CheckStateContract;
@@ -21,6 +24,7 @@ public class CheckStatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_stat);
+        setToolBar();
         init();
     }
 
@@ -37,4 +41,23 @@ public class CheckStatActivity extends AppCompatActivity {
         CheckStateContract.Presenter presenter = new CheckStateContractImpl(fragment,checkStatementTask,studentTask);
         fragment.setPresenter(presenter);
     }
+
+    protected void setToolBar(){
+        Toolbar toolbar=findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(onClickListener);
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle(R.string.mine_check);
+    }
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                default:
+                    finish();
+            }
+        }
+    };
 }
