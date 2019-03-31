@@ -22,10 +22,11 @@
     <Button
         android:id="@+id/send_btn"
         android:text="@string/sent"
+        android:background="@drawable/button_ripple"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="35dp" />
     <EditText
         android:id="@+id/refuse_et"
         android:padding="5dp"
@@ -36,5 +37,5 @@
         android:layout_toRightOf="@id/user_icon_iv"
         android:layout_toLeftOf="@id/send_btn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="35dp" />
 </RelativeLayout>
