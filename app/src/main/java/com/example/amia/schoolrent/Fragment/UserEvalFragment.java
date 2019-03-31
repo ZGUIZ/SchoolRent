@@ -1,6 +1,5 @@
 package com.example.amia.schoolrent.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,33 +11,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.amia.schoolrent.Activity.IdleInfoActivity;
-import com.example.amia.schoolrent.Bean.IdleInfo;
-import com.example.amia.schoolrent.Bean.IdleInfoExtend;
+import com.example.amia.schoolrent.Bean.Eval;
+import com.example.amia.schoolrent.Bean.EvalExtend;
 import com.example.amia.schoolrent.Bean.Student;
-import com.example.amia.schoolrent.Fragment.RecyclerAdapter.IdleAdapter;
-import com.example.amia.schoolrent.Fragment.RecyclerAdapter.OnItemClickListener;
-import com.example.amia.schoolrent.Presenter.UserIdleContract;
+import com.example.amia.schoolrent.Fragment.RecyclerAdapter.EvalAdapter;
+import com.example.amia.schoolrent.Presenter.UserEvalContract;
 import com.example.amia.schoolrent.R;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.List;
 
+import static com.example.amia.schoolrent.Task.IdleTask.GET_EVAL;
 import static com.example.amia.schoolrent.Task.IdleTask.USER_PUSH;
 
-public class UserIdleFragment extends Fragment implements UserIdleContract.View{
+public class UserEvalFragment extends Fragment implements UserEvalContract.View{
 
     private View view;
     private PullLoadMoreRecyclerView recyclerView;
-    private IdleAdapter adapter;
-    private UserIdleContract.Presenter presenter;
+    private EvalAdapter adapter;
+    private UserEvalContract.Presenter presenter;
 
-    private IdleInfoExtend extend;
+    private EvalExtend extend;
     private Student student;
 
-    public static UserIdleFragment newInstance(){
-        UserIdleFragment idleFragment = new UserIdleFragment();
-        return idleFragment;
+    public static UserEvalFragment newInstance(){
+        UserEvalFragment userEvalFragment = new UserEvalFragment();
+        return userEvalFragment;
     }
 
     @Nullable
@@ -57,18 +55,8 @@ public class UserIdleFragment extends Fragment implements UserIdleContract.View{
     protected void init(){
         recyclerView = view.findViewById(R.id.index_refresh_layout);
 
-        recyclerView.setGridLayout(2);
-        adapter = new IdleAdapter(getActivity());
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemCLick(View view, int position) {
-                startInfoActivity(adapter.getIdleInfoByPosition(position));
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-            }
-        });
+        recyclerView.setGridLayout(1);
+        adapter = new EvalAdapter(getActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
             @Override
@@ -88,7 +76,7 @@ public class UserIdleFragment extends Fragment implements UserIdleContract.View{
     private void finishLoadMore(Object object){
         recyclerView.setPullLoadMoreCompleted();
         try{
-            List<IdleInfo> idleInfos = (List<IdleInfo>) object;
+            List<Eval> idleInfos = (List<Eval>) object;
 
             if(idleInfos==null || idleInfos.size()<=0){
                 if(extend.getPage() == 1){
@@ -99,7 +87,6 @@ public class UserIdleFragment extends Fragment implements UserIdleContract.View{
                 return;
             }
             view.findViewById(R.id.none_content).setVisibility(View.GONE);
-
             if(extend.getPage() == 1){
                 adapter.setIdleInfos(idleInfos);
             } else{
@@ -112,31 +99,16 @@ public class UserIdleFragment extends Fragment implements UserIdleContract.View{
         }
     }
 
-    /**
-     * 打开详细页面
-     * @param idleInfo
-     */
-    public void startInfoActivity(IdleInfo idleInfo){
-        Intent intent = new Intent(getActivity(), IdleInfoActivity.class);
-        intent.putExtra("idleInfo",idleInfo);
-        intent.putExtra("student",student);
-        startActivity(intent);
-    }
-
     private void refresh(){
-        extend = new IdleInfoExtend();
+        extend = new EvalExtend();
         extend.setPage(1);
         extend.setPageSize(6);
         extend.setUserId(student.getUserId());
-        presenter.getUserIdle(extend,handler);
+        presenter.getUserEval(extend,handler);
     }
 
     private void loadMore(){
-        presenter.getUserIdle(extend,handler);
-    }
-
-    public void setPresenter(UserIdleContract.Presenter presenter) {
-        this.presenter = presenter;
+        presenter.getUserEval(extend,handler);
     }
 
     @Override
@@ -154,10 +126,15 @@ public class UserIdleFragment extends Fragment implements UserIdleContract.View{
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case USER_PUSH:
+                case GET_EVAL:
                     finishLoadMore(msg.obj);
                     break;
             }
         }
     };
+
+    @Override
+    public void setPresenter(UserEvalContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
 }

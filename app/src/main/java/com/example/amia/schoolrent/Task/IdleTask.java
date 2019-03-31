@@ -5,6 +5,7 @@ import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.Eval;
+import com.example.amia.schoolrent.Bean.EvalExtend;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.Rent;
@@ -59,6 +60,7 @@ public interface IdleTask extends BaseTask{
     int DIS_RENT = 533;
     int USER_PUSH = 534;
     int ADD_EVAL = 535;
+    int GET_EVAL = 536;
 
     /**
      * 获取首页分类
@@ -159,4 +161,6 @@ public interface IdleTask extends BaseTask{
     void getUserPush(Context context, IdleInfoExtend extend,Handler handler);
 
     void addEval(Context context, Eval eval,Handler handler) throws UnsupportedEncodingException;
+
+    void getEval(Context context, EvalExtend extend,Handler handler);
 }

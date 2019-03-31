@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.Eval;
+import com.example.amia.schoolrent.Bean.EvalExtend;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.KeyValue;
@@ -41,6 +42,7 @@ import java.util.Map;
 public class IdleTaskImpl implements IdleTask {
 
     private Date updateTime;
+    private Date evalDate;
 
     @Override
     public void getIndexClassify(final Context context,IdleInfoExtend idleInfoExtend,final Handler handler) {
@@ -943,6 +945,48 @@ public class IdleTaskImpl implements IdleTask {
                     Result result = Result.getObjectWithList(json,null);
                     if(result.getResult()) {
                         msg.what = ADD_EVAL;
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void getEval(Context context, EvalExtend extend, final Handler handler) {
+        if(extend.getPage() == 1 || evalDate == null){
+            evalDate = new Date();
+        }
+
+        extend.setEvalDate(evalDate);
+
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.list_eval);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("eval",extend);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getObjectWithList(json,Eval.class);
+                    if(result.getResult()) {
+                        msg.what = GET_EVAL;
+                        msg.obj = result.getData();
                     } else {
                         msg.what = ERROR;
                         msg.obj = result.getMsg();

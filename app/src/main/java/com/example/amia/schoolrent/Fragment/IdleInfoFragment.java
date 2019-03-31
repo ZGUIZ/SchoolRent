@@ -45,7 +45,9 @@ import com.example.amia.schoolrent.Fragment.RecyclerAdapter.slideswaphelper.WIte
 import com.example.amia.schoolrent.ListenerAdapter.AnimationListenerAdapter;
 import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.IdleInfoContract;
+import com.example.amia.schoolrent.Presenter.PersenterImpl.UserEvalContractImpl;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.UserIdleContractImpl;
+import com.example.amia.schoolrent.Presenter.UserEvalContract;
 import com.example.amia.schoolrent.Presenter.UserIdleContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.IdleTask;
@@ -101,6 +103,8 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
     private UserIdleFragment userIdleFragment;
     private IdleTask task;
     private UserIdleContract.Presenter idlePresenter;
+    private UserEvalFragment userEvalFragment;
+    private UserEvalContract.Presenter evalPresenter;
 
     protected List<Fragment> fragmentList;
     protected List<String> titleList;
@@ -130,6 +134,7 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         fragmentList = new ArrayList<>();
         titleList = new ArrayList<>();
         titleList.add(ActivityUtil.getString(getContext(),R.string.user_push));
+        titleList.add(ActivityUtil.getString(getContext(),R.string.eval));
 
         IdleInfoInterface idleInfoInterface = (IdleInfoInterface) getActivity();
         IdleInfo idleInfo = idleInfoInterface.getIdleInfo();
@@ -491,6 +496,7 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
 
         //加载信息
         loadInfoTab(student);
+        loadEvalTab(student);
 
         //将Fragment与Tab关联
         viewPager.setAdapter(new MyRentFragmentAdapter(getActivity().getSupportFragmentManager(),getActivity(),fragmentList,titleList));
@@ -510,6 +516,21 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
             userIdleFragment.setPresenter(idlePresenter);
         }
         userIdleFragment.setStudent(student);
+    }
+
+    protected void loadEvalTab(Student student){
+        if(userEvalFragment == null){
+            userEvalFragment = UserEvalFragment.newInstance();
+            fragmentList.add(userEvalFragment);
+        }
+        if(task == null){
+            task = new IdleTaskImpl();
+        }
+        if(evalPresenter == null){
+            evalPresenter = new UserEvalContractImpl(userEvalFragment,task);
+            userEvalFragment.setPresenter(evalPresenter);
+        }
+        userEvalFragment.setStudent(student);
     }
 
     private void hideInfoLayout(){

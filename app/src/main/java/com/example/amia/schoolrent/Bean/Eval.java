@@ -37,13 +37,13 @@ public class Eval {
     /**
      * 评价等级
      */
-	private float level;
+	private double level;
     /**
      * 状态
      */
 	private Integer status;
 
-	private IdleInfo idleInfo;
+	private Student student;
 
 
 	public String getEvalId() {
@@ -86,11 +86,11 @@ public class Eval {
 		this.evalDate = evalDate;
 	}
 
-	public float getLevel() {
+	public double getLevel() {
 		return level;
 	}
 
-	public void setLevel(float level) {
+	public void setLevel(double level) {
 		this.level = level;
 	}
 
@@ -102,11 +102,11 @@ public class Eval {
 		this.status = status;
 	}
 
-	public IdleInfo getIdleInfo() {
-		return idleInfo;
+	public Student getStudent() {
+		return student;
 	}
 
-	public void setIdleInfo(IdleInfo idleInfo) {
-		this.idleInfo = idleInfo;
+	public void setStudent(Student student) {
+		this.student = student;
 	}
 }

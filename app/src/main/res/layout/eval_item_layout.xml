@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="10dp"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.example.amia.schoolrent.View.RoundImageView
+        android:id="@+id/user_icon"
+        android:src="@drawable/default_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_marginLeft="6dp"
+        android:layout_toRightOf="@id/user_icon"
+        android:text="用户名"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/context"
+        android:layout_toRightOf="@id/user_icon"
+        android:layout_below="@id/user_name"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="6dp"
+        android:text="内容"
+        android:textColor="@android:color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/time"
+        android:text="时间"
+        android:layout_margin="6dp"
+        android:layout_below="@id/context"
+        android:layout_toRightOf="@id/user_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:numStars="5"
+        android:rating="3"
+        android:layout_margin="6dp"
+        android:progressTint="#ff931E"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </RatingBar>
+    <View
+        android:background="#f3f4f8"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/user_icon"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+</RelativeLayout>
