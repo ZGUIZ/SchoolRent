@@ -460,6 +460,10 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         refuseView.findViewById(R.id.send_btn).setOnClickListener(onClickListener);
     }
 
+    /**
+     * 加载用户信息
+     * @param student
+     */
     protected void loadUserInfo(Student student){
         userInfoLayout.setVisibility(View.VISIBLE);
 
@@ -474,6 +478,15 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         TextView realName = userInfoLayout.findViewById(R.id.real_name);
         TextView credit = userInfoLayout.findViewById(R.id.score);
 
+        TextView phone = userInfoLayout.findViewById(R.id.telephone);
+        TextView mail = userInfoLayout.findViewById(R.id.email);
+        TextView sex = userInfoLayout.findViewById(R.id.sex_tv);
+        TextView studentId = userInfoLayout.findViewById(R.id.student_id);
+        phone.setText(student.getTelephone());
+        mail.setText(student.getEmail());
+        sex.setText(student.getSex());
+        studentId.setText(student.getStudentId());
+
         Glide.with(getContext()).load(student.getUserIcon()).into(userIcon);
         userName.setText(student.getUserName());
         //判断是否有看到真实姓名的权限
@@ -484,8 +497,14 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         if(s.getUserId().equals(idleInfo.getUserId())) {
             realName.setVisibility(View.VISIBLE);
             realName.setText(student.getRealName());
+            studentId.setVisibility(View.VISIBLE);
+            phone.setVisibility(View.VISIBLE);
+            mail.setVisibility(View.VISIBLE);
         } else {
             realName.setVisibility(View.GONE);
+            studentId.setVisibility(View.GONE);
+            phone.setVisibility(View.GONE);
+            mail.setVisibility(View.GONE);
         }
 
         credit.setText(String.valueOf(student.getCredit()));
