@@ -15,6 +15,8 @@ import com.example.amia.schoolrent.Util.SharedPreferencesUtil;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class MainActivity extends BaseAcitivity {
 
     @Override
@@ -22,6 +24,9 @@ public class MainActivity extends BaseAcitivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+
+        //初始化推送
+        initJPush();
     }
 
     protected void init(){
@@ -38,5 +43,10 @@ public class MainActivity extends BaseAcitivity {
             fragment = MainFragement.newInstance();
             ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),fragment,R.id.main_frame);
         }
+    }
+
+    protected void initJPush(){
+        JPushInterface.init(this);
+        JPushInterface.setAlias(this,0,student.getUserId());
     }
 }
