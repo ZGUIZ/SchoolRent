@@ -191,7 +191,13 @@ public class JSONUtil {
         try{
             if(cls.equals(Date.class)){
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                String d = sdf.format(jsonObject.getDouble(propertyName));
+                String d;
+                try {
+                    d = sdf.format(jsonObject.getDouble(propertyName));
+                } catch (Exception e){
+                    e.printStackTrace();
+                    d = jsonObject.getString(propertyName);
+                }
                 Date date=sdf.parse(d);
                 return date;
             } else if(cls.equals(IdleInfo.class)){
