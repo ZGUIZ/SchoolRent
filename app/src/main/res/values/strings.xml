@@ -54,6 +54,10 @@
     <string name="get_capital">/capital/getMyCapital</string>  <!--获取我的余额信息-->
     <string name="get_user_push">/idleInfo/getUserPush</string>  <!--获取指定用户发布信息-->
     <string name="add_eval">/eval/add</string>  <!--添加评价-->
+    <string name="c_rent_finish">/rent/finishRent</string>  <!--完成租赁-->
+    <string name="list_eval">/eval/listByPage</string>
+    <string name="mine_message">/message/pushUnRead</string>
+    <string name="message_list">/message/list</string>
 
     <!--系统提示-->
     <string name="double_exit">请再按一次返回按钮退出程序</string>
@@ -194,6 +198,7 @@
     <string name="cash">提现</string>
     <string name="eval">评价</string>
     <string name="had_eval">已评价</string>
+    <string name="student_id">学号</string>
 
     <string name="requested">已申请</string>
     <string name="agree_request">已同意</string>
