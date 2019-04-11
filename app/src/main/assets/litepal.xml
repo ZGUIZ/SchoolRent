@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
     <dbname value="schoolrent" ></dbname>
-    <version value="3" ></version>
+    <version value="4" ></version>
     <list>
         <mapping class="com.example.amia.schoolrent.Bean.KeyValue"></mapping>
         <mapping class="com.example.amia.schoolrent.Bean.Student"></mapping>
         <mapping class="com.example.amia.schoolrent.Bean.Classify"></mapping>
+        <mapping class="com.example.amia.schoolrent.Bean.Message"></mapping>
     </list>
 </litepal>

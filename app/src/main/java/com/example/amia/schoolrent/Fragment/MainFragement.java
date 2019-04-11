@@ -23,15 +23,19 @@ import com.example.amia.schoolrent.ListenerAdapter.AnimationListenerAdapter;
 import com.example.amia.schoolrent.Presenter.ArticleContract;
 import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.MainContract;
+import com.example.amia.schoolrent.Presenter.MyMessageContract;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.ArticleContractImpl;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.MainContractImpl;
+import com.example.amia.schoolrent.Presenter.PersenterImpl.MyMessageContractImpl;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.PushArticleContractImpl;
 import com.example.amia.schoolrent.Presenter.PushArticleContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.IdleTask;
+import com.example.amia.schoolrent.Task.MessageTask;
 import com.example.amia.schoolrent.Task.RefuseTask;
 import com.example.amia.schoolrent.Task.RentNeedsTask;
 import com.example.amia.schoolrent.Task.TaskImpl.IdleTaskImpl;
+import com.example.amia.schoolrent.Task.TaskImpl.MessageTaskImpl;
 import com.example.amia.schoolrent.Task.TaskImpl.RefuseTaskImpl;
 import com.example.amia.schoolrent.Task.TaskImpl.RentNeedsTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
@@ -50,6 +54,7 @@ public class MainFragement extends Fragment {
     private Fragment mineFragment;
     private Fragment indexFragment;
     private Fragment articleListFragment;
+    private Fragment messageFragment;
 
     private RelativeLayout pushLayout;
     private RelativeLayout idleBtn;
@@ -60,6 +65,7 @@ public class MainFragement extends Fragment {
     private Fragment selected;
 
     private RentNeedsTask rentNeedsTask;
+    private MessageTask messageTask;
 
     public static MainFragement newInstance(){
         MainFragement mainFragement=new MainFragement();
@@ -183,6 +189,19 @@ public class MainFragement extends Fragment {
         ((ArticleListFragment) articleListFragment).setPresenter(presenter);
     }
 
+    protected void loadMessage(){
+        if(messageFragment == null){
+            messageFragment = MessageFragment.newInstance();
+            messageTask = new MessageTaskImpl();
+        }
+        selected = messageFragment;
+
+        MyMessageContract.Presenter presenter = new MyMessageContractImpl((BaseView) messageFragment,messageTask);
+        ((MessageFragment) messageFragment).setPresenter(presenter);
+
+        ActivityUtil.replaceFragment(getActivity().getSupportFragmentManager(),messageFragment,R.id.main_frame_layout);
+    }
+
     /**
      * 加载新增闲置页面
      */
@@ -245,6 +264,9 @@ public class MainFragement extends Fragment {
                     break;
                 case R.id.idle_btn:
                     loadPushActivity();
+                    break;
+                case R.id.message:
+                    loadMessage();
                     break;
                 case R.id.article_btn:
                     loadPushArticleActivity();
