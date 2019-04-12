@@ -44,10 +44,6 @@ public class IdleInfoActivity extends AppCompatActivity implements IdleInfoInter
         }
 
         //设置Presenter
-        /*SchoolTask schoolTask = new SchoolTaskImpl();
-        StudentTask studentTask = new StudentTaskImpl();
-        LoginContract.Presenter presenter = new LoginContractImpl(fragment,schoolTask,studentTask);
-        fragment.setPresenter(presenter);*/
         RefuseTask refuseTask = new RefuseTaskImpl();
         IdleTask idleTask = new IdleTaskImpl();
         IdleInfoContract.Presenter presenter = new IdleInfoContractImpl(fragment,refuseTask,idleTask);

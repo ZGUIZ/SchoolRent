@@ -14,13 +14,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Task.IdleTask;
 
 import java.util.List;
 import java.util.Map;
 
 public class IndexClassifyAdapter extends RecyclerView.Adapter<IndexClassifyAdapter.Holder> {
     private List<Classify> list;
-    //private Map<String,Bitmap> iconMap;
     private Context context;
     private OnClickListener onClickListener;
 
@@ -49,11 +49,27 @@ public class IndexClassifyAdapter extends RecyclerView.Adapter<IndexClassifyAdap
         holder.btnLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(onClickListener!=null){
+                if(onClickListener==null){
+                    return;
+                }
+                if(IdleTask.allId.equals(classify.getClassifyId())){
+                    onClickListener.toClassifyAcitivy();
+                } else {
                     onClickListener.onCLick(classify.getClassifyId());
                 }
             }
         });
+    }
+
+    public void setList(List<Classify> list){
+        this.list.clear();
+        this.list.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void addData(List<Classify> list){
+        this.list.addAll(list);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -79,5 +95,6 @@ public class IndexClassifyAdapter extends RecyclerView.Adapter<IndexClassifyAdap
 
     public interface OnClickListener{
         void onCLick(String id);
+        void toClassifyAcitivy();
     }
 }

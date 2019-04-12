@@ -13,10 +13,10 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
+import com.example.amia.schoolrent.Activity.AllClassifyActivity;
 import com.example.amia.schoolrent.Activity.BaseAcitivity;
 import com.example.amia.schoolrent.Activity.IdleInfoActivity;
 import com.example.amia.schoolrent.Activity.SearchActivity;
@@ -88,6 +88,11 @@ public class IndexFragment extends Fragment implements MainContract.View{
             @Override
             public void onCLick(String id) {
                 startSearchActivity(id);
+            }
+
+            @Override
+            public void toClassifyAcitivy() {
+                startClassifyActivity();
             }
         });
         classifyView.setAdapter(adapter);
@@ -175,6 +180,13 @@ public class IndexFragment extends Fragment implements MainContract.View{
             intent.putExtra("classifyId", id);
         }
         intent.putExtra("student",acitivity.getStudent());
+        startActivity(intent);
+    }
+
+    public void startClassifyActivity(){
+        BaseAcitivity activity = (BaseAcitivity) getActivity();
+        Intent intent = new Intent(activity, AllClassifyActivity.class);
+        intent.putExtra("student",activity.getStudent());
         startActivity(intent);
     }
 
