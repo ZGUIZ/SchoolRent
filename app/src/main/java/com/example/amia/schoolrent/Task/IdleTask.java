@@ -16,6 +16,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface IdleTask extends BaseTask{
+    //所有类别的ID
+    String allId = "0000000";
+
     int ERRORWITHMESSAGE=-2;
     int ERROR = -1;
     int INDEX_CLASSIFY = 1;

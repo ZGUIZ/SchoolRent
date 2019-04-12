@@ -123,7 +123,7 @@ public class MessageTaskImpl implements MessageTask {
     }
 
     private List<Message> readMessage(){
-        List<Message> messageList = LitePal.where("status != 100").order("createDate").find(Message.class);
+        List<Message> messageList = LitePal.where("status != 100").order("createDate desc").find(Message.class);
         return messageList;
     }
 }

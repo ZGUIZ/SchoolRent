@@ -46,7 +46,7 @@ public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.Holder> {
         holder.ratingBar.setRating((float) eval.getLevel());
         Glide.with(context).load(student.getUserIcon()).into(holder.userIcon);
         holder.userName.setText(student.getUserName());
-        holder.createDate.setText(DateUtil.formatDate(eval.getEvalDate(),"yyyy-MM-dd hh:mm:ss"));
+        holder.createDate.setText(DateUtil.formatDate(eval.getEvalDate(),"yyyy-MM-dd HH:mm:ss"));
         holder.eval.setText(eval.getContent());
     }
 

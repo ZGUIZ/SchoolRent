@@ -8,6 +8,7 @@ public class IdleInfoExtend extends IdleInfo{
     private String search;
     private Date createDate;
     private String userId;
+    private String classifyId;
 
     public IdleInfoExtend() {
         super();
@@ -61,5 +62,15 @@ public class IdleInfoExtend extends IdleInfo{
     @Override
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    @Override
+    public String getClassifyId() {
+        return classifyId;
+    }
+
+    @Override
+    public void setClassifyId(String classifyId) {
+        this.classifyId = classifyId;
     }
 }

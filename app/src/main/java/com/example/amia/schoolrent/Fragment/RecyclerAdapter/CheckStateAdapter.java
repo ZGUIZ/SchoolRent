@@ -28,7 +28,7 @@ public class CheckStateAdapter extends RecyclerView.Adapter<CheckStateAdapter.Ho
     public CheckStateAdapter(Context context) {
         this.datas = new ArrayList<>();
         this.context = context;
-        sdf = new SimpleDateFormat("MM-dd hh:mm:ss");
+        sdf = new SimpleDateFormat("MM-dd HH:mm:ss");
     }
 
     @NonNull

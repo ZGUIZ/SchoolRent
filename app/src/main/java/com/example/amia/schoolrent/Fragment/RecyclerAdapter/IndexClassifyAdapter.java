@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +22,7 @@ public class IndexClassifyAdapter extends RecyclerView.Adapter<IndexClassifyAdap
     private List<Classify> list;
     //private Map<String,Bitmap> iconMap;
     private Context context;
+    private OnClickListener onClickListener;
 
     public IndexClassifyAdapter(List<Classify> list, Context context) {
         this.list = list;
@@ -36,13 +38,22 @@ public class IndexClassifyAdapter extends RecyclerView.Adapter<IndexClassifyAdap
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-        Classify classify = list.get(position);
+        final Classify classify = list.get(position);
         holder.textView.setText(classify.getClassifyName());
         if(classify.getImageUrl() == null || "".equals(classify.getImageUrl().trim())){
             holder.imageView.setImageResource(R.drawable.default_icon);
         } else {
             Glide.with(context).load(classify.getImageUrl()).into(holder.imageView);
         }
+
+        holder.btnLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(onClickListener!=null){
+                    onClickListener.onCLick(classify.getClassifyId());
+                }
+            }
+        });
     }
 
     @Override
@@ -50,17 +61,23 @@ public class IndexClassifyAdapter extends RecyclerView.Adapter<IndexClassifyAdap
         return list.size();
     }
 
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
+
     class Holder extends RecyclerView.ViewHolder{
         ImageView imageView;
         TextView textView;
+        RelativeLayout btnLayout;
         public Holder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image_view);
             textView = itemView.findViewById(R.id.text_view);
+            btnLayout = itemView.findViewById(R.id.btn_rl);
         }
     }
 
-   /* public void setIconMap(Map<String, Bitmap> iconMap) {
-        //this.iconMap = iconMap;
-    }*/
+    public interface OnClickListener{
+        void onCLick(String id);
+    }
 }

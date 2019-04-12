@@ -32,7 +32,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.Holder> 
     public ArticleAdapter(Context context) {
         this.rentNeeds = new ArrayList<>();
         this.context = context;
-        sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 
     @NonNull

@@ -54,7 +54,7 @@ public class MyMessageAdapter extends RecyclerView.Adapter<MyMessageAdapter.RecV
         final Message message = data.get(position);
         holder.title.setText(message.getTitle());
         holder.desc.setText(message.getContent());
-        holder.createDate.setText(DateUtil.formatDate(message.getCreateDate(),"MM-dd hh:mm"));
+        holder.createDate.setText(DateUtil.formatDate(message.getCreateDate(),"MM-dd HH:mm"));
 
         holder.slideItem.setOnClickListener(new View.OnClickListener() {
             @Override

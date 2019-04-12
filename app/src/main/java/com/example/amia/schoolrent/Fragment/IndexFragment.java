@@ -13,11 +13,13 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
 import com.example.amia.schoolrent.Activity.BaseAcitivity;
 import com.example.amia.schoolrent.Activity.IdleInfoActivity;
+import com.example.amia.schoolrent.Activity.SearchActivity;
 import com.example.amia.schoolrent.Bean.Classify;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
@@ -74,11 +76,20 @@ public class IndexFragment extends Fragment implements MainContract.View{
     protected void init(){
         idleInfo = new IdleInfoExtend();
 
+        //设置搜索按钮的点击事件
+        view.findViewById(R.id.search_rl).setOnClickListener(onClickListener);
+
         classifyList = presenter.getCacheClassify();
 
         classifyView = view.findViewById(R.id.index_classify_rv);
         classifyView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
         adapter = new IndexClassifyAdapter(classifyList,getActivity());
+        adapter.setOnClickListener(new IndexClassifyAdapter.OnClickListener() {
+            @Override
+            public void onCLick(String id) {
+                startSearchActivity(id);
+            }
+        });
         classifyView.setAdapter(adapter);
 
         refreshLayout = view.findViewById(R.id.index_refresh_layout);
@@ -149,6 +160,20 @@ public class IndexFragment extends Fragment implements MainContract.View{
         BaseAcitivity acitivity = (BaseAcitivity) getActivity();
         Intent intent = new Intent(acitivity, IdleInfoActivity.class);
         intent.putExtra("idleInfo",idleInfo);
+        intent.putExtra("student",acitivity.getStudent());
+        startActivity(intent);
+    }
+
+    public void startSearchActivity(){
+        startSearchActivity(null);
+    }
+
+    public void startSearchActivity(String id){
+        BaseAcitivity acitivity = (BaseAcitivity) getActivity();
+        Intent intent = new Intent(acitivity, SearchActivity.class);
+        if(id!=null && !"".equals(id)) {
+            intent.putExtra("classifyId", id);
+        }
         intent.putExtra("student",acitivity.getStudent());
         startActivity(intent);
     }
@@ -233,6 +258,17 @@ public class IndexFragment extends Fragment implements MainContract.View{
                     break;
                 case LOAD_MORE_ERROR:
                     linkError();
+                    break;
+            }
+        }
+    };
+
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.search_rl:
+                    startSearchActivity();
                     break;
             }
         }

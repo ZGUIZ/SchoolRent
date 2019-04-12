@@ -190,7 +190,7 @@ public class JSONUtil {
         }
         try{
             if(cls.equals(Date.class)){
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String d;
                 try {
                     d = sdf.format(jsonObject.getDouble(propertyName));
