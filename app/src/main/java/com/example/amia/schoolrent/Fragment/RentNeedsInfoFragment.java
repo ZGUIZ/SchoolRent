@@ -7,12 +7,16 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -20,16 +24,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.amia.schoolrent.Activity.ActivityInterface.IdleInfoInterface;
 import com.example.amia.schoolrent.Activity.ActivityInterface.RentNeedsInterface;
 import com.example.amia.schoolrent.Bean.RentNeeds;
 import com.example.amia.schoolrent.Bean.ResponseInfo;
 import com.example.amia.schoolrent.Bean.SecondResponseInfo;
 import com.example.amia.schoolrent.Bean.Student;
+import com.example.amia.schoolrent.Fragment.RecyclerAdapter.IconClickListener;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.OnItemClickListener;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.RefuseAdapter;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.SecondRefuseListener;
+import com.example.amia.schoolrent.ListenerAdapter.AnimationListenerAdapter;
+import com.example.amia.schoolrent.Presenter.PersenterImpl.UserEvalContractImpl;
+import com.example.amia.schoolrent.Presenter.PersenterImpl.UserIdleContractImpl;
 import com.example.amia.schoolrent.Presenter.RentNeedsContract;
+import com.example.amia.schoolrent.Presenter.UserEvalContract;
+import com.example.amia.schoolrent.Presenter.UserIdleContract;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Task.IdleTask;
+import com.example.amia.schoolrent.Task.TaskImpl.IdleTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.Util.DateUtil;
 import com.example.amia.schoolrent.Util.KeyboardUtil;
@@ -37,10 +50,12 @@ import com.example.amia.schoolrent.View.RoundImageView;
 import com.rey.material.app.BottomSheetDialog;
 import com.tencent.cos.xml.utils.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.amia.schoolrent.Task.RefuseTask.LOAD_REFUSE_SUCCESS;
 import static com.example.amia.schoolrent.Task.RefuseTask.PUSH_REFUSE_SUCCESS;
+import static com.example.amia.schoolrent.Task.StudentTask.BASE_INFO_SUCCESS;
 
 public class RentNeedsInfoFragment extends Fragment implements RentNeedsContract.View {
     private View view;
@@ -57,6 +72,18 @@ public class RentNeedsInfoFragment extends Fragment implements RentNeedsContract
     private RentNeeds rentNeeds;
     private Student student;
 
+    private RelativeLayout userInfoLayout;
+    private TextView sex;
+
+    protected List<Fragment> fragmentList;
+    protected List<String> titleList;
+
+    private UserIdleFragment userIdleFragment;
+    private IdleTask task;
+    private UserIdleContract.Presenter idlePresenter;
+    private UserEvalFragment userEvalFragment;
+    private UserEvalContract.Presenter evalPresenter;
+
     public static RentNeedsInfoFragment newInstance(){
         RentNeedsInfoFragment rentNeedsInfoFragment = new RentNeedsInfoFragment();
         return rentNeedsInfoFragment;
@@ -71,6 +98,12 @@ public class RentNeedsInfoFragment extends Fragment implements RentNeedsContract
     }
 
     private void init(){
+        fragmentList = new ArrayList<>();
+        titleList = new ArrayList<>();
+        titleList.add(ActivityUtil.getString(getContext(),R.string.user_push));
+        titleList.add(ActivityUtil.getString(getContext(),R.string.eval));
+
+        userInfoLayout = view.findViewById(R.id.resp_user_layout);
 
         RentNeedsInterface rentNeedsInterface = (RentNeedsInterface) getActivity();
         rentNeeds = rentNeedsInterface.getRentNeeds();
@@ -79,6 +112,7 @@ public class RentNeedsInfoFragment extends Fragment implements RentNeedsContract
         Student needStudent = rentNeeds.getStudent();
         RoundImageView imageView = view.findViewById(R.id.user_icon_riv);
         Glide.with(getActivity()).load(needStudent.getUserIcon()).into(imageView);
+        imageView.setOnClickListener(onClickListener);
         TextView userName = view.findViewById(R.id.user_name_tv);
         userName.setText(needStudent.getUserName());
         TextView info = view.findViewById(R.id.idle_info_detail);
@@ -95,6 +129,8 @@ public class RentNeedsInfoFragment extends Fragment implements RentNeedsContract
         credit.setText(ActivityUtil.getString(getActivity(),R.string.credit)+needStudent.getCredit());
 
         loadResponseInfo();
+
+        view.findViewById(R.id.resp_user_layout).setOnClickListener(onClickListener);
     }
 
     /**
@@ -167,6 +203,101 @@ public class RentNeedsInfoFragment extends Fragment implements RentNeedsContract
         }
     }
 
+    protected void loadBaseInfoSuccess(Object o){
+        try{
+            Student student = (Student) o;
+            loadUserInfo(student);
+        }catch (Exception e){
+            e.printStackTrace();
+            linkError();
+        }
+    }
+
+    /**
+     * 加载用户信息
+     * @param student
+     */
+    protected void loadUserInfo(Student student){
+        userInfoLayout.setVisibility(View.VISIBLE);
+
+        Animation inAnimation= AnimationUtils.loadAnimation(getActivity(),R.anim.push_bottom_in_short);
+        Animation alphaAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.alpha_anim);
+        userInfoLayout.startAnimation(alphaAnimation);
+        View v = view.findViewById(R.id.info_layout);
+        v.startAnimation(inAnimation);
+
+        ImageView userIcon = userInfoLayout.findViewById(R.id.user_icon);
+        TextView userName = userInfoLayout.findViewById(R.id.user_name);
+        TextView credit = userInfoLayout.findViewById(R.id.score);
+
+        sex = userInfoLayout.findViewById(R.id.sex_tv);
+        sex.setText(student.getSex());
+
+        Glide.with(getContext()).load(student.getUserIcon()).into(userIcon);
+        userName.setText(student.getUserName());
+
+        setMessageUnRead();
+
+        credit.setText(String.valueOf(student.getCredit()));
+
+        //找到对应的Tab
+        ViewPager viewPager = userInfoLayout.findViewById(R.id.view_pager1);
+        TabLayout tabLayout = userInfoLayout.findViewById(R.id.tab_layout1);
+
+        //加载信息
+        loadInfoTab(student);
+        loadEvalTab(student);
+
+        //将Fragment与Tab关联
+        viewPager.setAdapter(new MyRentFragmentAdapter(getActivity().getSupportFragmentManager(),getActivity(),fragmentList,titleList));
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    /**
+     * 隐藏部分字段
+     */
+    protected void setMessageUnRead(){
+        view.findViewById(R.id.real_name).setVisibility(View.GONE);
+        view.findViewById(R.id.real_name_validate).setVisibility(View.GONE);
+        view.findViewById(R.id.student_id_label).setVisibility(View.GONE);
+        view.findViewById(R.id.student_id).setVisibility(View.GONE);
+        view.findViewById(R.id.student_id_validate).setVisibility(View.GONE);
+        view.findViewById(R.id.phone).setVisibility(View.GONE);
+        view.findViewById(R.id.telephone).setVisibility(View.GONE);
+        view.findViewById(R.id.mail).setVisibility(View.GONE);
+        view.findViewById(R.id.email).setVisibility(View.GONE);
+    }
+
+    protected void loadInfoTab(Student student){
+        if(userIdleFragment == null){
+            userIdleFragment = UserIdleFragment.newInstance();
+            fragmentList.add(userIdleFragment);
+        }
+        if(task == null){
+            task = new IdleTaskImpl();
+        }
+        if(idlePresenter == null) {
+            idlePresenter = new UserIdleContractImpl(userIdleFragment, task);
+            userIdleFragment.setPresenter(idlePresenter);
+        }
+        userIdleFragment.setStudent(student);
+    }
+
+    protected void loadEvalTab(Student student){
+        if(userEvalFragment == null){
+            userEvalFragment = UserEvalFragment.newInstance();
+            fragmentList.add(userEvalFragment);
+        }
+        if(task == null){
+            task = new IdleTaskImpl();
+        }
+        if(evalPresenter == null){
+            evalPresenter = new UserEvalContractImpl(userEvalFragment,task);
+            userEvalFragment.setPresenter(evalPresenter);
+        }
+        userEvalFragment.setStudent(student);
+    }
+
     /**
      * 加载回复信息
      * @param o
@@ -198,6 +329,13 @@ public class RentNeedsInfoFragment extends Fragment implements RentNeedsContract
             final RefuseAdapter adapter =new RefuseAdapter(getActivity(),responseInfos);
             refuseRecyclerView.setHasFixedSize(true);
             refuseRecyclerView.setFocusable(false);
+
+            adapter.setIconClickListener(new IconClickListener() {
+                @Override
+                public void onClick(Student student) {
+                    presenter.getStudentInfo(student,handler);
+                }
+            });
 
             adapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
@@ -278,6 +416,28 @@ public class RentNeedsInfoFragment extends Fragment implements RentNeedsContract
         keyboardUtil.hideKeyBoard(getActivity(),editText);
     }
 
+    private void loadArticleUser(){
+        Student student = new Student();
+        student.setUserId(rentNeeds.getUserId());
+        presenter.getStudentInfo(student,handler);
+    }
+
+    private void hideInfoLayout(){
+        Animation outAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.push_buttom_out);
+        Animation alphaAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.alpha_out_anim);
+        outAnimation.setFillAfter(true);
+        outAnimation.setAnimationListener(new AnimationListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                super.onAnimationStart(animation);
+                userInfoLayout.setVisibility(View.GONE);
+            }
+        });
+        View v = view.findViewById(R.id.info_layout);
+        v.startAnimation(outAnimation);
+        userInfoLayout.startAnimation(alphaAnimation);
+    }
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -288,6 +448,9 @@ public class RentNeedsInfoFragment extends Fragment implements RentNeedsContract
                     break;
                 case LOAD_REFUSE_SUCCESS:
                     loadRefuse(msg.obj);
+                    break;
+                case BASE_INFO_SUCCESS:
+                    loadBaseInfoSuccess(msg.obj);
                     break;
                 default:
                     errorWithMessage(msg.obj);
@@ -308,6 +471,12 @@ public class RentNeedsInfoFragment extends Fragment implements RentNeedsContract
                     break;
                 case R.id.refuse_rl:
                     pushRefuseDialog();
+                    break;
+                case R.id.resp_user_layout:
+                    hideInfoLayout();
+                    break;
+                case R.id.user_icon_riv:
+                    loadArticleUser();
                     break;
             }
         }

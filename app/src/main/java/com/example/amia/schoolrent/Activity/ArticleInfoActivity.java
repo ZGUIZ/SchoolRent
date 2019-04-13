@@ -20,8 +20,10 @@ import com.example.amia.schoolrent.Presenter.RentNeedsContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.IdleTask;
 import com.example.amia.schoolrent.Task.RefuseTask;
+import com.example.amia.schoolrent.Task.StudentTask;
 import com.example.amia.schoolrent.Task.TaskImpl.IdleTaskImpl;
 import com.example.amia.schoolrent.Task.TaskImpl.RefuseTaskImpl;
+import com.example.amia.schoolrent.Task.TaskImpl.StudentTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 
 public class ArticleInfoActivity extends AppCompatActivity implements RentNeedsInterface {
@@ -50,7 +52,8 @@ public class ArticleInfoActivity extends AppCompatActivity implements RentNeedsI
 
         //设置Presenter
         RefuseTask refuseTask = new RefuseTaskImpl();
-        RentNeedsContract.Presenter presenter = new RentNeedsContractImpl(fragment,refuseTask);
+        StudentTask studentTask = new StudentTaskImpl();
+        RentNeedsContract.Presenter presenter = new RentNeedsContractImpl(fragment,refuseTask,studentTask);
         fragment.setPresenter(presenter);
 
         setToolBar();

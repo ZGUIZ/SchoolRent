@@ -129,6 +129,15 @@
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
     <RelativeLayout
+        android:id="@+id/resp_user_layout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000">
+        <include layout="@layout/user_info_layout"
+            android:id="@+id/info_layout"/>
+    </RelativeLayout>
+    <RelativeLayout
         android:id="@+id/progress_view"
         android:background="#66000000"
         android:visibility="gone"
