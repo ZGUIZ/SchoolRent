@@ -78,6 +78,16 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
                     responseRentInterface.updateIdle(idleInfo);
                 }
             });
+        } else if(idleInfo.getStatus() == 5){
+            //如果提交损毁信息，则设置为详细按钮
+            holder.edit.setBackgroundColor(Color.rgb(255,157,0));
+            holder.edit.setText(R.string.detail);
+            holder.edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    responseRentInterface.startRent(idleInfo);
+                }
+            });
         } else {
             holder.edit.setBackgroundColor(Color.rgb(200,199,205));
         }
@@ -99,6 +109,9 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
             case 4:
                 status = ActivityUtil.getString(context,R.string.close_by_self);
                 break;
+            case 5:
+                status = ActivityUtil.getString(context,R.string.submit_destroy);
+                break;
             case 8:
                 status = ActivityUtil.getString(context,R.string.request_return);
                 break;
@@ -117,13 +130,17 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
                 holder.close.setText(R.string.close_btn);
                 break;
             case 1:
-                holder.close.setBackgroundColor(Color.rgb(255,157,0));
+                holder.close.setBackgroundColor(Color.rgb(255,60,49));
                 holder.close.setText(R.string.cancle_rent);
                 break;
             case 2:
             case 8:
-                holder.close.setBackgroundColor(Color.rgb(255,157,0));
+                holder.close.setBackgroundColor(Color.rgb(255,60,49));
                 holder.close.setText(R.string.finish);
+                break;
+            case 5:
+                holder.close.setBackgroundColor(Color.rgb(255,60,49));
+                holder.close.setText(R.string.refuse_rent);
                 break;
             default:
                 holder.close.setBackgroundColor(Color.rgb(254,60,49));
@@ -148,6 +165,7 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
                         break;
                     case 1:
                     case 2:
+                    case 5:
                     case 8:
                         //取消或完成
                         responseRentInterface.cancleOrFinish(idleInfo);
@@ -223,5 +241,6 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
         void cancleOrFinish(IdleInfo idleInfo);
         void delIdle(IdleInfo idleInfo);
         void updateIdle(IdleInfo idleInfo);
+        void startRent(IdleInfo idleInfo);
     }
 }

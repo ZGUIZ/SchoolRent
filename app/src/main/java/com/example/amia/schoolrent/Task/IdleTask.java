@@ -64,6 +64,7 @@ public interface IdleTask extends BaseTask{
     int USER_PUSH = 534;
     int ADD_EVAL = 535;
     int GET_EVAL = 536;
+    int ADD_DESTORY = 537;
 
     /**
      * 获取首页分类
@@ -156,6 +157,7 @@ public interface IdleTask extends BaseTask{
     void findIdleById(Context context,String id,Handler handler);
 
     void startRent(Context context,Rent rent,Handler handler);
+    void startRent(Context context,IdleInfo idleInfo,Handler handler);
 
     void delRent(Context context,Rent rent,Handler handler);
 
@@ -166,4 +168,6 @@ public interface IdleTask extends BaseTask{
     void addEval(Context context, Eval eval,Handler handler) throws UnsupportedEncodingException;
 
     void getEval(Context context, EvalExtend extend,Handler handler);
+
+    void addDestory(Context context,IdleInfo idleInfo,Handler handler);
 }

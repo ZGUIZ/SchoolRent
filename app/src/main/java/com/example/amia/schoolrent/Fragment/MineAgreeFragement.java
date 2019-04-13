@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,10 +26,12 @@ import com.example.amia.schoolrent.Fragment.RecyclerAdapter.MyRequestAdapter;
 import com.example.amia.schoolrent.Presenter.MineRentContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
+import com.example.amia.schoolrent.View.DestoryDialog;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.List;
 
+import static com.example.amia.schoolrent.Task.IdleTask.ADD_DESTORY;
 import static com.example.amia.schoolrent.Task.IdleTask.CANCEL_RENT;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.FIND_BY_ID;
@@ -47,6 +50,9 @@ public class MineAgreeFragement extends Fragment implements MineRentContract.Vie
     private MyAgreeAdapter adapter;
 
     private RentExtend rentExtend;
+
+    //损毁填写的对话框
+    private DestoryDialog dialog;
 
     private boolean isRefresh = false;
 
@@ -88,6 +94,11 @@ public class MineAgreeFragement extends Fragment implements MineRentContract.Vie
             public void startRent(Rent rent) {
                 progressView.setVisibility(View.VISIBLE);
                 presenter.startRent(rent,handler);
+            }
+
+            @Override
+            public void addDestory(IdleInfo idleInfo) {
+                addDestoryMessage(idleInfo);
             }
         });
         recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -149,6 +160,29 @@ public class MineAgreeFragement extends Fragment implements MineRentContract.Vie
         }
     }
 
+    /**
+     * 填写损毁信息
+     * @param idleInfo
+     */
+    protected void addDestoryMessage(final IdleInfo idleInfo){
+        dialog = null;
+        final DestoryDialog.Builder builder = new DestoryDialog.Builder(getContext());
+        builder.setPositiveButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String str = builder.getFill();
+                idleInfo.setDestoryInfo(str);
+                addDestory(idleInfo);
+            }
+        });
+        dialog = builder.createDialog();
+        dialog.show();
+    }
+
+    protected void addDestory(IdleInfo idleInfo){
+        presenter.addDestroy(idleInfo,handler);
+    }
+
     private void loadMore(){
         presenter.getMyRent(rentExtend,handler,LOAD_MINE_REQUEST);
     }
@@ -191,6 +225,12 @@ public class MineAgreeFragement extends Fragment implements MineRentContract.Vie
         recyclerView.setIsRefresh(true);
     }
 
+    private void addDestorySuccess(){
+        refresh();
+        Toast.makeText(getContext(),R.string.behavior_success,Toast.LENGTH_SHORT).show();
+        dialog.cancel();
+    }
+
     @Override
     public void linkError() {
         Toast.makeText(getContext(),R.string.link_error,Toast.LENGTH_SHORT).show();
@@ -220,6 +260,9 @@ public class MineAgreeFragement extends Fragment implements MineRentContract.Vie
                 case CANCEL_RENT:
                 case START_RENT:
                     changeSuccess();
+                    break;
+                case ADD_DESTORY:
+                    addDestorySuccess();
                     break;
                 case ERROR:
                 default:

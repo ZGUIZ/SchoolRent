@@ -4,6 +4,7 @@ import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
+import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.MyPushContract;
 import com.example.amia.schoolrent.Task.IdleTask;
@@ -35,5 +36,10 @@ public class MyPushContractImpl implements MyPushContract.Presenter {
     @Override
     public void delIdle(IdleInfo idleInfo, Handler handler) {
         task.delIdleInfo(view.getContext(),idleInfo,handler);
+    }
+
+    @Override
+    public void startRent(IdleInfo idleInfo, Handler handler) {
+        task.startRent(view.getContext(),idleInfo,handler);
     }
 }

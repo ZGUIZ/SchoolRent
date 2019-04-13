@@ -147,6 +147,11 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
         float retal = Float.valueOf(((EditText)view.findViewById(R.id.retal_et)).getText().toString());
         idleInfo.setRetal(retal);
 
+        if(retal>baseCash){
+            pushError(ActivityUtil.getString(getActivity(),R.string.money_error));
+            return;
+        }
+
         List<IdelPic> pics = adapter.getPicList();
         if (pics.size()<=0){
             pushError(ActivityUtil.getString(getActivity(),R.string.pic_null));

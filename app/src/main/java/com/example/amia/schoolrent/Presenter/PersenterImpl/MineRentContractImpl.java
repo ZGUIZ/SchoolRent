@@ -58,4 +58,9 @@ public class MineRentContractImpl implements MineRentContract.Presenter {
     public void eval(Eval eval, Handler handler) throws UnsupportedEncodingException {
         task.addEval(view.getContext(),eval,handler);
     }
+
+    @Override
+    public void addDestroy(IdleInfo idleInfo, Handler handler) {
+        task.addDestory(view.getContext(),idleInfo,handler);
+    }
 }

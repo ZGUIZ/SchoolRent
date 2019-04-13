@@ -81,6 +81,15 @@ public class MyAgreeAdapter extends RecyclerView.Adapter<MyAgreeAdapter.RecViewh
             case 4:
                 status = ActivityUtil.getString(context,R.string.close_by_self);
                 break;
+            case 5:
+                status = ActivityUtil.getString(context,R.string.submit_destroy);
+                break;
+            case 8:
+                status = ActivityUtil.getString(context,R.string.request_return);
+                break;
+            case 9:
+                status = ActivityUtil.getString(context,R.string.had_eval);
+                break;
             case 100:
                 status = ActivityUtil.getString(context,R.string.admin_close);
                 break;
@@ -102,6 +111,9 @@ public class MyAgreeAdapter extends RecyclerView.Adapter<MyAgreeAdapter.RecViewh
                     case R.id.start:
                         responseRentInterface.startRent(rent);
                         break;
+                    case R.id.add_info:
+                        responseRentInterface.addDestory(rent.getIdleInfo());
+                        break;
                 }
             }
         };
@@ -109,6 +121,14 @@ public class MyAgreeAdapter extends RecyclerView.Adapter<MyAgreeAdapter.RecViewh
         holder.cancelBtn.setOnClickListener(onClickListener);
         holder.item.setOnClickListener(onClickListener);
         holder.startBtn.setOnClickListener(onClickListener);
+        holder.destoryBtn.setOnClickListener(onClickListener);
+        if(rent.getStatus() == 9 || rent.getIdleInfo().getStatus() == 5){
+            holder.destoryBtn.setVisibility(View.GONE);
+            holder.startBtn.setVisibility(View.GONE);
+        } else {
+            holder.destoryBtn.setVisibility(View.VISIBLE);
+            holder.startBtn.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -130,6 +150,7 @@ public class MyAgreeAdapter extends RecyclerView.Adapter<MyAgreeAdapter.RecViewh
 
         Button cancelBtn;
         Button startBtn;
+        Button destoryBtn;
 
         RelativeLayout item;
 
@@ -147,6 +168,7 @@ public class MyAgreeAdapter extends RecyclerView.Adapter<MyAgreeAdapter.RecViewh
             cancelBtn = itemView.findViewById(R.id.cancel_btn);
             item = itemView.findViewById(R.id.my_request_item_rl);
             startBtn = itemView.findViewById(R.id.start);
+            destoryBtn = itemView.findViewById(R.id.add_info);
         }
 
     }
@@ -154,5 +176,6 @@ public class MyAgreeAdapter extends RecyclerView.Adapter<MyAgreeAdapter.RecViewh
         void cancel(Rent rent);
         void toIdle(IdleInfo idleInfo);
         void startRent(Rent rent);
+        void addDestory(IdleInfo idleInfo);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,14 +21,18 @@ import com.example.amia.schoolrent.Activity.IdleInfoActivity;
 import com.example.amia.schoolrent.Activity.UpdateIdleActivity;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
+import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.MyPushAdapter;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.slideswaphelper.PlusItemSlideCallback;
 import com.example.amia.schoolrent.Fragment.RecyclerAdapter.slideswaphelper.WItemTouchHelperPlus;
 import com.example.amia.schoolrent.Presenter.MyPushContract;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Util.ActivityUtil;
+import com.example.amia.schoolrent.View.DestoryDialog;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
+import java.sql.BatchUpdateException;
 import java.util.List;
 
 import static com.example.amia.schoolrent.Task.IdleTask.CANCLE_SUCCESS;
@@ -36,6 +41,7 @@ import static com.example.amia.schoolrent.Task.IdleTask.DEL_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.MY_IDLE_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.MY_IDLE_SUCCESS;
+import static com.example.amia.schoolrent.Task.IdleTask.START_RENT;
 
 public class MyPushFragment extends Fragment implements MyPushContract.View {
     private View view;
@@ -48,6 +54,9 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
     private RelativeLayout progressView;
 
     private IdleInfoExtend idleInfo;
+
+    //损毁详情的Dialog
+    private DestoryDialog destoryDialog;
 
     public static MyPushFragment newInstance(){
         MyPushFragment myPushFragment=new MyPushFragment();
@@ -107,6 +116,11 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
             public void updateIdle(IdleInfo idleInfo) {
                 loadUpdateActivity(idleInfo);
             }
+
+            @Override
+            public void startRent(IdleInfo idleInfo) {
+                showStartRentDialog(idleInfo);
+            }
         });
 
         RecyclerView rv = recyclerView.getRecyclerView();
@@ -132,6 +146,28 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
         });
         recyclerView.refresh();
         recyclerView.setIsRefresh(true);
+    }
+
+    protected void showStartRentDialog(final IdleInfo idleInfo){
+        DestoryDialog.Builder builder = new DestoryDialog.Builder(getActivity());
+
+        builder.setPositiveButton(ActivityUtil.getString(getActivity(),R.string.agree),new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressView.setVisibility(View.VISIBLE);
+                presenter.startRent(idleInfo,handler);
+            }
+        });
+        builder.setNegativeButton(ActivityUtil.getString(getActivity(), R.string.refuse_rent), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressView.setVisibility(View.VISIBLE);
+                presenter.cancelRent(idleInfo,handler);
+            }
+        });
+        builder.setEditAble(false).setTitle(R.string.destroy_detail).setContent(idleInfo.getDestoryInfo());
+        destoryDialog = builder.createDialog();
+        destoryDialog.show();
     }
 
     protected void refresh(){
@@ -208,6 +244,9 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
     }
 
     protected void behaviorSuccess(){
+        if(destoryDialog!=null&&destoryDialog.isShowing()){
+            destoryDialog.hide();
+        }
         Toast.makeText(getActivity(),R.string.behavior_success,Toast.LENGTH_SHORT).show();
         refresh();
     }
@@ -224,6 +263,7 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
                 case CLOSE_IDLE_SUCCESS:
                     closeSuccess();
                     break;
+                case START_RENT:
                 case DEL_SUCCESS:
                 case CANCLE_SUCCESS:
                     behaviorSuccess();

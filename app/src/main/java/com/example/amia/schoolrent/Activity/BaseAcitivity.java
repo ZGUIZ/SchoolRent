@@ -37,7 +37,7 @@ public abstract class BaseAcitivity extends AppCompatActivity {
         NetUtils.disConnection();
     }
 
-    public Student getStudent(){
+    public static Student getStudent(){
         return student;
     }
 

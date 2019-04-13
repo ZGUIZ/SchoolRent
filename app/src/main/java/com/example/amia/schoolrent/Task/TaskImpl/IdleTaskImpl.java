@@ -816,6 +816,44 @@ public class IdleTaskImpl implements IdleTask {
     }
 
     @Override
+    public void startRent(Context context, IdleInfo idleInfo,final Handler handler) {
+        IdleInfo param = new IdleInfo();
+        param.setInfoId(idleInfo.getInfoId());
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.start_rent_pusher);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("idleInfo",param);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack()  {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result r = Result.getObjectWithList(json,null);
+                    if(r.getResult()){
+                        msg.what = START_RENT;
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = r.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                    msg.obj = e.getMessage();
+                }finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
     public void delRent(Context context, Rent rent, final Handler handler) {
         Rent r = new Rent();
         r.setRentId(rent.getRentId());
@@ -987,6 +1025,49 @@ public class IdleTaskImpl implements IdleTask {
                     if(result.getResult()) {
                         msg.what = GET_EVAL;
                         msg.obj = result.getData();
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void addDestory(Context context, IdleInfo idleInfo, final Handler handler) {
+        IdleInfo param = new IdleInfo();
+        param.setInfoId(idleInfo.getInfoId());
+        try {
+            param.setDestoryInfo(URLEncoder.encode(idleInfo.getDestoryInfo(),"utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.add_destroy);
+
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("idleInfo",param);
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()) {
+                        msg.what = ADD_DESTORY;
                     } else {
                         msg.what = ERROR;
                         msg.obj = result.getMsg();

@@ -3,8 +3,10 @@ package com.example.amia.schoolrent.Task.TaskImpl;
 import android.content.Context;
 import android.os.Handler;
 
+import com.example.amia.schoolrent.Activity.BaseAcitivity;
 import com.example.amia.schoolrent.Bean.Message;
 import com.example.amia.schoolrent.Bean.Result;
+import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.NetCallBack;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.MessageTask;
@@ -123,7 +125,9 @@ public class MessageTaskImpl implements MessageTask {
     }
 
     private List<Message> readMessage(){
-        List<Message> messageList = LitePal.where("status != 100").order("createDate desc").find(Message.class);
+        Student student = BaseAcitivity.getStudent();
+
+        List<Message> messageList = LitePal.where("status != 100","userId ="+student.getUserId()).order("createDate desc").find(Message.class);
         return messageList;
     }
 }

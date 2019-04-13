@@ -1,6 +1,5 @@
 package com.example.amia.schoolrent.Presenter;
 
-import android.content.Context;
 import android.os.Handler;
 
 import com.example.amia.schoolrent.Bean.IdleInfo;
@@ -12,6 +11,7 @@ public interface MyPushContract {
        void closeIdle(IdleInfo idleInfo,Handler handler);
        void cancelRent(IdleInfo idleInfo,Handler handler);
        void delIdle(IdleInfo idleInfo,Handler handler);
+       void startRent(IdleInfo rent, Handler handler);
     }
 
     interface View extends BaseView<Presenter>{
