@@ -7,6 +7,7 @@ import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.ResponseInfo;
 import com.example.amia.schoolrent.Bean.SecondResponseInfo;
+import com.example.amia.schoolrent.Bean.Student;
 
 public interface IdleInfoContract {
     interface Presenter{
@@ -18,6 +19,7 @@ public interface IdleInfoContract {
         void getRentList(IdleInfo idleInfo,Handler handler);
         void agreeRent(Rent rent,Handler handler);
         void disagreeRent(Rent rent,Handler handler);
+        void getUserInfo(Student student,Handler handler);
     }
 
     interface View extends BaseView<Presenter>{

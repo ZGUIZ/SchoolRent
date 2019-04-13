@@ -16,8 +16,10 @@ import com.example.amia.schoolrent.Presenter.PersenterImpl.IdleInfoContractImpl;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Task.IdleTask;
 import com.example.amia.schoolrent.Task.RefuseTask;
+import com.example.amia.schoolrent.Task.StudentTask;
 import com.example.amia.schoolrent.Task.TaskImpl.IdleTaskImpl;
 import com.example.amia.schoolrent.Task.TaskImpl.RefuseTaskImpl;
+import com.example.amia.schoolrent.Task.TaskImpl.StudentTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 
 public class IdleInfoActivity extends AppCompatActivity implements IdleInfoInterface {
@@ -46,7 +48,8 @@ public class IdleInfoActivity extends AppCompatActivity implements IdleInfoInter
         //设置Presenter
         RefuseTask refuseTask = new RefuseTaskImpl();
         IdleTask idleTask = new IdleTaskImpl();
-        IdleInfoContract.Presenter presenter = new IdleInfoContractImpl(fragment,refuseTask,idleTask);
+        StudentTask studentTask = new StudentTaskImpl();
+        IdleInfoContract.Presenter presenter = new IdleInfoContractImpl(fragment,refuseTask,idleTask,studentTask);
         fragment.setPresenter(presenter);
 
         setToolBar();

@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.amia.schoolrent.Activity.ActivityInterface.IdleInfoInterface;
+import com.example.amia.schoolrent.Bean.AuthPicture;
 import com.example.amia.schoolrent.Bean.IdelPic;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.Rent;
@@ -77,6 +78,8 @@ import static com.example.amia.schoolrent.Task.RefuseTask.LOAD_REFUSE_ERROR;
 import static com.example.amia.schoolrent.Task.RefuseTask.LOAD_REFUSE_SUCCESS;
 import static com.example.amia.schoolrent.Task.RefuseTask.PUSH_REFUSE_ERROR;
 import static com.example.amia.schoolrent.Task.RefuseTask.PUSH_REFUSE_SUCCESS;
+import static com.example.amia.schoolrent.Task.StudentTask.BASE_INFO_ERROR;
+import static com.example.amia.schoolrent.Task.StudentTask.BASE_INFO_SUCCESS;
 
 public class IdleInfoFragment extends Fragment implements IdleInfoContract.View {
 
@@ -108,6 +111,17 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
 
     protected List<Fragment> fragmentList;
     protected List<String> titleList;
+
+    //动态显示是否可见的组件
+    private TextView phone;
+    private TextView mail;
+    private TextView realName;
+    private TextView studentId;
+    private TextView studenIdLabel;
+    private TextView phoneLabel;
+    private TextView mailLabel;
+    private ImageView schoolIcon;
+    private ImageView idIcon;
 
     //商品和当前用户的关系
     //0.申请后待确认 -1.正在查询 1.确认 2.拒绝 3.同意后拒绝租赁 4.开始 5.完成 6取消 7无关（客户端回显需要） 8 当前用户发布
@@ -225,6 +239,12 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
             extension.attachToRecyclerView(rentList);
         }
 
+        studenIdLabel = view.findViewById(R.id.student_id_label);
+        phoneLabel = view.findViewById(R.id.phone);
+        mailLabel = view.findViewById(R.id.mail);
+
+        schoolIcon = view.findViewById(R.id.student_id_validate);
+        idIcon = view.findViewById(R.id.real_name_validate);
     }
 
     private void setRentBtn(Student student,IdleInfo idleInfo){
@@ -475,17 +495,18 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
 
         ImageView userIcon = userInfoLayout.findViewById(R.id.user_icon);
         TextView userName = userInfoLayout.findViewById(R.id.user_name);
-        TextView realName = userInfoLayout.findViewById(R.id.real_name);
+        realName = userInfoLayout.findViewById(R.id.real_name);
         TextView credit = userInfoLayout.findViewById(R.id.score);
 
-        TextView phone = userInfoLayout.findViewById(R.id.telephone);
-        TextView mail = userInfoLayout.findViewById(R.id.email);
+        phone = userInfoLayout.findViewById(R.id.telephone);
+        mail = userInfoLayout.findViewById(R.id.email);
         TextView sex = userInfoLayout.findViewById(R.id.sex_tv);
-        TextView studentId = userInfoLayout.findViewById(R.id.student_id);
+        studentId = userInfoLayout.findViewById(R.id.student_id);
         phone.setText(student.getTelephone());
         mail.setText(student.getEmail());
         sex.setText(student.getSex());
         studentId.setText(student.getStudentId());
+        realName.setText(student.getRealName());
 
         Glide.with(getContext()).load(student.getUserIcon()).into(userIcon);
         userName.setText(student.getUserName());
@@ -495,16 +516,9 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
 
         //判断是否有有看到真实姓名的权限
         if(s.getUserId().equals(idleInfo.getUserId())) {
-            realName.setVisibility(View.VISIBLE);
-            realName.setText(student.getRealName());
-            studentId.setVisibility(View.VISIBLE);
-            phone.setVisibility(View.VISIBLE);
-            mail.setVisibility(View.VISIBLE);
+            setMessageRead();
         } else {
-            realName.setVisibility(View.GONE);
-            studentId.setVisibility(View.GONE);
-            phone.setVisibility(View.GONE);
-            mail.setVisibility(View.GONE);
+            setMessageUnRead();
         }
 
         credit.setText(String.valueOf(student.getCredit()));
@@ -520,6 +534,83 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         //将Fragment与Tab关联
         viewPager.setAdapter(new MyRentFragmentAdapter(getActivity().getSupportFragmentManager(),getActivity(),fragmentList,titleList));
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    protected void setMessageUnRead(){
+        realName.setVisibility(View.GONE);
+        studentId.setVisibility(View.GONE);
+        phone.setVisibility(View.GONE);
+        mail.setVisibility(View.GONE);
+        studenIdLabel.setVisibility(View.GONE);
+        phoneLabel.setVisibility(View.GONE);
+        mailLabel.setVisibility(View.GONE);
+        schoolIcon.setVisibility(View.GONE);
+        idIcon.setVisibility(View.GONE);
+    }
+
+    protected void setMessageRead(){
+        realName.setVisibility(View.VISIBLE);
+        studentId.setVisibility(View.VISIBLE);
+        phone.setVisibility(View.VISIBLE);
+        mail.setVisibility(View.VISIBLE);
+        studenIdLabel.setVisibility(View.VISIBLE);
+        phoneLabel.setVisibility(View.VISIBLE);
+        mailLabel.setVisibility(View.VISIBLE);
+        schoolIcon.setVisibility(View.VISIBLE);
+        idIcon.setVisibility(View.VISIBLE);
+    }
+
+    protected void loadUserInfoSuccess(Object o){
+        try{
+            Student student = (Student) o;
+            setValidateMessage(student);
+        } catch (Exception e){
+            e.printStackTrace();
+            linkError();
+        }
+    }
+
+    private void setValidateMessage(Student student){
+        List<AuthPicture> authPictures = student.getAuthPictureList();
+
+        if(authPictures == null || authPictures.size() <= 0){
+            return;
+        }
+
+        //设置验证信息
+        for(AuthPicture authPicture:authPictures){
+            int type = authPicture.getType();
+            int status =authPicture.getStatus();
+            if( type == 1){
+                switch (status){
+                    case 0:
+                        break;
+                    case 1:
+                        schoolIcon.setImageResource(R.drawable.validate);
+                        break;
+                    case 2:
+                        schoolIcon.setImageResource(R.drawable.unvalidate);
+                        break;
+                    case 3:
+                        schoolIcon.setImageResource(R.drawable.unvalidate);
+                        break;
+                }
+            } else if(type == 2){
+                switch (status){
+                    case 0:
+                        break;
+                    case 1:
+                        idIcon.setImageResource(R.drawable.validate);
+                        break;
+                    case 2:
+                        idIcon.setImageResource(R.drawable.unvalidate);
+                        break;
+                    case 3:
+                        idIcon.setImageResource(R.drawable.validate);
+                        break;
+                }
+            }
+        }
     }
 
     protected void loadInfoTab(Student student){
@@ -670,6 +761,7 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                 @Override
                 public void onClick(Student student) {
                     loadUserInfo(student);
+                    presenter.getUserInfo(student,handler);
                 }
             });
 
@@ -758,6 +850,8 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         IdleInfo idleInfo = idleInfoInterface.getIdleInfo();
         Student student = idleInfo.getStudent();
         loadUserInfo(student);
+
+        presenter.getUserInfo(student,handler);
     }
 
     @Override
@@ -812,9 +906,14 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                 case RENT_AGREE_SUCCESS:
                     agreeSuccess();
                     break;
+                case BASE_INFO_SUCCESS:
+                    loadUserInfoSuccess(msg.obj);
+                    break;
                 case RENT_AGREE_ERROR:
                     break;
+                case BASE_INFO_ERROR:
                 case ERROR:
+                default:
                     linkError();
                     break;
             }

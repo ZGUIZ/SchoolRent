@@ -7,20 +7,24 @@ import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.ResponseInfo;
 import com.example.amia.schoolrent.Bean.SecondResponseInfo;
+import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.BaseView;
 import com.example.amia.schoolrent.Presenter.IdleInfoContract;
 import com.example.amia.schoolrent.Task.IdleTask;
 import com.example.amia.schoolrent.Task.RefuseTask;
+import com.example.amia.schoolrent.Task.StudentTask;
 
 public class IdleInfoContractImpl implements IdleInfoContract.Presenter {
     private BaseView view;
     private RefuseTask refuseTask;
     private IdleTask idleTask;
+    private StudentTask studentTask;
 
-    public IdleInfoContractImpl(BaseView view, RefuseTask refuseTask,IdleTask idleTask) {
+    public IdleInfoContractImpl(BaseView view, RefuseTask refuseTask, IdleTask idleTask, StudentTask studentTask) {
         this.view = view;
         this.refuseTask = refuseTask;
         this.idleTask = idleTask;
+        this.studentTask = studentTask;
     }
 
     @Override
@@ -61,5 +65,10 @@ public class IdleInfoContractImpl implements IdleInfoContract.Presenter {
     @Override
     public void disagreeRent(Rent rent, Handler handler) {
         idleTask.disagreeRent(view.getContext(),rent,handler);
+    }
+
+    @Override
+    public void getUserInfo(Student student, Handler handler) {
+        studentTask.getBaseInfo(view.getContext(),student,handler);
     }
 }

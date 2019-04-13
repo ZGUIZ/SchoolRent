@@ -53,6 +53,16 @@ android:layout_alignParentBottom="true">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
+                <ImageView
+                    android:id="@+id/real_name_validate"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_below="@id/user_name"
+                    android:layout_toRightOf="@id/real_name"
+                    android:src="@drawable/unvalidate"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
                 <TextView
                     android:id="@+id/student_id_label"
                     android:layout_marginTop="6dp"
@@ -71,6 +81,16 @@ android:layout_alignParentBottom="true">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
+                <ImageView
+                    android:id="@+id/student_id_validate"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_below="@id/real_name"
+                    android:layout_toRightOf="@id/student_id"
+                    android:src="@drawable/unvalidate"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
                 <TextView
                     android:id="@+id/sex"
                     android:layout_marginTop="6dp"
@@ -84,7 +104,7 @@ android:layout_alignParentBottom="true">
                     android:layout_marginTop="6dp"
                     android:text="性别"
                     android:layout_marginLeft="6dp"
-                    android:layout_toRightOf="@id/phone"
+                    android:layout_toRightOf="@id/sex"
                     android:layout_below="@id/student_id_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
