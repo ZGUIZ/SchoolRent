@@ -229,6 +229,12 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                 progressView.setVisibility(View.VISIBLE);
                 presenter.disagreeRent(rent,handler);
             }
+
+            @Override
+            public void showUserMsg(Student student) {
+                loadUserInfo(student);
+                presenter.getUserInfo(student,handler);
+            }
         });
 
         rentList.setLayoutManager(new LinearLayoutManager(getActivity()));

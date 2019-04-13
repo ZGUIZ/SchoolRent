@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:padding="3dp"
-    android:layout_marginBottom="1dp"
+    android:layout_height="53dp"
+    android:paddingLeft="3dp"
+    android:paddingRight="3dp"
+    android:background="@android:color/white"
     android:clipChildren="false">
+
+    <View
+        android:id="@+id/line"
+        android:background="#f3f4f8"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
 
     <RelativeLayout
         android:id="@+id/slide_itemView"
         android:clipChildren="false"
         android:tag="slide_flag"
+        android:layout_below="@id/line"
+        android:layout_marginTop="3dp"
+        android:background="?android:selectableItemBackgroundBorderless"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -105,5 +117,4 @@
         </LinearLayout>
 
     </RelativeLayout>
-
 </RelativeLayout>

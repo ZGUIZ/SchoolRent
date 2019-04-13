@@ -8,6 +8,7 @@
         android:id="@+id/my_push_rv"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_margin="6dp"
+        android:padding="1dp"
         android:background="@drawable/list_border"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

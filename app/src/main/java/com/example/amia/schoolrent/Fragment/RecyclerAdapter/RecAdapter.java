@@ -65,18 +65,27 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewholder> {
             holder.agreeIcon.setVisibility(View.GONE);
         }
 
-        holder.agree.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                responseRentInterface.agree(rent);
+                switch (view.getId()){
+                    case R.id.agree_tv:
+                        responseRentInterface.agree(rent);
+                        break;
+                    case R.id.refuse_tv:
+                        responseRentInterface.refuse(rent);
+                        break;
+                    case R.id.user_info_rl:
+                        responseRentInterface.showUserMsg(rent.getStudent());
+                        break;
+                }
             }
-        });
-        holder.refuse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                responseRentInterface.refuse(rent);
-            }
-        });
+        };
+
+        holder.agree.setOnClickListener(onClickListener);
+        holder.refuse.setOnClickListener(onClickListener);
+
+        holder.infoLayout.setOnClickListener(onClickListener);
     }
 
     @Override
@@ -98,6 +107,8 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewholder> {
         TextView agree;
         TextView refuse;
 
+        RelativeLayout infoLayout;
+
         public RelativeLayout slideItem;
 
         public RecViewholder(View itemView) {
@@ -109,6 +120,8 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewholder> {
             agree = itemView.findViewById(R.id.agree_tv);
             refuse = itemView.findViewById(R.id.refuse_tv);
             slideItem = itemView.findViewById(R.id.slide_itemView);
+
+            infoLayout = itemView.findViewById(R.id.user_info_rl);
         }
 
         @Override
@@ -133,5 +146,6 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewholder> {
     public interface ResponseRentInterface{
         void agree(Rent rent);
         void refuse(Rent rent);
+        void showUserMsg(Student student);
     }
 }
