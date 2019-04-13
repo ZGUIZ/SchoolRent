@@ -122,6 +122,7 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
     private TextView mailLabel;
     private ImageView schoolIcon;
     private ImageView idIcon;
+    private TextView sex;
 
     //商品和当前用户的关系
     //0.申请后待确认 -1.正在查询 1.确认 2.拒绝 3.同意后拒绝租赁 4.开始 5.完成 6取消 7无关（客户端回显需要） 8 当前用户发布
@@ -495,18 +496,17 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
 
         ImageView userIcon = userInfoLayout.findViewById(R.id.user_icon);
         TextView userName = userInfoLayout.findViewById(R.id.user_name);
-        realName = userInfoLayout.findViewById(R.id.real_name);
         TextView credit = userInfoLayout.findViewById(R.id.score);
 
+
+        sex = userInfoLayout.findViewById(R.id.sex_tv);
+        sex.setText(student.getSex());
+        realName = userInfoLayout.findViewById(R.id.real_name);
         phone = userInfoLayout.findViewById(R.id.telephone);
         mail = userInfoLayout.findViewById(R.id.email);
-        TextView sex = userInfoLayout.findViewById(R.id.sex_tv);
         studentId = userInfoLayout.findViewById(R.id.student_id);
-        phone.setText(student.getTelephone());
-        mail.setText(student.getEmail());
-        sex.setText(student.getSex());
-        studentId.setText(student.getStudentId());
-        realName.setText(student.getRealName());
+
+        loadHideInfo(student);
 
         Glide.with(getContext()).load(student.getUserIcon()).into(userIcon);
         userName.setText(student.getUserName());
@@ -563,11 +563,20 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
     protected void loadUserInfoSuccess(Object o){
         try{
             Student student = (Student) o;
+            loadHideInfo(student);
             setValidateMessage(student);
         } catch (Exception e){
             e.printStackTrace();
             linkError();
         }
+    }
+
+    protected void loadHideInfo(Student student){
+        phone.setText(student.getTelephone());
+        mail.setText(student.getEmail());
+        studentId.setText(student.getStudentId());
+        realName.setText(student.getRealName());
+        sex.setText(student.getSex());
     }
 
     private void setValidateMessage(Student student){
