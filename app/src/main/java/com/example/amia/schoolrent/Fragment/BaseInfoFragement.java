@@ -99,6 +99,9 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
             schoolTextView.setText(school.getSchoolName());
         }
 
+        TextView studentId = view.findViewById(R.id.student_id_tv);
+        studentId.setText(student.getStudentId());
+
         TextView mailTextView = view.findViewById(R.id.mail_tv);
         mailTextView.setText(student.getEmail());
         mailTextView.setOnClickListener(onClickListener);
@@ -129,6 +132,7 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
                        case 2:
                            schoolIcon.setImageResource(R.drawable.unvalidate);
                            schoolTV.setText(R.string.validate_no_pass);
+                           studentId.setOnClickListener(onClickListener);
                            break;
                        case 3:
                            idFlag = false;
@@ -349,6 +353,9 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
                     break;
                 case R.id.pay_password_reset_ll:
                     showModifyActivity(R.id.pay_password_reset_ll);
+                    break;
+                case R.id.student_id_tv:
+                    showModifyActivity(R.id.student_id_tv);
                     break;
                 case R.id.exit_tv:
                     exit();

@@ -97,6 +97,10 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
                 title.setText(R.string.mail);
                 modifyValidateInfo();
                 break;
+            case R.id.student_id_tv:
+                title.setText(R.string.student_id);
+                modifyBaseInfo();
+                break;
         }
 
         findViewById(R.id.finish_tv).setOnClickListener(onClickListener);
@@ -168,6 +172,7 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
         switch (flag){
             case R.id.user_name_tv:
             case R.id.real_name_tv:
+            case R.id.student_id_tv:
                 fillValue();
                 break;
             case R.id.password_reset_ll:

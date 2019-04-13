@@ -51,6 +51,9 @@ public class ModifyFragment extends Fragment implements FillStudentInterface {
             case R.id.real_name_tv:
                 input.setText(student.getRealName());
                 break;
+            case R.id.student_id_tv:
+                input.setText(student.getStudentId());
+                break;
         }
         view.findViewById(R.id.clear_btn).setOnClickListener(onClickListener);
     }
@@ -81,6 +84,9 @@ public class ModifyFragment extends Fragment implements FillStudentInterface {
                 break;
             case R.id.real_name_tv:
                 student.setRealName(str);
+                break;
+            case R.id.student_id_tv:
+                student.setStudentId(str);
                 break;
         }
         return student;
