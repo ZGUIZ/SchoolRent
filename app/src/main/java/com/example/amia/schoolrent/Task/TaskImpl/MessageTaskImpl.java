@@ -127,7 +127,7 @@ public class MessageTaskImpl implements MessageTask {
     private List<Message> readMessage(){
         Student student = BaseAcitivity.getStudent();
 
-        List<Message> messageList = LitePal.where("status != 100","userId ="+student.getUserId()).order("createDate desc").find(Message.class);
+        List<Message> messageList = LitePal.where("status != 100 and userId = '"+ student.getUserId() + "'").order("createDate desc").find(Message.class);
         return messageList;
     }
 }
