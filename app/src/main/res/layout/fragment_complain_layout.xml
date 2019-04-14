@@ -14,15 +14,12 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <ScrollView
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/push_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
         <LinearLayout
+            android:layout_alignParentTop="true"
+            android:layout_above="@id/push_button"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
             <TextView
                 android:id="@+id/idle_title"
                 android:padding="6dp"
@@ -40,34 +37,13 @@
                 android:id="@+id/idle_info_et"
                 android:inputType="textMultiLine"
                 android:padding="6dp"
-                android:hint="@string/destroy_detail"
+                android:hint="@string/reason"
                 android:gravity="left|top"
                 android:lines="10"
                 android:background="@null"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-            <LinearLayout
-                android:padding="3dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="@string/complain_money"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <EditText
-                    android:id="@+id/money"
-                    android:background="@null"
-                    android:inputType="numberDecimal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/idle_image_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
-    </ScrollView>
 
     <RelativeLayout
         android:id="@+id/success_ll"

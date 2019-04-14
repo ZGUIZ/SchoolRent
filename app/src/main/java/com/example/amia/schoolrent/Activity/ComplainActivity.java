@@ -9,25 +9,38 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.example.amia.schoolrent.Activity.ActivityInterface.ComplainInterface;
 import com.example.amia.schoolrent.Activity.ActivityInterface.IdleInfoInterface;
 import com.example.amia.schoolrent.Activity.ActivityInterface.PicInterface;
+import com.example.amia.schoolrent.Activity.ActivityInterface.RentNeedsInterface;
+import com.example.amia.schoolrent.Bean.Complain;
 import com.example.amia.schoolrent.Bean.IdleInfo;
+import com.example.amia.schoolrent.Bean.RentNeeds;
 import com.example.amia.schoolrent.Bean.Student;
+import com.example.amia.schoolrent.Fragment.ComplainFragment;
 import com.example.amia.schoolrent.Fragment.MyPushFragment;
 import com.example.amia.schoolrent.Fragment.PushComplainFragment;
 import com.example.amia.schoolrent.Presenter.ComplainContract;
+import com.example.amia.schoolrent.Presenter.OtherComplainContract;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.ComplainContractImpl;
+import com.example.amia.schoolrent.Presenter.PersenterImpl.OtherComplainContractImpl;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Task.ComplainTask;
 import com.example.amia.schoolrent.Task.IdleTask;
+import com.example.amia.schoolrent.Task.TaskImpl.ComplainTaskImpl;
 import com.example.amia.schoolrent.Task.TaskImpl.IdleTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 
 import static com.example.amia.schoolrent.Activity.PushActivity.CHOOSE_PICTURE_FLAG;
 
-public class ComplainActivity extends AppCompatActivity implements IdleInfoInterface, PicInterface {
+public class ComplainActivity extends AppCompatActivity implements IdleInfoInterface, PicInterface, ComplainInterface, RentNeedsInterface {
 
     private IdleInfo idleInfo;
+    private RentNeeds rentNeeds;
     private PushComplainFragment fragment;
+    private ComplainFragment complainFragment;
+
+    private Complain complain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +53,45 @@ public class ComplainActivity extends AppCompatActivity implements IdleInfoInter
     private void init(){
         Intent intent = getIntent();
         idleInfo = (IdleInfo) intent.getSerializableExtra("idleInfo");
+        rentNeeds = (RentNeeds) intent.getSerializableExtra("rentNeeds");
+        complain = (Complain) intent.getSerializableExtra("complain");
+        if(complain!=null){
+            setOtherComplainFragment();
+        } else {
+            setPushComplainFragment();
+        }
+    }
 
+    /**
+     * 设置为信息举报/投诉的Fragment
+     */
+    private void setOtherComplainFragment(){
+        try{
+            complainFragment = (ComplainFragment) getSupportFragmentManager().findFragmentById(R.id.complain_layout);
+            if(complainFragment == null){
+                complainFragment = ComplainFragment.newInstance();
+                ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),complainFragment,R.id.complain_layout);
+            }
+        } catch (Exception e){
+            complainFragment = ComplainFragment.newInstance();
+            ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),complainFragment,R.id.complain_layout);
+        }
+        ComplainTask task = new ComplainTaskImpl();
+        OtherComplainContract.Presenter presenter = new OtherComplainContractImpl(complainFragment,task);
+        complainFragment.setPresenter(presenter);
+    }
 
-        fragment = (PushComplainFragment) getSupportFragmentManager().findFragmentById(R.id.complain_layout);
-        if(fragment == null){
+    /**
+     * 设置为租赁投诉的fragment
+     */
+    private void setPushComplainFragment(){
+        try{
+            fragment = (PushComplainFragment) getSupportFragmentManager().findFragmentById(R.id.complain_layout);
+            if(fragment == null){
+                fragment = PushComplainFragment.newInstance();
+                ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),fragment,R.id.complain_layout);
+            }
+        } catch (Exception e){
             fragment = PushComplainFragment.newInstance();
             ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),fragment,R.id.complain_layout);
         }
@@ -64,6 +112,11 @@ public class ComplainActivity extends AppCompatActivity implements IdleInfoInter
     @Override
     public IdleInfo getIdleInfo() {
         return idleInfo;
+    }
+
+    @Override
+    public RentNeeds getRentNeeds() {
+        return rentNeeds;
     }
 
     @Override
@@ -103,4 +156,9 @@ public class ComplainActivity extends AppCompatActivity implements IdleInfoInter
             finish();
         }
     };
+
+    @Override
+    public Complain getComplain() {
+        return complain;
+    }
 }

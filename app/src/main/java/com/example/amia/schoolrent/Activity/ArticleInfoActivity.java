@@ -4,10 +4,14 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.RentNeedsInterface;
+import com.example.amia.schoolrent.Bean.Complain;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.RentNeeds;
 import com.example.amia.schoolrent.Bean.Student;
@@ -69,16 +73,37 @@ public class ArticleInfoActivity extends AppCompatActivity implements RentNeedsI
         toolbar.setNavigationOnClickListener(onClickListener);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.info_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.complain_menu:
+                toComplainActivity();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void toComplainActivity(){
+        Intent intent = new Intent(this,ComplainActivity.class);
+        intent.putExtra("rentNeeds",rentNeeds);
+        Complain complain = new Complain();
+        //设置为商品投诉类型
+        complain.setComplainType(2);
+        intent.putExtra("complain",complain);
+        startActivity(intent);
+    }
+
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            switch (view.getId()){
-                case R.id.complain_ib:
-
-                    break;
-                default:
-                    finish();
-            }
+            finish();
         }
     };
 

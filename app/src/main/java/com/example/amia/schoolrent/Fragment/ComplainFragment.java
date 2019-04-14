@@ -1,14 +1,11 @@
 package com.example.amia.schoolrent.Fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,54 +14,45 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.amia.schoolrent.Activity.ActivityInterface.ComplainInterface;
 import com.example.amia.schoolrent.Activity.ActivityInterface.IdleInfoInterface;
-import com.example.amia.schoolrent.Activity.ActivityInterface.PicInterface;
-import com.example.amia.schoolrent.Activity.BaseAcitivity;
-import com.example.amia.schoolrent.Bean.IdelPic;
+import com.example.amia.schoolrent.Activity.ActivityInterface.RentNeedsInterface;
+import com.example.amia.schoolrent.Bean.Complain;
 import com.example.amia.schoolrent.Bean.IdleInfo;
-import com.example.amia.schoolrent.Bean.LocalPic;
-import com.example.amia.schoolrent.Bean.OrderComplian;
-import com.example.amia.schoolrent.Fragment.RecyclerAdapter.PushImageAdapter;
-import com.example.amia.schoolrent.Presenter.ComplainContract;
+import com.example.amia.schoolrent.Bean.RentNeeds;
+import com.example.amia.schoolrent.Presenter.OtherComplainContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.ActivityUtil;
-import com.example.amia.schoolrent.Util.COSUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static com.example.amia.schoolrent.Fragment.PushArticleFragment.UPDATE_TIME;
 import static com.example.amia.schoolrent.Fragment.PushIdleFragment.CLOSE_ACTIVITY;
 import static com.example.amia.schoolrent.Fragment.PushIdleFragment.CLOSE_DIALOG;
-import static com.example.amia.schoolrent.Fragment.PushIdleFragment.UPDATE_TIME;
-import static com.example.amia.schoolrent.Task.IdleTask.ADD_COMPLAIN;
+import static com.example.amia.schoolrent.Task.ComplainTask.PUSH_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
-import static com.example.amia.schoolrent.Task.IdleTask.ERRORWITHMESSAGE;
+import static com.example.amia.schoolrent.Task.SchoolTask.ERRORWITHMESSAGE;
 
-public class PushComplainFragment extends Fragment implements ComplainContract.View {
-
+public class ComplainFragment extends Fragment implements OtherComplainContract.View {
     private View view;
-    private ComplainContract.Presenter presenter;
+    private OtherComplainContract.Presenter presenter;
 
     private TextView lastTime;
     private RelativeLayout errorLayout;
     private RelativeLayout progressLayout;
     private EditText contentEdit;
-    private EditText moneyEdit;
 
-    private int imageCount = 0;
     protected IdleInfo idleInfo;
-    protected OrderComplian complian;
+    protected RentNeeds rentNeeds;
+    protected Complain complain;
 
-    private PushImageAdapter adapter;
 
-    public static PushComplainFragment newInstance(){
-        PushComplainFragment complainFragment=new PushComplainFragment();
+    public static ComplainFragment newInstance(){
+        ComplainFragment complainFragment=new ComplainFragment();
         return complainFragment;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_push_complain_layout,container,false);
+        view = inflater.inflate(R.layout.fragment_complain_layout,container,false);
         return view;
     }
 
@@ -75,28 +63,22 @@ public class PushComplainFragment extends Fragment implements ComplainContract.V
     }
 
     private void init(){
-        complian = new OrderComplian();
-        complian.setUrls(new ArrayList<String>());
+        complain = ((ComplainInterface)getActivity()).getComplain();
 
-        idleInfo = ((IdleInfoInterface) getActivity()).getIdleInfo();
-        complian.setInfoId(idleInfo.getInfoId());
         TextView title = view.findViewById(R.id.idle_title);
-        title.setText(idleInfo.getTitle());
 
-        moneyEdit = view.findViewById(R.id.money);
-
-        RecyclerView recyclerView = view.findViewById(R.id.idle_image_rv);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
-        Activity activity = getActivity();
-
-        adapter = new PushImageAdapter(activity);
-        adapter.setOnItemCLickListener(new PushImageAdapter.OnItemClickListener() {
-            @Override
-            public void addPic() {
-                selectPic();
-            }
-        });
-        recyclerView.setAdapter(adapter);
+        switch (complain.getComplainType()){
+            case 1:
+                idleInfo = ((IdleInfoInterface) getActivity()).getIdleInfo();
+                complain.setInfoId(idleInfo.getInfoId());
+                title.setText(idleInfo.getTitle());
+                break;
+            case 2:
+                rentNeeds = ((RentNeedsInterface)getActivity()).getRentNeeds();
+                complain.setInfoId(rentNeeds.getInfoId());
+                title.setText(rentNeeds.getTitle());
+                break;
+        }
 
         view.findViewById(R.id.push_button).setOnClickListener(onClickListener);
 
@@ -107,33 +89,10 @@ public class PushComplainFragment extends Fragment implements ComplainContract.V
         lastTime = view.findViewById(R.id.last_time);
     }
 
-    protected void selectPic(){
-        PicInterface pushIdleInterface = (PicInterface) getActivity();
-        pushIdleInterface.choosePic();
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         presenter = null;
-    }
-
-    @Override
-    public void addPic(String path) {
-
-        LocalPic localPic = new LocalPic();
-        localPic.setAdd(false);
-        localPic.setLocalUri(path);
-
-        imageCount++;
-
-        //上传图片
-        COSUtil cosUtil = new COSUtil(getActivity());
-        String fileName = cosUtil.uploadFile(BaseAcitivity.getStudent(),path,handler,String.valueOf(imageCount));
-        IdelPic idelPic = new IdelPic();
-        idelPic.setPicUrl(ActivityUtil.getString(getActivity(),R.string.image_host)+fileName);
-        localPic.setPic(idelPic);
-        adapter.addPic(localPic);
     }
 
     @Override
@@ -142,7 +101,7 @@ public class PushComplainFragment extends Fragment implements ComplainContract.V
     }
 
     @Override
-    public void setPresenter(ComplainContract.Presenter presenter) {
+    public void setPresenter(OtherComplainContract.Presenter presenter) {
         this.presenter = presenter;
     }
 
@@ -164,31 +123,12 @@ public class PushComplainFragment extends Fragment implements ComplainContract.V
             return;
         }
 
-        String m = moneyEdit.getText().toString();
-        if(m == null || "".equals(m.trim())){
-            pushError(ActivityUtil.getString(getContext(),R.string.null_fill));
-            return;
-        }
-        Float mon = null;
-        try{
-            mon = Float.parseFloat(m);
-        }catch (Exception e){
-            e.printStackTrace();
-            pushError(ActivityUtil.getString(getContext(),R.string.money_format_error));
-            return;
-        }
 
-        complian.setContext(content);
-        complian.setMoney(mon);
-
-        List<IdelPic> picList = adapter.getPicList();
-        for(IdelPic pic:picList) {
-            complian.getUrls().add(pic.getPicUrl());
-        }
+        complain.setMsg(content);
 
         progressLayout.setVisibility(View.VISIBLE);
 
-        presenter.addComplain(complian,handler);
+        presenter.addComplain(complain,handler);
     }
 
     protected void pushSuccess(){
@@ -248,7 +188,7 @@ public class PushComplainFragment extends Fragment implements ComplainContract.V
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case ADD_COMPLAIN:
+                case PUSH_SUCCESS:
                     pushSuccess();
                     break;
                 case ERROR:
