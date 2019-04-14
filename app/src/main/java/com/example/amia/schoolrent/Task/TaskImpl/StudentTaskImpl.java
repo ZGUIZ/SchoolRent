@@ -82,6 +82,17 @@ public class StudentTaskImpl implements StudentTask {
         }
     }
 
+    public void pushMessage(Context context){
+        NetUtils.get(ActivityUtil.getString(context, R.string.host) + ActivityUtil.getString(context, R.string.mine_message), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+            }
+            @Override
+            public void error(String... msg) {
+            }
+        });
+    }
+
     protected void loginAfterEncode(Context context,Student student,final Handler handler){
         Map<String,Object> param = new HashMap<>();
         param.put("student",student);

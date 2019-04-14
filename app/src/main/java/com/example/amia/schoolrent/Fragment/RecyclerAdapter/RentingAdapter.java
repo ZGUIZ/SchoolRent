@@ -90,6 +90,12 @@ public class RentingAdapter extends RecyclerView.Adapter<RentingAdapter.RecViewh
             case 8:
                 status = ActivityUtil.getString(context,R.string.request_return);
                 break;
+            case 9:
+                status = ActivityUtil.getString(context,R.string.request_return);
+                break;
+            case 10:
+                status = ActivityUtil.getString(context,R.string.complain);
+                break;
             case 100:
                 status = ActivityUtil.getString(context,R.string.admin_close);
                 break;
@@ -110,7 +116,7 @@ public class RentingAdapter extends RecyclerView.Adapter<RentingAdapter.RecViewh
             }
         };
 
-        if(idleInfo.getStatus() == 8){
+        if(idleInfo.getStatus() == 8 || idleInfo.getStatus() == 10){
             holder.backBtn.setVisibility(View.GONE);
         } else{
             holder.backBtn.setVisibility(View.VISIBLE);

@@ -8,6 +8,7 @@ import com.example.amia.schoolrent.Bean.Eval;
 import com.example.amia.schoolrent.Bean.EvalExtend;
 import com.example.amia.schoolrent.Bean.IdleInfo;
 import com.example.amia.schoolrent.Bean.IdleInfoExtend;
+import com.example.amia.schoolrent.Bean.OrderComplian;
 import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.RentExtend;
 import com.example.amia.schoolrent.Bean.Student;
@@ -65,6 +66,7 @@ public interface IdleTask extends BaseTask{
     int ADD_EVAL = 535;
     int GET_EVAL = 536;
     int ADD_DESTORY = 537;
+    int ADD_COMPLAIN = 538;
 
     /**
      * 获取首页分类
@@ -170,4 +172,6 @@ public interface IdleTask extends BaseTask{
     void getEval(Context context, EvalExtend extend,Handler handler);
 
     void addDestory(Context context,IdleInfo idleInfo,Handler handler);
+
+    void addComplain(Context context, OrderComplian complian,Handler handler);
 }

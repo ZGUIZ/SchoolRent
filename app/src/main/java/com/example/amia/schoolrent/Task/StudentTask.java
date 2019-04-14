@@ -70,4 +70,9 @@ public interface StudentTask extends BaseTask{
     void resetPayPassword(Context context,Handler handler);
     void resetPassword(Context context,Handler handler);
     void getMyCapital(Context context,Handler handler);
+
+    /**
+     * 获取推送信息
+     */
+    void pushMessage(Context context);
 }

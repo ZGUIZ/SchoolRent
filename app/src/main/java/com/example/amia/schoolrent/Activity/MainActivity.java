@@ -8,6 +8,8 @@ import android.view.View;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Fragment.MainFragement;
 import com.example.amia.schoolrent.R;
+import com.example.amia.schoolrent.Task.StudentTask;
+import com.example.amia.schoolrent.Task.TaskImpl.StudentTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 import com.example.amia.schoolrent.Util.NetUtils;
 import com.example.amia.schoolrent.Util.SharedPreferencesUtil;
@@ -48,5 +50,8 @@ public class MainActivity extends BaseAcitivity {
     protected void initJPush(){
         JPushInterface.init(this);
         JPushInterface.setAlias(this,0,student.getUserId());
+
+        StudentTask studentTask = new StudentTaskImpl();
+        studentTask.pushMessage(this);
     }
 }

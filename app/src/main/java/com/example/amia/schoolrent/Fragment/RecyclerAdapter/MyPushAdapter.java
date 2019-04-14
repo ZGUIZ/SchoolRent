@@ -88,6 +88,16 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
                     responseRentInterface.startRent(idleInfo);
                 }
             });
+        } else if(idleInfo.getStatus() == 2 || idleInfo.getStatus() == 8){
+            //如果是正在租赁，或者申请返还，则可以设置赔偿金额
+            holder.edit.setBackgroundColor(Color.rgb(255,157,0));
+            holder.edit.setText(R.string.complain);
+            holder.edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    responseRentInterface.complain(idleInfo);
+                }
+            });
         } else {
             holder.edit.setBackgroundColor(Color.rgb(200,199,205));
         }
@@ -117,6 +127,9 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
                 break;
             case 9:
                 status = ActivityUtil.getString(context,R.string.had_eval);
+                break;
+            case 10:
+                status = ActivityUtil.getString(context,R.string.submit_destroy);
                 break;
             case 100:
                 status = ActivityUtil.getString(context,R.string.admin_close);
@@ -242,5 +255,6 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
         void delIdle(IdleInfo idleInfo);
         void updateIdle(IdleInfo idleInfo);
         void startRent(IdleInfo idleInfo);
+        void complain(IdleInfo idleInfo);
     }
 }

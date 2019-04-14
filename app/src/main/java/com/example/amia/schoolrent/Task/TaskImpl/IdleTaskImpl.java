@@ -16,6 +16,7 @@ import com.example.amia.schoolrent.Bean.IdleInfoExtend;
 import com.example.amia.schoolrent.Bean.KeyValue;
 import com.example.amia.schoolrent.Bean.MapKeyValue;
 import com.example.amia.schoolrent.Bean.NetBitmap;
+import com.example.amia.schoolrent.Bean.OrderComplian;
 import com.example.amia.schoolrent.Bean.Rent;
 import com.example.amia.schoolrent.Bean.RentExtend;
 import com.example.amia.schoolrent.Bean.Result;
@@ -1068,6 +1069,48 @@ public class IdleTaskImpl implements IdleTask {
                     Result result = Result.getJSONObject(json,null);
                     if(result.getResult()) {
                         msg.what = ADD_DESTORY;
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void addComplain(Context context, OrderComplian complain, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.add_complain);
+
+        try{
+            complain.setContext(URLEncoder.encode(complain.getContext(),"utf-8"));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("complain",complain);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getObjectWithList(json,null);
+                    if(result.getResult()) {
+                        msg.what = ADD_COMPLAIN;
                     } else {
                         msg.what = ERROR;
                         msg.obj = result.getMsg();

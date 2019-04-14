@@ -1,6 +1,5 @@
 package com.example.amia.schoolrent.Fragment;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.StudentInterface;
+import com.example.amia.schoolrent.Activity.ComplainActivity;
 import com.example.amia.schoolrent.Activity.IdleInfoActivity;
 import com.example.amia.schoolrent.Activity.UpdateIdleActivity;
 import com.example.amia.schoolrent.Bean.IdleInfo;
@@ -121,6 +121,11 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
             public void startRent(IdleInfo idleInfo) {
                 showStartRentDialog(idleInfo);
             }
+
+            @Override
+            public void complain(IdleInfo idleInfo) {
+                toComplainActivity(idleInfo);
+            }
         });
 
         RecyclerView rv = recyclerView.getRecyclerView();
@@ -146,6 +151,12 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
         });
         recyclerView.refresh();
         recyclerView.setIsRefresh(true);
+    }
+
+    protected void toComplainActivity(IdleInfo idleInfo){
+        Intent intent = new Intent(getActivity(), ComplainActivity.class);
+        intent.putExtra("idleInfo",idleInfo);
+        startActivity(intent);
     }
 
     protected void showStartRentDialog(final IdleInfo idleInfo){
