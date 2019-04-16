@@ -76,7 +76,7 @@ public class PushComplainFragment extends Fragment implements ComplainContract.V
 
     private void init(){
         complian = new OrderComplian();
-        complian.setUrls(new ArrayList<String>());
+        complian.setUrls(new ArrayList<IdelPic>());
 
         idleInfo = ((IdleInfoInterface) getActivity()).getIdleInfo();
         complian.setInfoId(idleInfo.getInfoId());
@@ -182,9 +182,7 @@ public class PushComplainFragment extends Fragment implements ComplainContract.V
         complian.setMoney(mon);
 
         List<IdelPic> picList = adapter.getPicList();
-        for(IdelPic pic:picList) {
-            complian.getUrls().add(pic.getPicUrl());
-        }
+        complian.getUrls().addAll(picList);
 
         progressLayout.setVisibility(View.VISIBLE);
 

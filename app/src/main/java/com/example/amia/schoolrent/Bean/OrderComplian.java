@@ -44,7 +44,7 @@ public class OrderComplian {
 	private String infoId;
 	private String responsePerson;
 
-	private List<String> urls;
+	private List<IdelPic> urls;
 
 	/**
 	 * 赔偿金额
@@ -108,11 +108,11 @@ public class OrderComplian {
 		this.infoId = infoId;
 	}
 
-	public List<String> getUrls() {
+	public List<IdelPic> getUrls() {
 		return urls;
 	}
 
-	public void setUrls(List<String> urls) {
+	public void setUrls(List<IdelPic> urls) {
 		this.urls = urls;
 	}
 
