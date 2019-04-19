@@ -819,6 +819,7 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
     }
 
     protected void agreeSuccess(){
+        idleInfo.setStatus(1);
         Toast.makeText(getActivity(),R.string.agree_success,Toast.LENGTH_SHORT).show();
         presenter.getRentList(idleInfo,handler);
     }

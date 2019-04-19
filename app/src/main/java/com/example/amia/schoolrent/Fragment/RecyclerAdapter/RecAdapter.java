@@ -1,6 +1,7 @@
 package com.example.amia.schoolrent.Fragment.RecyclerAdapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +69,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewholder> {
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (view.getId()){
+                switch (view.getId()) {
                     case R.id.agree_tv:
                         responseRentInterface.agree(rent);
                         break;
@@ -82,9 +83,16 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.RecViewholder> {
             }
         };
 
-        holder.agree.setOnClickListener(onClickListener);
-        holder.refuse.setOnClickListener(onClickListener);
-
+        //如果已经回复，则不可点击
+        if(rent.getStatus() == 0) {
+            holder.agree.setOnClickListener(onClickListener);
+            holder.refuse.setOnClickListener(onClickListener);
+            holder.agree.setBackgroundColor(Color.rgb(255,157,0));
+            holder.refuse.setBackgroundColor(Color.rgb(254,60,49));
+        } else {
+            holder.agree.setBackgroundColor(Color.rgb(200,199,205));
+            holder.refuse.setBackgroundColor(Color.rgb(200,199,205));
+        }
         holder.infoLayout.setOnClickListener(onClickListener);
     }
 
