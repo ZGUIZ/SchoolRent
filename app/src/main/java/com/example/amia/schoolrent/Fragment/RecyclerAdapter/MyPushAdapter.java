@@ -67,7 +67,7 @@ public class MyPushAdapter extends RecyclerView.Adapter<MyPushAdapter.RecViewhol
         holder.money.setText(String.valueOf(idleInfo.getRetal()));
         holder.deposit.setText(String.valueOf(idleInfo.getDeposit()));
 
-        if(idleInfo.getStatus() == 0 || idleInfo.getStatus() == 1){
+        if(idleInfo.getStatus() == 0){
             holder.edit.setBackgroundColor(Color.rgb(255,157,0));
             holder.edit.setOnClickListener(new View.OnClickListener() {
                 @Override

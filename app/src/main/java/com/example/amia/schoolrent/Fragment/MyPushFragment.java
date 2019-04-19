@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.amia.schoolrent.Activity.ActivityInterface.StudentInterface;
@@ -52,6 +53,7 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
     private PullLoadMoreRecyclerView recyclerView;
     private MyPushAdapter adapter;
     private RelativeLayout progressView;
+    private TextView nullMessage;
 
     private IdleInfoExtend idleInfo;
 
@@ -82,6 +84,8 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
     }
 
     private void init(){
+        nullMessage = view.findViewById(R.id.null_message);
+
         student = ((StudentInterface)getActivity()).getStudent();
 
         progressView = view.findViewById(R.id.progress_view);
@@ -204,6 +208,12 @@ public class MyPushFragment extends Fragment implements MyPushContract.View {
             List<IdleInfo> idleInfos = (List<IdleInfo>) o;
             //如果当前页为第一页，则直接清除原来的数据
             //否则则添加
+            if(idleInfo.getPage() == 1 && (idleInfos == null || idleInfos.size()<=0)){
+                nullMessage.setVisibility(View.VISIBLE);
+                return;
+            } else {
+                nullMessage.setVisibility(View.GONE);
+            }
             if (idleInfo.getPage() == 1) {
                 adapter.setList(idleInfos);
             } else {
