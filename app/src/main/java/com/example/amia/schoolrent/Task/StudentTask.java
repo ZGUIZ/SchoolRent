@@ -23,6 +23,7 @@ public interface StudentTask extends BaseTask{
     int RESET_ERROR = 210;
     int GET_CAPITAL = 211;
     int MODIFY_PASSWORD = 212;
+    int UPDATE_MAIL = 213;
 
     /**
      * 登录
@@ -83,4 +84,9 @@ public interface StudentTask extends BaseTask{
     void sendForgotCode(Context context,String address,Handler handler);
     void valdateForgot(Context context,KeyValue keyValue,Handler handler);
     void forgotPassword(Context context,PassWord passWord,Handler handler);
+
+    /**
+     * 更改邮箱
+     */
+    void updateMail(Context context,Student student,Handler handler);
 }

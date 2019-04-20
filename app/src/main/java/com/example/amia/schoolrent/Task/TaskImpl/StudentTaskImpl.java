@@ -223,6 +223,39 @@ public class StudentTaskImpl implements StudentTask {
         });
     }
 
+    @Override
+    public void updateMail(Context context, Student student,final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.update_mail);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("student",student);
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()){
+                        msg.what = UPDATE_MAIL;
+                        msg.obj = result.getData();
+                    } else{
+                        msg.what = ERROR;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERROR_WITH_MESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
     protected void loginAfterEncode(Context context,Student student,final Handler handler){
         Map<String,Object> param = new HashMap<>();
         param.put("student",student);

@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,11 +17,11 @@ import com.example.amia.schoolrent.Activity.ActivityInterface.ModifyPasswordInte
 import com.example.amia.schoolrent.Activity.ActivityInterface.StudentInterface;
 import com.example.amia.schoolrent.Bean.PassWord;
 import com.example.amia.schoolrent.Bean.Student;
-import com.example.amia.schoolrent.Fragment.BaseInfoFragement;
 import com.example.amia.schoolrent.Fragment.ModifyFragment;
+import com.example.amia.schoolrent.Fragment.ModifyMailFragment;
 import com.example.amia.schoolrent.Fragment.ResetPasswordFragment;
-import com.example.amia.schoolrent.Presenter.BaseInfoContract;
-import com.example.amia.schoolrent.Presenter.PersenterImpl.BaseInfoContractImpl;
+import com.example.amia.schoolrent.Presenter.ModifyMailContract;
+import com.example.amia.schoolrent.Presenter.PersenterImpl.ModifyMailContractImpl;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.ResetPasswordContractImpl;
 import com.example.amia.schoolrent.Presenter.RetPasswordContract;
 import com.example.amia.schoolrent.R;
@@ -30,6 +29,8 @@ import com.example.amia.schoolrent.Task.StudentTask;
 import com.example.amia.schoolrent.Task.TaskImpl.StudentTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 
+import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
+import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_MAIL;
 import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_PASSWORD_ERROR;
 import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_PAYPASSWORD_ERROR;
 import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_STUDENT_ERROR;
@@ -42,6 +43,7 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
     private TextView title;
     private FillStudentInterface fillStudentInterface;
     private ModifyPasswordInterface modifyPasswordInterface;
+    private ModifyMailContract.View modifyMailView;
 
     private RelativeLayout progressBar;
 
@@ -134,6 +136,11 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
     }
 
     private void modifyValidateInfo(){
+        ModifyMailFragment fragment = ModifyMailFragment.newInstance();
+        ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),fragment,R.id.modify_fragment);
+        modifyMailView = fragment;
+        ModifyMailContract.Presenter presenter = new ModifyMailContractImpl(fragment,studentTask);
+        fragment.setPresenter(presenter);
     }
 
     @Override
@@ -168,6 +175,16 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
         studentTask.changePayPassword(this,passWord,handler);
     }
 
+    protected void modifyMail(){
+        Student s = modifyMailView.getFill();
+        if(s == null){
+            return;
+        }
+
+        s.setUserId(student.getUserId());
+        studentTask.updateMail(this,s,handler);
+    }
+
     protected void selectFillResult(){
         switch (flag){
             case R.id.user_name_tv:
@@ -185,7 +202,7 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
 
                 break;
             case R.id.mail_tv:
-
+                modifyMail();
                 break;
         }
     }
@@ -249,6 +266,18 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
                     break;
                 case UPDATE_PAYPASSWORD_ERROR:
                     updatePayPasswordError(msg.obj);
+                    break;
+                case UPDATE_MAIL:
+                    Toast.makeText(ModifyActivity.this,R.string.update_success,Toast.LENGTH_SHORT).show();
+                    ModifyActivity.this.finish();
+                    break;
+                case ERROR:
+                    try{
+                        modifyMailView.Snack((String)msg.obj);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        linkError();
+                    }
                     break;
             }
         }

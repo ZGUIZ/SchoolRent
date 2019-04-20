@@ -95,6 +95,11 @@ public class Student extends LitePalSupport implements Serializable{
 
 	private List<AuthPicture> authPictureList;
 
+	/**
+	 * 验证码
+	 */
+	private String code;
+
 	public String getUserId() {
 		return userId;
 	}
@@ -256,6 +261,14 @@ public class Student extends LitePalSupport implements Serializable{
 
 	public void setAuthPictureList(List<AuthPicture> authPictureList) {
 		this.authPictureList = authPictureList;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	/**
