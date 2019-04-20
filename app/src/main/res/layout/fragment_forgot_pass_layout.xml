@@ -1,74 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/splash_background"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    android:paddingTop="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
+        android:paddingTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <include layout="@layout/back_tool_bar"/>
-        <include layout="@layout/next_tool_bar"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_marginBottom="25dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:id="@+id/pay_password_ll"
-        android:background="@drawable/login_text_background"
-        android:layout_below="@id/user_ll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/pay_pass_iv"
-            android:layout_centerVertical="true"
-            android:background="@drawable/password"
-            android:layout_marginLeft="5dp"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
-        <EditText
-            android:id="@+id/password"
-            android:layout_toRightOf="@id/pay_pass_iv"
-            android:inputType="textPassword"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="5dp"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:hint="@string/new_password"
+        android:layout_height="match_parent">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_marginBottom="25dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:id="@+id/pay_password_confirm_ll"
-        android:background="@drawable/login_text_background"
-        android:layout_below="@id/user_ll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/pay_pass_confirm_iv"
-            android:layout_centerVertical="true"
-            android:background="@drawable/password"
-            android:layout_marginLeft="5dp"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
-        <EditText
-            android:id="@+id/password_confirm"
-            android:layout_toRightOf="@id/pay_pass_confirm_iv"
-            android:inputType="textPassword"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="5dp"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:hint="@string/password_confirm"
+            android:layout_height="wrap_content">
+            <include layout="@layout/back_tool_bar"/>
+            <include layout="@layout/next_tool_bar"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:id="@+id/pay_password_ll"
+            android:background="@drawable/login_text_background"
+            android:layout_below="@id/user_ll"
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
-    </RelativeLayout>
-
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/pay_pass_iv"
+                android:layout_centerVertical="true"
+                android:background="@drawable/password"
+                android:layout_marginLeft="5dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp" />
+            <EditText
+                android:id="@+id/password"
+                android:layout_toRightOf="@id/pay_pass_iv"
+                android:inputType="textPassword"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="5dp"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:hint="@string/new_password"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:id="@+id/pay_password_confirm_ll"
+            android:background="@drawable/login_text_background"
+            android:layout_below="@id/user_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/pay_pass_confirm_iv"
+                android:layout_centerVertical="true"
+                android:background="@drawable/password"
+                android:layout_marginLeft="5dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp" />
+            <EditText
+                android:id="@+id/password_confirm"
+                android:layout_toRightOf="@id/pay_pass_confirm_iv"
+                android:inputType="textPassword"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="5dp"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:hint="@string/password_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+        </RelativeLayout>
+    </LinearLayout>
     <RelativeLayout
         android:id="@+id/progress_view"
         android:background="#66000000"
@@ -89,4 +93,4 @@
             android:layout_width="48dp"
             android:layout_height="48dp" />
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>
