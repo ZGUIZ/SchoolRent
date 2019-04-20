@@ -24,6 +24,8 @@ public interface StudentTask extends BaseTask{
     int GET_CAPITAL = 211;
     int MODIFY_PASSWORD = 212;
     int UPDATE_MAIL = 213;
+    int UPDATE_PHONE = 214;
+    int SEND_SMS = 215;
 
     /**
      * 登录
@@ -89,4 +91,7 @@ public interface StudentTask extends BaseTask{
      * 更改邮箱
      */
     void updateMail(Context context,Student student,Handler handler);
+
+    void sendSMS(Context context,String telephone,Handler handler);
+    void updateTelephone(Context context,Student student,Handler handler);
 }

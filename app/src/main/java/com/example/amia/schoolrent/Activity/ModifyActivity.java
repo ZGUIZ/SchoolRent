@@ -19,9 +19,12 @@ import com.example.amia.schoolrent.Bean.PassWord;
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Fragment.ModifyFragment;
 import com.example.amia.schoolrent.Fragment.ModifyMailFragment;
+import com.example.amia.schoolrent.Fragment.ModifyPhoneFragment;
 import com.example.amia.schoolrent.Fragment.ResetPasswordFragment;
 import com.example.amia.schoolrent.Presenter.ModifyMailContract;
+import com.example.amia.schoolrent.Presenter.ModifyPhoneContract;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.ModifyMailContractImpl;
+import com.example.amia.schoolrent.Presenter.PersenterImpl.ModifyPhoneContractImpl;
 import com.example.amia.schoolrent.Presenter.PersenterImpl.ResetPasswordContractImpl;
 import com.example.amia.schoolrent.Presenter.RetPasswordContract;
 import com.example.amia.schoolrent.R;
@@ -30,9 +33,11 @@ import com.example.amia.schoolrent.Task.TaskImpl.StudentTaskImpl;
 import com.example.amia.schoolrent.Util.ActivityUtil;
 
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
+import static com.example.amia.schoolrent.Task.StudentTask.SEND_SMS;
 import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_MAIL;
 import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_PASSWORD_ERROR;
 import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_PAYPASSWORD_ERROR;
+import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_PHONE;
 import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_STUDENT_ERROR;
 import static com.example.amia.schoolrent.Task.StudentTask.UPDATE_STUDENT_SUCCESS;
 
@@ -44,6 +49,7 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
     private FillStudentInterface fillStudentInterface;
     private ModifyPasswordInterface modifyPasswordInterface;
     private ModifyMailContract.View modifyMailView;
+    private ModifyPhoneContract.View modifyPhoneView;
 
     private RelativeLayout progressBar;
 
@@ -93,7 +99,7 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
                 break;
             case R.id.telephone_tv:
                 title.setText(R.string.telephone);
-                modifyValidateInfo();
+                modifyPhoneInfo();
                 break;
             case R.id.mail_tv:
                 title.setText(R.string.mail);
@@ -143,6 +149,14 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
         fragment.setPresenter(presenter);
     }
 
+    private void modifyPhoneInfo(){
+        ModifyPhoneFragment fragment = ModifyPhoneFragment.newInstance();
+        ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),fragment,R.id.modify_fragment);
+        modifyPhoneView = fragment;
+        ModifyPhoneContract.Presenter presenter = new ModifyPhoneContractImpl(fragment,studentTask);
+        fragment.setPresenter(presenter);
+    }
+
     @Override
     public Student getStudent() {
         return student;
@@ -185,6 +199,17 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
         studentTask.updateMail(this,s,handler);
     }
 
+    protected void modifyPhone(){
+        Student s = modifyPhoneView.getFill();
+        if(s == null){
+            return;
+        }
+
+        s.setUserId(student.getUserId());
+        studentTask.updateTelephone(this,s,handler);
+    }
+
+
     protected void selectFillResult(){
         switch (flag){
             case R.id.user_name_tv:
@@ -199,7 +224,7 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
                 changePayPassword();
                 break;
             case R.id.telephone_tv:
-
+                modifyPhone();
                 break;
             case R.id.mail_tv:
                 modifyMail();
@@ -254,6 +279,7 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
             super.handleMessage(msg);
             progressBar.setVisibility(View.GONE);
             switch (msg.what){
+                case UPDATE_PHONE:
                 case UPDATE_STUDENT_SUCCESS:
                     Toast.makeText(ModifyActivity.this,R.string.update_success,Toast.LENGTH_SHORT).show();
                     ModifyActivity.this.finish();
@@ -273,7 +299,12 @@ public class ModifyActivity extends AppCompatActivity implements StudentInterfac
                     break;
                 case ERROR:
                     try{
-                        modifyMailView.Snack((String)msg.obj);
+                        if(modifyMailView!=null) {
+                            modifyMailView.Snack((String) msg.obj);
+                        }
+                        if(modifyPhoneView != null){
+                            modifyPhoneView.Snack((String)msg.obj);
+                        }
                     }catch (Exception e){
                         e.printStackTrace();
                         linkError();

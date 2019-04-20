@@ -17,29 +17,28 @@ import android.widget.Toast;
 
 import com.example.amia.schoolrent.Bean.Student;
 import com.example.amia.schoolrent.Presenter.ModifyMailContract;
+import com.example.amia.schoolrent.Presenter.ModifyPhoneContract;
 import com.example.amia.schoolrent.R;
 import com.example.amia.schoolrent.Util.KeyboardUtil;
 import com.example.amia.schoolrent.Util.MailUtil;
 
+import static com.example.amia.schoolrent.Fragment.ModifyMailFragment.BTN_TIME_FLAG;
 import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.ERROR_WITH_MESSAGE;
-import static com.example.amia.schoolrent.Presenter.PersenterImpl.StudentContractImpl.SEND_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.ERROR;
+import static com.example.amia.schoolrent.Task.StudentTask.SEND_SMS;
 
-public class ModifyMailFragment extends Fragment implements ModifyMailContract.View {
-    protected static final int BTN_TIME_FLAG = 1000;
-
+public class ModifyPhoneFragment extends Fragment implements ModifyPhoneContract.View {
     private View view;
-
     private Student student;
 
     private EditText mailEt;
     private EditText codeEt;
     private Button sendBtn;
 
-    private ModifyMailContract.Presenter presenter;
+    private ModifyPhoneContract.Presenter presenter;
 
-    public static ModifyMailFragment newInstance(){
-        ModifyMailFragment modifyFragment = new ModifyMailFragment();
+    public static ModifyPhoneFragment newInstance(){
+        ModifyPhoneFragment modifyFragment = new ModifyPhoneFragment();
         return modifyFragment;
     }
 
@@ -51,6 +50,14 @@ public class ModifyMailFragment extends Fragment implements ModifyMailContract.V
     }
 
     private void init(){
+        student = new Student();
+
+        mailEt = view.findViewById(R.id.text);
+        codeEt = view.findViewById(R.id.code);
+
+        //设置提示字符
+        mailEt.setHint(R.string.telephone);
+
         sendBtn = view.findViewById(R.id.send_btn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,10 +65,6 @@ public class ModifyMailFragment extends Fragment implements ModifyMailContract.V
                 sendCode();
             }
         });
-        student = new Student();
-
-        mailEt = view.findViewById(R.id.text);
-        codeEt = view.findViewById(R.id.code);
     }
 
     private void sendCode(){
@@ -71,13 +74,13 @@ public class ModifyMailFragment extends Fragment implements ModifyMailContract.V
 
         String address = mailEt.getText().toString().trim();
         if("".equals(address)){
-            Snack(R.string.mail_null);
+            Snack(R.string.phone_null);
             return;
         }
 
         //邮箱非法
-        if(!MailUtil.isMail(address)){
-            Snack(R.string.mail_format_error);
+        if(address.length() != 11){
+            Snack(R.string.phone_format_error);
             return;
         }
 
@@ -89,7 +92,7 @@ public class ModifyMailFragment extends Fragment implements ModifyMailContract.V
             Snackbar.make(view,R.string.link_error,Snackbar.LENGTH_SHORT).show();
             return;
         }
-        Snackbar.make(view,msg,Toast.LENGTH_SHORT).show();
+        Snackbar.make(view,msg, Toast.LENGTH_SHORT).show();
     }
 
     public void Snack(int msg){
@@ -153,13 +156,13 @@ public class ModifyMailFragment extends Fragment implements ModifyMailContract.V
 
         String address = mailEt.getText().toString().trim();
         if("".equals(address)){
-            Snack(R.string.mail_null);
+            Snack(R.string.phone_null);
             return null;
         }
 
-        //邮箱非法
-        if(!MailUtil.isMail(address)){
-            Snack(R.string.mail_format_error);
+        //手机号码非法
+        if(address.length() != 11){
+            Snack(R.string.phone_format_error);
             return null;
         }
         String code = codeEt.getText().toString().trim();
@@ -168,13 +171,13 @@ public class ModifyMailFragment extends Fragment implements ModifyMailContract.V
             return null;
         }
 
-        student.setEmail(address);
+        student.setTelephone(address);
         student.setCode(code);
         return student;
     }
 
     @Override
-    public void setPresenter(ModifyMailContract.Presenter presenter) {
+    public void setPresenter(ModifyPhoneContract.Presenter presenter) {
         this.presenter = presenter;
     }
 
@@ -183,7 +186,7 @@ public class ModifyMailFragment extends Fragment implements ModifyMailContract.V
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case SEND_SUCCESS:
+                case SEND_SMS:
                     sendSuccess();
                     break;
                 case ERROR:

@@ -256,6 +256,72 @@ public class StudentTaskImpl implements StudentTask {
         });
     }
 
+    @Override
+    public void sendSMS(Context context, String telephone, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.send_sms)+telephone;
+        NetUtils.get(url, new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json, null);
+                    if(result.getResult()) {
+                        msg.what = SEND_SMS;
+                        msg.obj = result.getData();
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void updateTelephone(Context context, Student student,final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.update_phone);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("student",student);
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,null);
+                    if(result.getResult()){
+                        msg.what = UPDATE_PHONE;
+                        msg.obj = result.getData();
+                    } else{
+                        msg.what = ERROR;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERROR_WITH_MESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
     protected void loginAfterEncode(Context context,Student student,final Handler handler){
         Map<String,Object> param = new HashMap<>();
         param.put("student",student);
