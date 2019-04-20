@@ -29,7 +29,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/TranslucentLayout">
-        <activity android:name=".Activity.ComplainActivity"></activity>
+        <activity android:name=".Activity.ForgotPassActivity"></activity>
+        <activity android:name=".Activity.ComplainActivity" />
         <activity android:name=".Activity.AllClassifyActivity" />
         <activity android:name=".Activity.SearchActivity" />
         <activity android:name=".Activity.CheckStatActivity" />

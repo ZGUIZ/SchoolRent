@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.amia.schoolrent.Activity.BaseAcitivity;
+import com.example.amia.schoolrent.Activity.ForgotPassActivity;
 import com.example.amia.schoolrent.Activity.MainActivity;
 import com.example.amia.schoolrent.Activity.RegisterActivity;
 
@@ -74,6 +75,8 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         //登录按钮设置监听事件
         Button loginButton = view.findViewById(R.id.login_btn);
         loginButton.setOnClickListener(clickListener);
+
+        view.findViewById(R.id.forgot_tv).setOnClickListener(clickListener);
     }
 
     @Override
@@ -87,6 +90,11 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         Toast.makeText(getActivity(),ActivityUtil.getString(getActivity(),R.string.password_error),Toast.LENGTH_SHORT).show();
         progressView.setVisibility(View.GONE);
         progressView.setOnClickListener(clickListener);
+    }
+
+    public void loadForgotPasswordActivity(){
+        Intent intent = new Intent(getActivity(), ForgotPassActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -130,6 +138,9 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                     login();
                     break;
                 case R.id.progress_view:
+                    break;
+                case R.id.forgot_tv:
+                    loadForgotPasswordActivity();
                     break;
             }
         }

@@ -93,6 +93,136 @@ public class StudentTaskImpl implements StudentTask {
         });
     }
 
+    @Override
+    public void sendForgotCode(Context context, String address, final Handler handler) {
+        //拼接URL
+        String url = ActivityUtil.getString(context,R.string.host) + ActivityUtil.getString(context,R.string.send_forgot_message);
+
+        Student student = new Student();
+        student.setEmail(address);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("student",student);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    try {
+                        Result result = Result.getJSONObject(json,null);
+                        if(result.getResult()) {
+                            msg.what = SEND_SUCCESS;
+                        } else {
+                            msg.what = ERROR;
+                            msg.obj = result.getMsg();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        handler.sendMessage(msg);
+                    }
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERROR_WITH_MESSAGE;
+                message.obj = msg;
+                handler.sendMessage(message);
+            }
+        });
+    }
+
+    @Override
+    public void valdateForgot(Context context, KeyValue keyValue, final Handler handler) {
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.validate_forgot);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("keyValue",keyValue);
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getJSONObject(json,PassWord.class);
+                    if(result.getResult()){
+                        msg.what = VALIDATE_SUCCESS;
+                        msg.obj = result.getData();
+                    } else{
+                        msg.what = VALIDATE_ERROR;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERROR_WITH_MESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void forgotPassword(Context context, PassWord passWord, final Handler handler) {
+        List<KeyValue> keyValues = LitePal.where("key = ?","publicKey").find(KeyValue.class);
+        if(keyValues.size()>0) {
+            KeyValue keyValue = keyValues.get(0);
+            byte[] bytes = Base64.decode(keyValue.getValue(), Base64.DEFAULT);
+            //还原公钥
+            //RSAUtil.restorePublicKey(bytes);
+            PublicKey key = RSAUtil.restorePublicKey(bytes);
+            byte[] encodePassword = null;
+            try {
+                encodePassword = RSAUtil.RSAEncode(key, passWord.getNewPassword().getBytes("utf-8"));
+                passWord.setNewPassword(Base64.encodeToString(encodePassword, Base64.DEFAULT));
+                encodePassword = RSAUtil.RSAEncode(key, passWord.getConfirmPaswword().getBytes("utf-8"));
+                passWord.setConfirmPaswword(Base64.encodeToString(encodePassword, Base64.DEFAULT));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        String url = ActivityUtil.getString(context,R.string.host)+ActivityUtil.getString(context,R.string.forgot_password_url);
+        Map<String,Object> keyValueMap = new HashMap<>();
+        keyValueMap.put("passWord",passWord);
+
+        NetUtils.doPost(url, keyValueMap, new HashMap<String, String>(), new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result result = Result.getObjectWithList(json,null);
+                    if(result.getResult()) {
+                        msg.what = MODIFY_PASSWORD;
+                    } else {
+                        msg.what = ERROR;
+                        msg.obj = result.getMsg();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
     protected void loginAfterEncode(Context context,Student student,final Handler handler){
         Map<String,Object> param = new HashMap<>();
         param.put("student",student);

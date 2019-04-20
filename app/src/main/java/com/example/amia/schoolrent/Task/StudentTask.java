@@ -22,6 +22,7 @@ public interface StudentTask extends BaseTask{
     int RESET_SUECCESS = 209;
     int RESET_ERROR = 210;
     int GET_CAPITAL = 211;
+    int MODIFY_PASSWORD = 212;
 
     /**
      * 登录
@@ -75,4 +76,11 @@ public interface StudentTask extends BaseTask{
      * 获取推送信息
      */
     void pushMessage(Context context);
+
+    /**
+     * 忘记密码验证邮箱
+     */
+    void sendForgotCode(Context context,String address,Handler handler);
+    void valdateForgot(Context context,KeyValue keyValue,Handler handler);
+    void forgotPassword(Context context,PassWord passWord,Handler handler);
 }
