@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.amia.schoolrent.Activity.AddChargeActivity;
 import com.example.amia.schoolrent.Bean.Capital;
 import com.example.amia.schoolrent.Bean.CheckStatement;
 import com.example.amia.schoolrent.Bean.CheckStatementExtend;
@@ -36,6 +38,7 @@ public class CheckStateFragment extends Fragment implements CheckStateContract.V
     private CheckStateAdapter adapter;
 
     private CheckStatementExtend extend;
+    private Capital capital;
 
     public static CheckStateFragment newInstance(){
         CheckStateFragment fragment = new CheckStateFragment();
@@ -78,6 +81,9 @@ public class CheckStateFragment extends Fragment implements CheckStateContract.V
 
         recyclerView.refresh();
         recyclerView.setIsRefresh(true);
+
+        view.findViewById(R.id.recharge_btn).setOnClickListener(onClickListener);
+        view.findViewById(R.id.cash).setOnClickListener(onClickListener);
     }
 
     private void refresh(){
@@ -111,6 +117,7 @@ public class CheckStateFragment extends Fragment implements CheckStateContract.V
     }
 
     private void setCapital(Capital capital){
+        this.capital = capital;
         TextView textView = view.findViewById(R.id.amount);
         textView.setText(String.valueOf(capital.getCapital()));
     }
@@ -148,6 +155,25 @@ public class CheckStateFragment extends Fragment implements CheckStateContract.V
             linkError();
         }
     }
+
+    private void loadChargeActivity(int type){
+        Intent intent = new Intent(getActivity(),AddChargeActivity.class);
+        intent.putExtra("type",type);
+        intent.putExtra("capital",capital);
+        startActivity(intent);
+    }
+
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.cash:
+                case R.id.recharge_btn:
+                    loadChargeActivity(view.getId());
+                    break;
+            }
+        }
+    };
 
     private Handler handler = new Handler(){
         @Override

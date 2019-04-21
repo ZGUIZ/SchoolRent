@@ -1,5 +1,6 @@
 package com.example.amia.schoolrent.Bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -11,7 +12,7 @@ import java.util.Date;
  * @author Yanghu
  * @since 2018-10-30
  */
-public class Capital{
+public class Capital implements Serializable {
 
 	private String capitalId;
 	private String userId;
