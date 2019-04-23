@@ -205,8 +205,10 @@ public class DissagreeFragment extends Fragment implements MineRentContract.View
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
+            recyclerView.setPullLoadMoreCompleted();
             super.handleMessage(msg);
             switch (msg.what){
+                case LOAD_MINE_REQUEST:
                 case LOAD_AGREE:
                     loadSuccess(msg.obj);
                     break;

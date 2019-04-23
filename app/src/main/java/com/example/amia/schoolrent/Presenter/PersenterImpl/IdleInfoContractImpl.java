@@ -71,4 +71,9 @@ public class IdleInfoContractImpl implements IdleInfoContract.Presenter {
     public void getUserInfo(Student student, Handler handler) {
         studentTask.getBaseInfo(view.getContext(),student,handler);
     }
+
+    @Override
+    public void getRentCount(String id, Handler handler) {
+        idleTask.getRentCount(view.getContext(),id,handler);
+    }
 }

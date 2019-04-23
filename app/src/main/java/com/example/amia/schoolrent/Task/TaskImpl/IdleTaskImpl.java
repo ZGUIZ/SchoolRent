@@ -30,6 +30,7 @@ import com.example.amia.schoolrent.Util.NetImageCallback;
 import com.example.amia.schoolrent.Util.NetUtils;
 import com.example.amia.schoolrent.Util.RSAUtil;
 
+import org.json.JSONObject;
 import org.litepal.LitePal;
 
 import java.io.UnsupportedEncodingException;
@@ -1119,6 +1120,38 @@ public class IdleTaskImpl implements IdleTask {
                     e.printStackTrace();
                     msg.what = ERROR;
                 } finally {
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void error(String... msg) {
+                Message message = handler.obtainMessage();
+                message.what = ERRORWITHMESSAGE;
+                message.obj = msg;
+            }
+        });
+    }
+
+    @Override
+    public void getRentCount(Context context, String id, final Handler handler) {
+        NetUtils.get(ActivityUtil.getString(context, R.string.host) + ActivityUtil.getString(context, R.string.get_rent_count)+id, new NetCallBack() {
+            @Override
+            public void finish(String json) {
+                Message msg = handler.obtainMessage();
+                try {
+                    Result r = Result.getJSONObject(json,null);
+                    if(r.getResult()){
+                        msg.what = RENT_COUNT;
+                        JSONObject jsonObject = new JSONObject(json);
+                        msg.obj = jsonObject.getInt("data");
+                    } else {
+                        msg.what = ERROR;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = ERROR;
+                }finally {
                     handler.sendMessage(msg);
                 }
             }

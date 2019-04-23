@@ -87,6 +87,7 @@ public class MessageFragment extends Fragment implements MyMessageContract.View 
             public void onLoadMore() {
             }
         });
+        recyclerView.setHasMore(false);
         recyclerView.refresh();
         recyclerView.setIsRefresh(true);
     }

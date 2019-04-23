@@ -72,6 +72,7 @@ import static com.example.amia.schoolrent.Task.IdleTask.LOAD_RELATION_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.LOAD_RELATION_SUCCESS;
 import static com.example.amia.schoolrent.Task.IdleTask.RENT_AGREE_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.RENT_AGREE_SUCCESS;
+import static com.example.amia.schoolrent.Task.IdleTask.RENT_COUNT;
 import static com.example.amia.schoolrent.Task.IdleTask.RENT_ERROR;
 import static com.example.amia.schoolrent.Task.IdleTask.RENT_SUCCESS;
 import static com.example.amia.schoolrent.Task.RefuseTask.LOAD_REFUSE_ERROR;
@@ -123,6 +124,7 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
     private ImageView schoolIcon;
     private ImageView idIcon;
     private TextView sex;
+    private TextView wantCount;
 
     //商品和当前用户的关系
     //0.申请后待确认 -1.正在查询 1.确认 2.拒绝 3.同意后拒绝租赁 4.开始 5.完成 6取消 7无关（客户端回显需要） 8 当前用户发布
@@ -252,11 +254,14 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
 
         schoolIcon = view.findViewById(R.id.student_id_validate);
         idIcon = view.findViewById(R.id.real_name_validate);
+
+        wantCount = view.findViewById(R.id.num_of_wanted);
+        presenter.getRentCount(idleInfo.getInfoId(),handler);
     }
 
     private void setRentBtn(Student student,IdleInfo idleInfo){
         //完成或者已经被禁止显示
-        if(idleInfo.getStatus() == 3 || idleInfo.getStatus() == 100 ){
+        if(idleInfo.getStatus() != 0){
             rentBtn.setBackgroundColor(Color.rgb(192,192,192));
             rentBtnTextView.setText(R.string.close);
             return;
@@ -293,12 +298,9 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                 rentBtnTextView.setText(R.string.close);
                 break;
             case 0:
-                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
-                rentBtnTextView.setText(R.string.cancel);
-                break;
             case 1:
-                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
-                rentBtnTextView.setText(R.string.received);
+                rentBtn.setBackgroundColor(Color.rgb(192,192,192));
+                rentBtnTextView.setText(R.string.requested);
                 break;
             case 2:
             case 3:
@@ -306,8 +308,8 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                 rentBtnTextView.setText(R.string.rent);
                 break;
             case 4:
-                rentBtn.setBackgroundColor(Color.rgb(238,44,44));
-                rentBtnTextView.setText(R.string.end_rent);
+                rentBtn.setBackgroundColor(Color.rgb(192,192,192));
+                rentBtnTextView.setText(R.string.renting);
                 break;
             case 5:
                 rentBtn.setBackgroundColor(Color.rgb(192,192,192));
@@ -870,6 +872,16 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
         presenter.getUserInfo(student,handler);
     }
 
+    private void getRentCount(Object o){
+        try{
+            Integer count = (Integer) o;
+            wantCount.setText(String.valueOf(count));
+        } catch (Exception e){
+            e.printStackTrace();
+            linkError();
+        }
+    }
+
     @Override
     public void linkError() {
         Toast.makeText(getContext(),R.string.link_error,Toast.LENGTH_SHORT).show();
@@ -924,6 +936,9 @@ public class IdleInfoFragment extends Fragment implements IdleInfoContract.View 
                     break;
                 case BASE_INFO_SUCCESS:
                     loadUserInfoSuccess(msg.obj);
+                    break;
+                case RENT_COUNT:
+                    getRentCount(msg.obj);
                     break;
                 case RENT_AGREE_ERROR:
                     break;

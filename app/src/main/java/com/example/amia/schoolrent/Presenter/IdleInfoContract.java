@@ -20,6 +20,7 @@ public interface IdleInfoContract {
         void agreeRent(Rent rent,Handler handler);
         void disagreeRent(Rent rent,Handler handler);
         void getUserInfo(Student student,Handler handler);
+        void getRentCount(String id,Handler handler);
     }
 
     interface View extends BaseView<Presenter>{

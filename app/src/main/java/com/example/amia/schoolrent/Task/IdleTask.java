@@ -67,6 +67,7 @@ public interface IdleTask extends BaseTask{
     int GET_EVAL = 536;
     int ADD_DESTORY = 537;
     int ADD_COMPLAIN = 538;
+    int RENT_COUNT = 539;
 
     /**
      * 获取首页分类
@@ -174,4 +175,6 @@ public interface IdleTask extends BaseTask{
     void addDestory(Context context,IdleInfo idleInfo,Handler handler);
 
     void addComplain(Context context, OrderComplian complian,Handler handler);
+
+    void getRentCount(Context context,String id,Handler handler);
 }

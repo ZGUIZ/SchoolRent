@@ -289,6 +289,7 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
                     break;
                 case RESULT_SUCCESS:
                     presenter.updateStudentInfo(getContext(),updateStudent,handler);
+                    view.findViewById(R.id.progress_view).setVisibility(View.GONE);
                     break;
                 case RESULT_ERROR:
                     student.setUserIcon(null);
@@ -313,11 +314,16 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
         if(TextUtils.isEmpty(path)){
             return;
         }
-        COSUtil cosUtil = new COSUtil(getActivity());
-        String url = cosUtil.uploadFile(student,path,handler,String.valueOf(new Date().getTime()));
-        updateStudent = new Student();
-        updateStudent.setUserId(student.getUserId());
-        updateStudent.setUserIcon(ActivityUtil.getString(getActivity(),R.string.image_host)+url);
+        view.findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
+        try {
+            COSUtil cosUtil = new COSUtil(getActivity());
+            String url = cosUtil.uploadFile(student, path, handler, String.valueOf(new Date().getTime()));
+            updateStudent = new Student();
+            updateStudent.setUserId(student.getUserId());
+            updateStudent.setUserIcon(ActivityUtil.getString(getActivity(), R.string.image_host) + url);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
