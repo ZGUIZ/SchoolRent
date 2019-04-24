@@ -44,6 +44,7 @@
     <string name="cancel_rent">/rent/cancel</string>  <!--取消租赁-->
     <string name="find_idle">/idleInfo/id/</string>   <!--查询指定的闲置信息-->
     <string name="start_rent">/rent/startRent</string> <!--开始租赁-->
+    <string name="start_rent_pusher">/rent/startRentPusher</string> <!--开始租赁-->
     <string name="del_rent">/rent/delRent</string>   <!--删除租赁请求信息-->
     <string name="disagree_rent">/rent/disagreeRent</string>  <!--不同意租赁-->
     <string name="add_article">/rentNeeds/add</string>  <!--新增需求信息-->
@@ -55,18 +56,34 @@
     <string name="get_user_push">/idleInfo/getUserPush</string>  <!--获取指定用户发布信息-->
     <string name="add_eval">/eval/add</string>  <!--添加评价-->
     <string name="c_rent_finish">/rent/finishRent</string>  <!--完成租赁-->
-    <string name="list_eval">/eval/listByPage</string>
-    <string name="mine_message">/message/pushUnRead</string>
-    <string name="message_list">/message/list</string>
+    <string name="list_eval">/eval/listByPage</string>  <!--显示评价信息-->
+    <string name="mine_message">/message/pushUnRead</string> <!--推送未读消息-->
+    <string name="message_list">/message/list</string>      <!--查询消息-->
+    <string name="add_destroy">/idleInfo/addDestroy</string>  <!--添加损毁-->
+    <string name="add_complain">/orderComplain/add</string>  <!--添加损毁赔偿信息-->
+    <string name="add_other_complain">/complain/add</string>  <!--添加举报信息-->
+    <string name="forgot_password_url">/student/modifyForgotPass</string>  <!--重置密码-->
+    <string name="validate_forgot">/student/validateForgot</string>      <!--验证邮箱-->
+    <string name="send_forgot_message">/student/sendForgotMessage</string>  <!--发送验证信息-->
+    <string name="update_mail">/student/updateMail</string>  <!--更新邮箱-->
+    <string name="send_sms">/student/sendMobileCode/</string>  <!--发送手机验证短信-->
+    <string name="update_phone">/student/updateMobile</string> <!--更新手机号码-->
+    <string name="add_charge">/charge/add</string>
+    <string name="add_capitalCash">/capitalCash/add</string>
+    <string name="get_rent_count">/rent/getRentCount/</string>
 
     <!--系统提示-->
     <string name="double_exit">请再按一次返回按钮退出程序</string>
     <string name="link_error">服务器连接异常</string>
     <string name="password_error">登录失败，账号或密码错误</string>
     <string name="null_school">请选择学校</string>
+    <string name="valid_code_label">验证码</string>
     <string name="valid_code">请输入验证码</string>
     <string name="send_mail_success">发送成功</string>
     <string name="mail_null">请输入邮箱地址</string>
+    <string name="phone_null">请输入手机号码</string>
+    <string name="phone_format_error">手机号码格式错误</string>
+    <string name="account_null">请输入账号</string>
     <string name="mail_format_error">邮箱格式错误，请检查邮箱输入是否正确</string>
     <string name="mail_validate_error">验证码错误，请检查邮箱地址或验证码是否正确</string>
     <string name="input_base_info">请输入基本信息</string>
@@ -80,6 +97,13 @@
     <string name="title_null">请填写标题！</string>
     <string name="info_null">请填写描述信息！</string>
     <string name="pic_null">请添加图片信息！</string>
+    <string name="money_error">最低押金不能小于每日租金！</string>
+    <string name="complain_money">赔偿金额:</string>
+    <string name="money_format_error">输入金额的异常！</string>
+    <string name="type_select">请选择账号类型！</string>
+    <string name="null_pay_pic">请上传支付截图</string>
+    <string name="money_out_border">您剩余的资金不足！</string>
+    <string name="submit_success">提交成功，请等待管理员审核</string>
     <string name="push_success">发布成功！</string>
     <string name="push_error">发布失败！</string>
     <string name="no_more">没有更多了...</string>
@@ -96,13 +120,23 @@
     <string name="behavior_success">操作成功！</string>
     <string name="null_info">暂无信息</string>
     <string name="fill_eval">请填写评价内容，您的评价会成为其他用户的参考</string>
+    <string name="fill_destroy">请填写损毁内容，这可能影响您申请能否通过</string>
     <string name="fill_score">满意度评分</string>
     <string name="eval_null">评价内容不能为空！</string>
+    <string name="destroy_null">内容不能为空！</string>
 
     <!--按钮-->
+    <string name="alipay">支付宝</string>
+    <string name="wechat">微信</string>
+    <string name="account_type">账户类型：</string>
     <string name="login">登录</string>
     <string name="user_name">用户名/邮箱/手机号</string>
+    <string name="account">账号</string>
+    <string name="money">提现金额</string>
+    <string name="money2">充值金额</string>
+    <string name="pay_pic">支付截图</string>
     <string name="user_show_name">用户名</string>
+    <string name="chang_pass_label">修改密码</string>
     <string name="password">密码</string>
     <string name="password_confirm">确认密码</string>
     <string name="select_school">点击选择学校</string>
@@ -142,6 +176,7 @@
     <string name="no_refuse">还没有人留言</string>
     <string name="sent">发送</string>
     <string name="rent">申请租赁</string>
+    <string name="change_pay_password">修改支付密码</string>
     <string name="pay_password">支付密码</string>
     <string name="confirm_pay_password">确认支付密码</string>
     <string name="real_name">真实姓名</string>
@@ -174,6 +209,10 @@
     <string name="forgot_context">是否要重置您的密码并将密码发送至您的邮箱？</string>
     <string name="sure">确定</string>
     <string name="cancel">取消</string>
+    <string name="detail">详细</string>
+    <string name="destroy_detail">损毁详情</string>
+    <string name="complain">申请赔偿</string>
+    <string name="reason">举报或投诉原因</string>
     <string name="input_pay_password">请输入支付密码</string>
     <string name="rent_submit_success">请求已经发送，请耐心等待！</string>
     <string name="rent_pepole">申请人</string>
@@ -186,6 +225,8 @@
     <string name="my_push_title">我的闲置</string>
     <string name="close_by_self">已下架</string>
     <string name="admin_close">非法下架</string>
+    <string name="submit_destroy">提交损毁</string>
+    <string name="submit">提交</string>
     <string name="alter_idle">修改闲置</string>
     <string name="start">开始</string>
     <string name="add_des_info">损毁填写</string>
@@ -199,6 +240,7 @@
     <string name="eval">评价</string>
     <string name="had_eval">已评价</string>
     <string name="student_id">学号</string>
+    <string name="all_classify_title">所有分类</string>
 
     <string name="requested">已申请</string>
     <string name="agree_request">已同意</string>
