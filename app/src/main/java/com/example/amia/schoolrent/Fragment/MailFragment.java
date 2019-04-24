@@ -237,9 +237,15 @@ public class MailFragment extends Fragment implements StudentContract.View {
                     break;
                 case ERROR_WITH_MESSAGE:
                     try {
-                        Snack(((String[]) msg.obj)[0]);
+                        Snack((String) msg.obj);
                     }catch (ClassCastException e){
                         e.printStackTrace();
+                        try{
+                            Snack(((String[]) msg.obj)[0]);
+                        } catch (Exception ex){
+                            ex.printStackTrace();
+                            linkError();
+                        }
                     }
                     break;
                 case BTN_TIME_FLAG:

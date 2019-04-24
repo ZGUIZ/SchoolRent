@@ -22,6 +22,8 @@
         <RelativeLayout
             android:background="@drawable/search_border"
             android:layout_marginLeft="5dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="30dp">
             <ImageButton
@@ -38,6 +40,7 @@
                 android:id="@+id/search_tv"
                 android:hint="搜索内容"
                 android:lines="1"
+                android:paddingLeft="3dp"
                 android:layout_toLeftOf="@id/search_iv"
                 android:textColor="@android:color/black"
                 android:background="@null"

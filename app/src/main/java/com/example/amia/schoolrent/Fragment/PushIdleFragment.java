@@ -76,13 +76,13 @@ public class PushIdleFragment extends Fragment implements PushIdleContract.View 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_push_idle_layout,container,false);
+        init();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        init();
     }
 
     protected void init(){
