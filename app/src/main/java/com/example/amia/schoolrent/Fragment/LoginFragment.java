@@ -150,12 +150,25 @@ public class LoginFragment extends Fragment implements LoginContract.View {
      * 用户登录
      */
     private void login(){
-        view.findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
         Student student = new Student();
         EditText account = view.findViewById(R.id.account);
         EditText password = view.findViewById(R.id.password);
-        student.setUserName(account.getText().toString());
-        student.setPassword(password.getText().toString());
+        String acc = account.getText().toString().trim();
+        String pass = password.getText().toString().trim();
+        if("".equals(acc)){
+            Toast.makeText(getActivity(),R.string.user_name_null,Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if("".equals(pass)){
+            Toast.makeText(getActivity(),R.string.password_null,Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        view.findViewById(R.id.progress_view).setVisibility(View.VISIBLE);
+
+        student.setUserName(acc);
+        student.setPassword(pass);
         presenter.login(getActivity(),student,handler);
     }
 

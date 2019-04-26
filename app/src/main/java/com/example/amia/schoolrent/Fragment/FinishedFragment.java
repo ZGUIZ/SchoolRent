@@ -236,6 +236,7 @@ public class FinishedFragment extends Fragment implements MineRentContract.View 
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
+                case LOAD_MINE_REQUEST:
                 case LOAD_AGREE:
                     loadSuccess(msg.obj);
                     break;
@@ -257,6 +258,7 @@ public class FinishedFragment extends Fragment implements MineRentContract.View 
                     break;
                 case ERROR:
                 default:
+                    recyclerView.setPullLoadMoreCompleted();
                     showMessage(msg.obj);
                     break;
             }
