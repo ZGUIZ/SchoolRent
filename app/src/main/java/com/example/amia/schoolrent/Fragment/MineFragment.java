@@ -70,7 +70,12 @@ public class MineFragment extends Fragment {
         credit.setText(ActivityUtil.getString(baseAcitivity,R.string.credit)+String.valueOf(student.getCredit()));
 
         ImageView imageView = view.findViewById(R.id.user_icon);
-        Glide.with(getActivity()).load(student.getUserIcon()).into(imageView);
+        //Glide.with(getActivity()).load(student.getUserIcon()).into(imageView);
+        if(student.getUserIcon() != null && !"".equals(student.getUserIcon())) {
+            Glide.with(getContext()).load(student.getUserIcon()).into(imageView);
+        } else {
+            imageView.setImageResource(R.drawable.default_icon);
+        }
 
         view.findViewById(R.id.user_info_layout).setOnClickListener(onClickListener);
         view.findViewById(R.id.mine_push).setOnClickListener(onClickListener);

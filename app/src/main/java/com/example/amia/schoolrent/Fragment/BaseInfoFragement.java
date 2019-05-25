@@ -81,7 +81,11 @@ public class BaseInfoFragement extends Fragment implements BaseInfoContract.View
         Context context = getActivity();
 
         ImageView userIcon = view.findViewById(R.id.user_cion);
-        Glide.with(context).load(student.getUserIcon()).into(userIcon);
+        if(student.getUserIcon() != null && !"".equals(student.getUserIcon())) {
+            Glide.with(context).load(student.getUserIcon()).into(userIcon);
+        } else {
+            userIcon.setImageResource(R.drawable.default_icon);
+        }
         userIcon.setOnClickListener(onClickListener);
 
         TextView userName = view.findViewById(R.id.user_name_tv);
